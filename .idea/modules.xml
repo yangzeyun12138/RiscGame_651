@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-project.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-project.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-project.buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-project.buildSrc.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-project.buildSrc.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-project.buildSrc.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-project.buildSrc.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/multi-project.client.iml" filepath="$PROJECT_DIR$/.idea/modules/client/multi-project.client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/multi-project.client.main.iml" filepath="$PROJECT_DIR$/.idea/modules/client/multi-project.client.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/multi-project.client.test.iml" filepath="$PROJECT_DIR$/.idea/modules/client/multi-project.client.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/multi-project.common.iml" filepath="$PROJECT_DIR$/.idea/modules/common/multi-project.common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/multi-project.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/multi-project.common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/multi-project.common.test.iml" filepath="$PROJECT_DIR$/.idea/modules/common/multi-project.common.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/multi-project.server.iml" filepath="$PROJECT_DIR$/.idea/modules/server/multi-project.server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/multi-project.server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/server/multi-project.server.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/multi-project.server.test.iml" filepath="$PROJECT_DIR$/.idea/modules/server/multi-project.server.test.iml" />
+    </modules>
+  </component>
+</project>

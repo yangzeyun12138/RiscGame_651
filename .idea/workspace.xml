@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="a43ce95d-f910-4c33-9754-8c06d366538c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/edu/duke/ece651/mp/client/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/edu/duke/ece651/mp/client/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/edu/duke/ece651/mp/client/ClientSk.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/edu/duke/ece651/mp/client/ClientSk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/test/java/edu/duke/ece651/mp/client/ClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/test/java/edu/duke/ece651/mp/client/ClientTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/BasicMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/BasicMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/GameMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/edu/duke/ece651/mp/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/edu/duke/ece651/mp/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/test/java/edu/duke/ece651/mp/server/ServerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/test/java/edu/duke/ece651/mp/server/ServerTest.java" afterDir="false" />
+=======
+    <list default="true" id="a43ce95d-f910-4c33-9754-8c06d366538c" name="Default Changelist" comment="add some documentation">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/edu/duke/ece651/mp/client/ClientSk.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/edu/duke/ece651/mp/client/ClientSk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/BasicMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/BasicMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/BasicMapDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/BasicMapDisplay.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/LandTerritory.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/LandTerritory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/edu/duke/ece651/mp/server/ServerSk.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/edu/duke/ece651/mp/server/ServerSk.java" afterDir="false" />
+>>>>>>> 7ce324c81e4f35cc1bd13714574c49561b3e2ff7
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="multi-project" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="25qwdDKGlicNWCQkF1TXMqSa91c" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/common/src/test/java/edu/duke/ece651/mp/common" />
+      <recent name="$PROJECT_DIR$/common/src/main/java/edu/duke/ece651/mp/common" />
+      <recent name="$PROJECT_DIR$/client/src/test/java/edu/duke/ece651/mp/client" />
+      <recent name="$PROJECT_DIR$/client/src/main/java/edu/duke/ece651/mp/client" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="edu.duke.ece651.mp.server" />
+      <recent name="edu.duke.ece651.mp.common" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.All in multi-project.server.test">
+    <configuration name="All in multi-project.client.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="multi-project.client.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in multi-project.common.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="multi-project.common.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in multi-project.common.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="multi-project.common.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in multi-project.server.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="multi-project.server.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in multi-project.server.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="multi-project.server.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in multi-project.server.test" />
+        <item itemvalue="JUnit.All in multi-project.client.test" />
+        <item itemvalue="JUnit.All in multi-project.common.test (1)" />
+        <item itemvalue="JUnit.All in multi-project.common.test" />
+        <item itemvalue="JUnit.All in multi-project.server.test (1)" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a43ce95d-f910-4c33-9754-8c06d366538c" name="Default Changelist" comment="" />
+      <created>1646268011545</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1646268011545</updated>
+    </task>
+    <servers />
+  </component>
+<<<<<<< HEAD
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
+=======
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add some documentation" />
+    <option name="LAST_COMMIT_MESSAGE" value="add some documentation" />
+>>>>>>> 7ce324c81e4f35cc1bd13714574c49561b3e2ff7
+  </component>
+</project>
