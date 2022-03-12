@@ -1,5 +1,6 @@
 package edu.duke.ece651.mp.common;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -9,7 +10,8 @@ public class BasicMap implements GameMap, java.io.Serializable{
   protected String mapName;
   protected ArrayList<String> colorList;
   protected HashSet<Territory> TerritorySet;
-  private ArrayList<Player> players; 
+  private ArrayList<Player> players;
+  private int num_units;
 
   /**
    * one room one map
@@ -22,6 +24,24 @@ public class BasicMap implements GameMap, java.io.Serializable{
     this.colorList = colorList;
     this.TerritorySet = TerritorySet;
     this.players = new ArrayList<Player>();
+  }
+
+
+  public BasicMap deep_copy() {
+    BasicMap deep_copy = null;
+    try {
+      // 写入字节流
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      ObjectOutputStream oos = new ObjectOutputStream(baos);
+      oos.writeObject(this);
+
+      ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+      ObjectInputStream ois = new ObjectInputStream(bais);
+      deep_copy = (BasicMap) ois.readObject();
+    } catch (ClassNotFoundException | IOException e) {
+      e.printStackTrace();
+    }
+    return deep_copy;
   }
 
   @Override
@@ -66,4 +86,16 @@ public class BasicMap implements GameMap, java.io.Serializable{
       assign_one(colorList.get(i));
     }
   }
+
+
+  @Override
+  public void init_num_units(){
+    this.num_units = players.get(0).player_terri_set.size() * 10;
+  }
+
+  @Override
+  public int get_num_units() {
+    return num_units;
+  }
+
 }

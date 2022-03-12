@@ -53,10 +53,13 @@ public class LandTerritoryTest {
     assertEquals(0,lt1.units.size());
     assertTrue(lt1.addUnit(u1));
     assertEquals(1,lt1.units.size());
-    assertThrows(IllegalArgumentException.class, ()-> lt1.setUnit(5));
+    assertThrows(IllegalArgumentException.class, ()-> lt1.setBasicUnit(5));
     assertTrue(lt1.loseUnit());
     assertFalse(lt1.loseUnit());
-    lt2.setUnit(5);
+    lt2.setBasicUnit(5);
     assertTrue(lt2.loseUnit());
+    assertTrue(lt2.addBasicUnit(5));
+    assertTrue(lt2.loseUnit(5));
   }
+
 }

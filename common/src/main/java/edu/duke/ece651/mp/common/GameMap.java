@@ -6,4 +6,6 @@ public interface GameMap {
     public ArrayList<Player> get_player_list();
     public void assign_one(String color);
     public void assign_all();
+    public void init_num_units();
+    public int get_num_units();
 }

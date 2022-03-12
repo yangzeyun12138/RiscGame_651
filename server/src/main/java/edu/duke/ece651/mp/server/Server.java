@@ -13,15 +13,20 @@ import java.util.HashSet;
 public class Server {
 
     public static void main(String[] args) throws IOException {
-        String filename = "Territory.txt";
-        int numPlayer = 3;
+        ArrayList<GameMap> maps = new ArrayList<>();
+        Server server = new Server();
+        GameMap gm = server.create_one_map("Territory.txt", 3);
+        maps.add(gm);
+        ServerSk serverSk = new ServerSk(maps);
+        serverSk.build_server();
+    }
+
+    public GameMap create_one_map(String filename, int numPlayer) throws IOException {
         Parse parse = new Parse();
         HashSet<Territory> result = parse.parseTerritoryNeighbor(filename, numPlayer);
         GameMap gm = new BasicMap("Map 1", parse.parseColor("Color.txt", numPlayer), result);
         gm.assign_all();
-        ArrayList<GameMap> maps = new ArrayList<>();
-        maps.add(gm);
-        ServerSk serverSk = new ServerSk(maps);
-        serverSk.build_server();
+        gm.init_num_units();
+        return gm;
     }
 }

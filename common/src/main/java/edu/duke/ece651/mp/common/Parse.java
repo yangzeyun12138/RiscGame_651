@@ -13,7 +13,7 @@ public class Parse {
    * @return: arraylist of each line that read from the file
    */
   public ArrayList<String> readfile(String filename) throws IOException{
-    String directory = System.getProperty("user.dir") + "/src/main/java/edu/duke/ece651/mp/common/";
+    String directory = System.getProperty("user.dir") + "/src/main/java/edu/duke/ece651/mp/";
     directory = directory + filename;
     File file = new File(directory);
     Scanner scan = new Scanner(file);

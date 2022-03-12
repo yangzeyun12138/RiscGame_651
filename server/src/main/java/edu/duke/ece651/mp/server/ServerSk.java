@@ -1,8 +1,11 @@
 package edu.duke.ece651.mp.server;
 import edu.duke.ece651.mp.common.*;
+import org.checkerframework.checker.units.qual.A;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,35 +51,39 @@ public class ServerSk {
    * @param map
    */
   public void process(GameMap map) {
+
     new Thread(new Runnable() {
       @Override
       public void run() {
+
         ArrayList<Socket> socket_list = accept_server(map);
         try {
           send_map_to_all(socket_list, map);
-        } catch (IOException ex) {
+          send_color(socket_list, map.get_player_list());
+          send_num_units(socket_list, map.get_num_units());
+          accept_player(socket_list, map.get_player_list());
+          send_map_to_all(socket_list, map);
+        } catch (IOException | ClassNotFoundException ex) {
           ex.printStackTrace();
-        } finally {
+        }
+        /*
+        finally {
           try {
             close_all_sk(socket_list);
           } catch (IOException e) {
             e.printStackTrace();
           }
         }
+
+         */
+
       }
     }).start();
+
+
   }
 
-  /**
-   * close all the client socket in the room after game ends
-   * @param socket_list
-   * @throws IOException
-   */
-  public void close_all_sk(ArrayList<Socket> socket_list) throws IOException {
-      for (Socket s : socket_list) {
-        s.close();
-      }
-  }
+
 
   /**
    * accept players in the room and store their socket in a list
@@ -84,6 +91,7 @@ public class ServerSk {
    * @return
    */
   public ArrayList<Socket> accept_server(GameMap map) {
+
     ArrayList<Socket> ans_list = new ArrayList<Socket>();
     for (int i = 0; i < map.get_num_players(); i++) {
       try {
@@ -109,18 +117,69 @@ public class ServerSk {
     for (Socket s : socket_list) {
       try {
         oos = new ObjectOutputStream(s.getOutputStream());
-        System.out.println("begin to send");
         oos.writeObject(map);
         oos.flush();
       } catch (IOException ex) {
         ex.printStackTrace();
-      } finally {
+      }
+      /*finally {
         try {
-          oos.close();
+          //oos.close();
         } catch (IOException e) {
           e.printStackTrace();
         }
+      }*/
+    }
+  }
+
+  public void send_color(ArrayList<Socket> socket_list, ArrayList<Player> player_list) throws IOException {
+
+    ObjectOutputStream oos = null;
+    int i = 0;
+    for (Socket s : socket_list) {
+      try {
+        oos = new ObjectOutputStream(s.getOutputStream());
+        oos.writeObject(player_list.get(i).color);
+        oos.flush();
+        i++;
+      } catch (IOException ex) {
+        ex.printStackTrace();
       }
+
+    }
+  }
+
+  public void send_num_units(ArrayList<Socket> socket_list, int num_units) throws IOException {
+    ObjectOutputStream oos = null;
+    for (Socket s : socket_list) {
+      try {
+        oos = new ObjectOutputStream(s.getOutputStream());
+        oos.writeObject(num_units);
+        oos.flush();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+
+    }
+  }
+
+  public void accept_player(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException {
+    players.clear();
+    for (Socket s : socket_list) {
+      ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+      Player temp = (Player) ois.readObject();
+      players.add(temp);
+    }
+  }
+
+  /**
+   * close all the client socket in the room after game ends
+   * @param socket_list
+   * @throws IOException
+   */
+  public void close_all_sk(ArrayList<Socket> socket_list) throws IOException {
+    for (Socket s : socket_list) {
+      s.close();
     }
   }
 }

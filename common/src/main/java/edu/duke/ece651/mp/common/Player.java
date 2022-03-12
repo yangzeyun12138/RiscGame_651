@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 public class Player implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
-    private String color;
+    public String color;
     public HashSet<Territory> player_terri_set;
 
     public Player(String color, HashSet<Territory> player_terri_set) {
@@ -16,12 +16,13 @@ public class Player implements java.io.Serializable{
     /**
      * @return a String that display the player color and their territories info
      */
-    @Override
+
     public String toString() {
         String res = new String(color + " player:\n");
         res += "-----------\n";
         for (Territory t: player_terri_set) {
-            res += "  " + "10" + " units in " + t.getName() + " (next to: ";
+            String unit_info = Integer.toString(t.countUnit());
+            res += "  " + unit_info + " units in " + t.getName() + " (next to: ";
             Iterator<Territory> it = t.getNeigh().iterator();
             while(true) {
                 res += it.next().getName();
@@ -37,4 +38,13 @@ public class Player implements java.io.Serializable{
         res += "\n";
         return res;
     }
+
+  /**
+   *getColor(), the the color of the player
+   *@return: color of the player.
+   */
+  
+  public String getColor(){
+    return this.color;
+  }
 }

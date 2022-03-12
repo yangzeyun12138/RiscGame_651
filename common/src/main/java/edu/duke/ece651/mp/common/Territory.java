@@ -13,9 +13,11 @@ public interface Territory {
   public void addNeigh(Territory neigh);
   public ArrayList<Territory> getNeigh();
 
+  public boolean addBasicUnit(int numUnit);
   public boolean addUnit(Unit u);
   public int countUnit();
-  public void setUnit(int numUnit);
+  public void setBasicUnit(int numUnit);
   public boolean loseUnit();
+  public boolean loseUnit(int numUnit);
   
 }

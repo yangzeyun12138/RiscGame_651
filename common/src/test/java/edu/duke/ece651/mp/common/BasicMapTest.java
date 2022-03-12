@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BasicMapTest {
-    @Test
+
+      @Test
   public void test_constructor() {
         String testname = "test";
         String color = "Red";
@@ -32,7 +32,24 @@ public class BasicMapTest {
         assertTrue(bm.colorList.contains("Red"));
         assertEquals(2,bm.get_num_players());
   }
+  @Test
 
+      public void test_deep_copy() {
+        String testname = "test";
+        String color = "Red";
+        ArrayList<String> test_color = new ArrayList<String>();
+        test_color.add("Red");
+        test_color.add("Blue");
+        HashSet<Territory> test_territory = new HashSet<>();
+        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red");
+        test_territory.add(lt1);
+        LandTerritory lt2 = new LandTerritory("Modor", "Blue");
+        test_territory.add(lt2);
+        BasicMap bm = new BasicMap(testname, test_color, test_territory);
+        BasicMap bm2 = bm.deep_copy();
+        bm2.mapName = "change";
+        assertNotEquals(bm.mapName, bm2.mapName);
+  }
 
 
 }

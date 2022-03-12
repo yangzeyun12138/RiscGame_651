@@ -17,7 +17,7 @@ class PlayerTest {
         test_territory.add(lt1);
         Player p = new Player("Red", test_territory);
         String test_string = new String("Red player:\n" +
-                "-----------\n" + "  10 units in Hogwalts (next to: Modor)\n\n");
+                "-----------\n" + "  0 units in Hogwalts (next to: Modor)\n\n");
         assertEquals(test_string, p.toString());
     }
 

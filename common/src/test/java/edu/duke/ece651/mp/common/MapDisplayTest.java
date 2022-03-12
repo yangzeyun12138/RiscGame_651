@@ -25,9 +25,9 @@ class MapDisplayTest {
         BasicMapDisplay bmd = new BasicMapDisplay(bm);
         bm.assign_all();
         String test_string = new String("Red player:\n" +
-                "-----------\n" + "  10 units in Hogwalts (next to: Modor)\n\n");
+                "-----------\n" + "  0 units in Hogwalts (next to: Modor)\n\n");
         test_string += "Blue player:\n" +
-                "-----------\n" + "  10 units in Modor (next to: Hogwalts)\n\n";
+                "-----------\n" + "  0 units in Modor (next to: Hogwalts)\n\n";
         assertEquals(test_string, bmd.display());
     }
 

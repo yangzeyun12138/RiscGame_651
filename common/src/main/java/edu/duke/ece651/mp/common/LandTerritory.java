@@ -77,6 +77,8 @@ public class LandTerritory implements Territory, java.io.Serializable {
   public ArrayList<Territory> getNeigh(){
     return this.neighbors;
   }
+
+  
   /**
    *addUnit: Add a unit to the arrayList of units in this territory
    *@param: a Unit u
@@ -85,6 +87,39 @@ public class LandTerritory implements Territory, java.io.Serializable {
   @Override
   public boolean addUnit(Unit u){
     this.units.add(u);
+    return true;
+  }
+  /**
+   * addBasicUnit: add multiple BasicUnits into the LandTerritory, and the difference between addBasicUnit() and setBasicUnit is that addBasicUnit can be used after initialization of LandTerritory.
+   *@param: numUnit: the number of BasicUnits you wanna add.
+   *@return: a boolean that shows the BasicUnit is successfully added.
+   */
+
+  @Override
+  public boolean addBasicUnit(int numUnit){
+    for (int i = 0; i < numUnit; i++){
+      Unit u = new BasicUnit();
+      boolean thisadd = this.addUnit(u);
+      if (!thisadd){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * loseUnit: lose multiple Units from the LandTerritory.
+   *@param: numUnit: the number of Units you wanna remove.
+   *@return: a boolean that shows the Unit is successfully deleted.
+   */
+  @Override
+  public boolean loseUnit(int numUnit){
+    for(int i = 0; i < numUnit; i++){
+      boolean thislose = this.loseUnit();
+      if(!thislose){
+        return false;
+      }
+    }
     return true;
   }
   /**
@@ -100,7 +135,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
    *@param: int number of Units want to be set with
    */
   @Override
-  public void setUnit(int numUnit){
+  public void setBasicUnit(int numUnit){
     if(this.units.size() != 0){
       throw new IllegalArgumentException("Can only set units in placement Phase, but this LandTerritory already has this number of units: " + this.units.size());
     }
