@@ -9,7 +9,7 @@ public class BasicMap implements GameMap, java.io.Serializable{
   protected String mapName;
   protected ArrayList<String> colorList;
   protected HashSet<Territory> TerritorySet;
-  private ArrayList<Player> players;
+  private ArrayList<Player> players; 
 
   /**
    * one room one map
