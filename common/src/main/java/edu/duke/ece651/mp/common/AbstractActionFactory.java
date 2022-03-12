@@ -11,7 +11,7 @@ public interface AbstractActionFactory {
    */
   public void Move(Player player, String src, String dest, int numUnit);
   // TODO: commit 
-  public ArrayList<Player> Attack (ArrayList<Player> allPlayers);
+  public void Attack (Player attacker, Player defender, String src, String dest, int numUnit);
   /**
    * Done function is the final command that the player would use, and it will help player to add 1 unit to all of his/her territories.
    *@param player is the current user.
