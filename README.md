@@ -1,4 +1,3 @@
-<<<<<<< README.md
 ECE 651: CI/CD Intro: Factoring Server 
 ![pipeline](https://gitlab.oit.duke.edu/ch450/ece651-project1/badges/master/pipeline.svg)
 ![coverage](https://gitlab.oit.duke.edu/ch450/ece651-project1/badges/master/coverage.svg?job=test)
@@ -11,8 +10,4 @@ of this project is to walk studenst through the setup of
 CI/CD on Duke's Gitlab.
 [Detailed coverage](https://ch450.pages.oit.duke.edu/ece651-project1/dashboard.html)
 
-
-=======
-# ece651-project1
->>>>>>> README.md
 
