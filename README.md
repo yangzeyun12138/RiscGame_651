@@ -1,6 +1,6 @@
 ECE 651: CI/CD Intro: Factoring Server 
-![pipeline](https://gitlab.oit.duke.edu/ch450/ece651-project1/badges/master/pipeline.svg)
-![coverage](https://gitlab.oit.duke.edu/ch450/ece651-project1/badges/master/coverage.svg?job=test)
+![pipeline](https://gitlab.oit.duke.edu/ch450/ece651-project1/badges/main/pipeline.svg)
+![coverage](https://gitlab.oit.duke.edu/ch450/ece651-project1/badges/main/coverage.svg?job=test)
 ======================================
 
 The code in this project is for a server which reads
