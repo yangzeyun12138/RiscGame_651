@@ -18,6 +18,6 @@ public interface AbstractActionFactory {
    */
   public void Done(Player player);
   public String checkForMove(Player player, String src, String dest, int numUnit);
-  public String checkForAttack(Player attacker, Player defender, String src, String dest, int numUnit);
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit);
   
 }

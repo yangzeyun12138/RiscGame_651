@@ -46,7 +46,7 @@ public class V1Action implements AbstractActionFactory {
    * @param numUnit is the number of Unit that join the attack.
    * @return returns null if there is no error. returns string argument when there is an error.
    */
-  public String checkForAttack(Player attacker, Player defender, String src, String dest, int numUnit){
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit){
     AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(null);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
     String result = FactionCheck.checkAttack(attacker, src, dest, numUnit);
@@ -63,7 +63,7 @@ public class V1Action implements AbstractActionFactory {
    */
   @Override
   public void Attack (Player attacker, Player defender, String src, String dest, int numUnit){
-    String checkResult = checkForAttack(attacker,defender,src, dest,numUnit);
+    String checkResult = checkForAttack(attacker, src, dest, numUnit);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
     }
