@@ -84,7 +84,25 @@ public class V1ActionTest {
     Territory taken = action.findTerritory(attacker, "Scadrial");
     assertEquals(taken.getColor(), "Red");
     assertEquals(taken.countUnit(), 1);
-    
+   assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1));
   }
 
+  @Test
+  public void test_done(){
+    HashSet<Territory> test_territory2 = new HashSet<>();
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue");
+
+    lt4.addNeigh(lt5);
+    lt5.addNeigh(lt4);
+    lt4.setBasicUnit(5);    
+    lt5.setBasicUnit(6);
+    test_territory2.add(lt4);
+    test_territory2.add(lt5);
+    Player defender = new Player("Blue", test_territory2);
+    int lt5_numUnit = lt5.countUnit();
+    V1Action action = new V1Action();
+    action.Done(defender);
+    assertEquals(lt5_numUnit + 1, lt5.countUnit());
+  }
 }

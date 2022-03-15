@@ -17,5 +17,7 @@ public interface AbstractActionFactory {
    *@param player is the current user.
    */
   public void Done(Player player);
+  public String checkForMove(Player player, String src, String dest, int numUnit);
+  public String checkForAttack(Player attacker, Player defender, String src, String dest, int numUnit);
   
 }
