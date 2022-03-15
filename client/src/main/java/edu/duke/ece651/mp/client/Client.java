@@ -21,6 +21,9 @@ public class Client {
         clientSk.send_player();
         String map_show2 = new String(clientSk.accept_map());
         System.out.print(map_show2);
+        clientSk.collect_orders_and_send();
+        String map_show3 = new String(clientSk.accept_map());
+        System.out.print(map_show3);
         //clientSk.close_client();
     }
 }
