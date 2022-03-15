@@ -62,7 +62,7 @@ public class V1Action implements AbstractActionFactory {
    */
   @Override
   public void Attack (Player attacker, Player defender, String src, String dest, int numUnit){
-    String checkResult = checkForAttack(attacker,src, dest,numUnit);
+    String checkResult = checkForAttack(attacker, src, dest, numUnit);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
     }
