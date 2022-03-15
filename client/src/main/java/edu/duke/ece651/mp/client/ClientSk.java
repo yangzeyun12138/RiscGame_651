@@ -18,6 +18,7 @@ public class ClientSk {
   private int num_units;
   public Player player;
   final BufferedReader inputReader;
+  
 
   /**
    * connect to the local host on 9999 port
@@ -80,8 +81,7 @@ public class ClientSk {
     for (Territory t : player.player_terri_set) {
       if (count == player.player_terri_set.size() - 1) {
         t.setBasicUnit(limit);
-        //for test
-        //System.out.println(toDisplay.display());
+        System.out.println("Remaining " + limit + " units are placed in " + t.getName());
         return;
       }
       System.out.println("How many units do you want to place in " + t.getName() + "?");
@@ -102,10 +102,7 @@ public class ClientSk {
 
 
   public int try_readLine(int limit) throws IOException {
-
     String s = inputReader.readLine();
-    //BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    //String s = input.readLine();
     for (int i = 0; i < s.length(); i++){
       if (!Character.isDigit(s.charAt(i))){
         throw new IllegalArgumentException("Please enter a valid integer!");

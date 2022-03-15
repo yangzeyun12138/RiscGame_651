@@ -24,7 +24,8 @@ public class V1Action implements AbstractActionFactory {
           curr_t.addBasicUnit(numUnit);
         }
       }
-    } else{
+    }
+    else{
       throw new IllegalArgumentException(result);
     } 
   }

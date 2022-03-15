@@ -30,7 +30,6 @@ class ServerSkTest {
           GameMap gm = server.create_one_map("Territory.txt", 3);
           maps.add(gm);
           ServerSk serverSk = new ServerSk(maps);
-          System.out.println("before build");
           serverSk.build_server();
         } catch (Exception e) {
         }

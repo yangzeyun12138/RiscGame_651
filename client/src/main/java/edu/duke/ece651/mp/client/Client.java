@@ -10,9 +10,8 @@ import java.io.StringReader;
 
 public class Client {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        //BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        BufferedReader inData= new BufferedReader(new StringReader("5\n28\n16\n"));
-        ClientSk clientSk = new ClientSk(inData);
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        ClientSk clientSk = new ClientSk(input);
         String map_show1 = new String(clientSk.accept_map());
         System.out.print(map_show1);
         clientSk.accept_color();

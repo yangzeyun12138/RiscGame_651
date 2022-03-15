@@ -97,7 +97,7 @@ public class ServerSk {
       try {
         Socket temp_socket = serverSocket.accept();
         //error handle, same player cannot enter one room more than once
-        System.out.println("accept " + i + " success");
+        System.out.println("Accept client " + i + " successfully");
         ans_list.add(temp_socket);
       } catch (IOException ex) {
         ex.printStackTrace();
