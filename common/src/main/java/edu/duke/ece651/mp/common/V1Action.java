@@ -40,13 +40,12 @@ public class V1Action implements AbstractActionFactory {
   /**
    * checkForAttack() would check whether the attack if legal or not.
    * @param attacker is the Player who attacks others
-   * @param defender is the Player who is attacked by others
    * @param src is the name of the source territory
    * @param dest is the name of the destination territory
    * @param numUnit is the number of Unit that join the attack.
    * @return returns null if there is no error. returns string argument when there is an error.
    */
-  public String checkForAttack(Player attacker, Player defender, String src, String dest, int numUnit){
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit){
     AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(null);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
     String result = FactionCheck.checkAttack(attacker, src, dest, numUnit);
@@ -63,7 +62,7 @@ public class V1Action implements AbstractActionFactory {
    */
   @Override
   public void Attack (Player attacker, Player defender, String src, String dest, int numUnit){
-    String checkResult = checkForAttack(attacker,defender,src, dest,numUnit);
+    String checkResult = checkForAttack(attacker,src, dest,numUnit);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
     }
@@ -135,12 +134,15 @@ public class V1Action implements AbstractActionFactory {
 
   /**
    * Done function is the final command that the player would use, and it will help player to add 1 unit to all of his/her territories.
-   *@param player is the current user.
+   *@param players is all the players
    */
+
   @Override
-  public void Done(Player player){
-    for(Territory t : player.player_terri_set){
-      t.addBasicUnit(1);
+  public void Done(ArrayList<Player> players){
+    for (Player p : players) {
+      for (Territory t : p.player_terri_set) {
+        t.addBasicUnit(1);
+      }
     }
   }
 }

@@ -178,8 +178,9 @@ public class ServerSk {
 
   public void do_move(ArrayList<Orders> ordersList, ArrayList<Player> players)  {
     for (int i = 0; i < ordersList.size(); i++) {
-      for (Order o : ordersList.get(i).moveList) {
-        Action.Move(players.get(i), o.src, o.des, o.numUnits);
+      for (Order o : ordersList.get(i).MoveList) {
+        Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
+        Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
       }
     }
   }
@@ -193,7 +194,7 @@ public class ServerSk {
     }
     do_move(ordersList, players);
     //do_attack();
-    //do_done();
+    Action.Done(players);
   }
 
 

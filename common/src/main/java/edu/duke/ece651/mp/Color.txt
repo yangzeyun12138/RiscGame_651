@@ -5,3 +5,6 @@ Black
 Pink
 White
 Purple
+Yellow
+Orange
+Grey

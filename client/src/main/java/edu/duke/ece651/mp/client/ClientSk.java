@@ -160,27 +160,30 @@ public class ClientSk {
     }
     int num_move = Integer.parseInt(numMove);
     if (action.equals("M")) {
-      String temp = new String(Action.CheckForMove(player, src, des, num_move));
+      String temp = Action.checkForMove(player, src, des, num_move);
       if (temp != null) {
         return temp;
       }
       else {
         //new a order class, add it to orders moveList
+        orders.MoveList.add(new Order(src, des, num_move));
       }
     }
     else {
-      String temp = new String(Action.CheckForAttack(player, src, des, num_move));
+      String temp = Action.checkForAttack(player, src, des, num_move);
       if (temp != null) {
         return temp;
       }
       else {
         //new a order class, add it to orders attackList
+        orders.AttackList.add(new Order(src, des, num_move));
       }
     }
     return null;
   }
 
   public void check_action(String s) {
+
     if (s.length() != 1) {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
     }
@@ -193,24 +196,28 @@ public class ClientSk {
     System.out.println("You are the " + color + " player, what would you like to do?");
     System.out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
     System.out.println("Attention: please do some Move or Attack, then ends with Done.");
-    String action = inputReader.readLine();
+    String action = null;
     while (true) {
       try {
+        action = new String(inputReader.readLine());
         check_action(action);
+
         break;
       } catch (IllegalArgumentException e) {
         System.out.println(e.getMessage());
       }
     }
+    System.out.println("ck");
     while (true) {
-      String res = new String();
-      res = null;
+      String res = null;
       if (action.equals("D")) {
         break;
       }
       else {
-        while (res != null) {
+
+        do {
           if (action.equals("M")) {
+
             res = parse_check_add(action, orders);
           } else {
             res = parse_check_add(action, orders);
@@ -218,7 +225,8 @@ public class ClientSk {
           if (res != null) {
             System.out.println(res);
           }
-        }
+        } while (res != null);
+        break;
       }
     }
     return action;

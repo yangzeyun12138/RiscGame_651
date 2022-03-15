@@ -16,8 +16,8 @@ public interface AbstractActionFactory {
    * Done function is the final command that the player would use, and it will help player to add 1 unit to all of his/her territories.
    *@param player is the current user.
    */
-  public void Done(Player player);
+  public void Done(ArrayList<Player> players);
   public String checkForMove(Player player, String src, String dest, int numUnit);
-  public String checkForAttack(Player attacker, Player defender, String src, String dest, int numUnit);
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit);
   
 }
