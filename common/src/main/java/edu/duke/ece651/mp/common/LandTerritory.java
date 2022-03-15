@@ -157,4 +157,11 @@ public class LandTerritory implements Territory, java.io.Serializable {
     }
     return false;
   }
+  
+  @Override
+  public void changeColor(String Color){
+    this.color = Color;
+  }
+
+ 
 }

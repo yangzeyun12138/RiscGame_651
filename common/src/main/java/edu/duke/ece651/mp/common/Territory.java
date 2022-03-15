@@ -19,5 +19,5 @@ public interface Territory {
   public void setBasicUnit(int numUnit);
   public boolean loseUnit();
   public boolean loseUnit(int numUnit);
-  
+  public void changeColor(String Color);
 }
