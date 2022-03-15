@@ -20,6 +20,7 @@ import java.util.HashSet;
 public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
+  private AbstractActionFactory Action;
 
   /**
    * build a listening socket on port 9999, init all the rooms
@@ -29,6 +30,7 @@ public class ServerSk {
   public ServerSk(ArrayList<GameMap> rooms) throws IOException {
     this.serverSocket = new ServerSocket(9999);
     this.rooms = rooms;
+    this.Action = new V1Action();
   }
 
   /**
@@ -62,6 +64,8 @@ public class ServerSk {
           send_color(socket_list, map.get_player_list());
           send_num_units(socket_list, map.get_num_units());
           accept_player(socket_list, map.get_player_list());
+          send_map_to_all(socket_list, map);
+          do_one_turn(socket_list, map.get_player_list());
           send_map_to_all(socket_list, map);
         } catch (IOException | ClassNotFoundException ex) {
           ex.printStackTrace();
@@ -171,6 +175,29 @@ public class ServerSk {
       players.add(temp);
     }
   }
+
+  public void do_move(ArrayList<Orders> ordersList, ArrayList<Player> players)  {
+    for (int i = 0; i < ordersList.size(); i++) {
+      for (Order o : ordersList.get(i).MoveList) {
+        Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
+        Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
+      }
+    }
+  }
+
+  public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
+    ArrayList<Orders> ordersList = new ArrayList<Orders>();
+    for (Socket s : socket_list) {
+      ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+      Orders temp = (Orders) ois.readObject();
+      ordersList.add(temp);
+    }
+    do_move(ordersList, players);
+    //do_attack();
+    Action.Done(players);
+  }
+
+
 
   /**
    * close all the client socket in the room after game ends

@@ -102,7 +102,9 @@ public class V1ActionTest {
     Player defender = new Player("Blue", test_territory2);
     int lt5_numUnit = lt5.countUnit();
     V1Action action = new V1Action();
-    action.Done(defender);
+    ArrayList<Player> arrayList = new ArrayList<Player>();
+    arrayList.add(defender);
+    action.Done(arrayList);
     assertEquals(lt5_numUnit + 1, lt5.countUnit());
   }
 }

@@ -18,29 +18,32 @@ public class ClientSk {
   private int num_units;
   public Player player;
   final BufferedReader inputReader;
-  
+  private AbstractActionFactory Action;
 
   /**
    * connect to the local host on 9999 port
    * map and toDisplay need to wait for info from server to initialize
+   *
    * @throws IOException
    */
   public ClientSk(BufferedReader inputSource) throws IOException {
     socket = new Socket("0.0.0.0", 9999);
     this.map = null;
     this.inputReader = inputSource;
+    this.Action = new V1Action();
   }
 
 
   /**
    * Read a map object from the socket and display it
+   *
    * @return A String that shows the info of the whole map
    * @throws IOException
    * @throws ClassNotFoundException
    */
   public String accept_map() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-    map = (BasicMap)ois.readObject();
+    map = (BasicMap) ois.readObject();
     toDisplay = new BasicMapDisplay(map);
     return toDisplay.display();
   }
@@ -52,7 +55,7 @@ public class ClientSk {
 
      */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-    this.color = (String)ois.readObject();
+    this.color = (String) ois.readObject();
     System.out.print("You are " + color + " player, ");
   }
 
@@ -62,13 +65,13 @@ public class ClientSk {
     this.num_units = dis.readInt();
      */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-    this.num_units = (int)ois.readObject();
+    this.num_units = (int) ois.readObject();
     System.out.println("you have " + num_units + " units totally");
     System.out.println("Please place your units on each territory");
   }
 
-  public void set_player(){
-    for (Player p : map.get_player_list()){
+  public void set_player() {
+    for (Player p : map.get_player_list()) {
       if (this.color.equals(p.color)) {
         this.player = p;
       }
@@ -103,30 +106,146 @@ public class ClientSk {
 
   public int try_readLine(int limit) throws IOException {
     String s = inputReader.readLine();
-    for (int i = 0; i < s.length(); i++){
-      if (!Character.isDigit(s.charAt(i))){
+    for (int i = 0; i < s.length(); i++) {
+      if (!Character.isDigit(s.charAt(i))) {
         throw new IllegalArgumentException("Please enter a valid integer!");
       }
     }
     int in = Integer.parseInt(s);
     if (in >= 0 && in <= limit) {
       return in;
-    }
-    else {
+    } else {
       throw new IllegalArgumentException("Please enter an integer within the " + limit + "!");
     }
   }
 
   /**
    * close the socket connection
+   *
    * @throws IOException
    */
 
-  public void send_player(){
+  public void send_player() {
     ObjectOutputStream oos = null;
     try {
       oos = new ObjectOutputStream(socket.getOutputStream());
       oos.writeObject(player);
+      oos.flush();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public String read_string(String promt) throws IOException {
+    System.out.print(promt);
+    String s = inputReader.readLine();
+    return s;
+  }
+
+
+  public String parse_check_add(String action, Orders orders) throws IOException {
+    String order = read_string("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
+            "numUnitsToDestination\n");
+    String src = new String();
+    String des = new String();
+    int index1 = order.indexOf(" ");
+    src = order.substring(0, index1);
+    int index2 = order.indexOf(" ", index1 + 1);
+    des = order.substring(index1 + 1, index2);
+    String numMove = order.substring(index2 + 1);
+    for (int i = 0; i < numMove.length(); i++) {
+      if (!Character.isDigit(numMove.charAt(i))) {
+        return new String("Please enter a valid integer!");
+      }
+    }
+    int num_move = Integer.parseInt(numMove);
+    if (action.equals("M")) {
+      String temp = Action.checkForMove(player, src, des, num_move);
+      if (temp != null) {
+        return temp;
+      }
+      else {
+        //new a order class, add it to orders moveList
+        orders.MoveList.add(new Order(src, des, num_move));
+      }
+    }
+    else {
+      String temp = Action.checkForAttack(player, src, des, num_move);
+      if (temp != null) {
+        return temp;
+      }
+      else {
+        //new a order class, add it to orders attackList
+        orders.AttackList.add(new Order(src, des, num_move));
+      }
+    }
+    return null;
+  }
+
+  public void check_action(String s) {
+
+    if (s.length() != 1) {
+      throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
+    }
+    if (s.charAt(0) != 'M' && s.charAt(0) != 'A' && s.charAt(0) != 'D') {
+      throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
+    }
+  }
+
+  public String collect_one_order(Orders orders) throws IOException {
+    System.out.println("You are the " + color + " player, what would you like to do?");
+    System.out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
+    System.out.println("Attention: please do some Move or Attack, then ends with Done.");
+    String action = null;
+    while (true) {
+      try {
+        action = new String(inputReader.readLine());
+        check_action(action);
+
+        break;
+      } catch (IllegalArgumentException e) {
+        System.out.println(e.getMessage());
+      }
+    }
+    System.out.println("ck");
+    while (true) {
+      String res = null;
+      if (action.equals("D")) {
+        break;
+      }
+      else {
+
+        do {
+          if (action.equals("M")) {
+
+            res = parse_check_add(action, orders);
+          } else {
+            res = parse_check_add(action, orders);
+          }
+          if (res != null) {
+            System.out.println(res);
+          }
+        } while (res != null);
+        break;
+      }
+    }
+    return action;
+  }
+
+  public void collect_orders_and_send() throws IOException {
+    Orders orders = new Orders();
+    String temp = new String();
+    do {
+      temp = collect_one_order(orders);
+    } while (!temp.equals("D"));
+    send_orders(orders);
+  }
+
+  public void send_orders(Orders orders) {
+    ObjectOutputStream oos = null;
+    try {
+      oos = new ObjectOutputStream(socket.getOutputStream());
+      oos.writeObject(orders);
       oos.flush();
     } catch (IOException ex) {
       ex.printStackTrace();

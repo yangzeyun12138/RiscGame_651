@@ -1,6 +1,7 @@
 package edu.duke.ece651.mp.common;
 
-public class Order {
+public class Order implements java.io.Serializable{
+  private static final long serialVersionUID = 1L;
   final String src;
   final String dest;
   final int numUnit;
