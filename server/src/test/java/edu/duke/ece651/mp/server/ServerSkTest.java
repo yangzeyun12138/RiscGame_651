@@ -1,8 +1,12 @@
 package edu.duke.ece651.mp.server;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import edu.duke.ece651.mp.common.*;
 import edu.duke.ece651.mp.client.*;
+
+import javax.print.attribute.standard.Severity;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,19 +19,19 @@ class ServerSkTest {
 
   public ClientSk build_client1() throws IOException, ClassNotFoundException {
     BufferedReader inData= new BufferedReader(new StringReader("5\n28\n16\nM\nGondor Mordor 1\nD\n"));
-    ClientSk clientSk = new ClientSk(inData);
+    ClientSk clientSk = new ClientSk(inData, System.out);
     return clientSk;
   }
 
   public ClientSk build_client2() throws IOException, ClassNotFoundException {
     BufferedReader inData= new BufferedReader(new StringReader("5\n28\n16\nM\nNarnia Oz 1\nD\n"));
-    ClientSk clientSk = new ClientSk(inData);
+    ClientSk clientSk = new ClientSk(inData, System.out);
     return clientSk;
   }
 
   public ClientSk build_client3() throws IOException, ClassNotFoundException {
     BufferedReader inData= new BufferedReader(new StringReader("5\n28\n16\nM\nElantris Scadrial 1\nD\n"));
-    ClientSk clientSk = new ClientSk(inData);
+    ClientSk clientSk = new ClientSk(inData, System.out);
     return clientSk;
   }
 

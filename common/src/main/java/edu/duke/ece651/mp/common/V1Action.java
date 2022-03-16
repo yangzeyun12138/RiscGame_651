@@ -1,5 +1,5 @@
 package edu.duke.ece651.mp.common;
-        
+
 import java.util.*;
 import java.util.Random;
 import java.io.*;
@@ -61,7 +61,9 @@ public class V1Action implements AbstractActionFactory {
    * @param numUnit is the number of Unit that join the attack.
    */
   @Override
+
   public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit){
+
     String checkResult = checkForAttack(attacker, src, dest, numUnit);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
@@ -72,7 +74,7 @@ public class V1Action implements AbstractActionFactory {
 
     // Attacker lose units that is attacking
     //attackerTerri.loseUnit(numUnit);
-    
+
     // Attacker win Defender
     boolean unitRemain = (numUnit > 0) && (defenderTerri.countUnit() > 0);
     while(unitRemain){
@@ -151,6 +153,7 @@ public class V1Action implements AbstractActionFactory {
     }
   }
 
+
    /**
    * getPlayer() can help the server to get the Player based on the name of the destination territory
    *@param dest is the name of the destination territory
@@ -205,5 +208,36 @@ public class V1Action implements AbstractActionFactory {
     
     Collections.shuffle(numlist,new Random());
     return numlist;
+
+  @Override
+  public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players) {
+    for (int i = 0; i < ordersList.size(); i++) {
+      for (Order o : ordersList.get(i).AttackList) {
+        Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
+        attackerTerri.loseUnit(o.getNumUnit());
+      }
+    }
+  }
+
+  @Override
+  public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players) {
+    ArrayList<Order> res = new ArrayList<Order>();
+    for (Player p : players) {
+      Order temp = new Order(p, " ", " ", 0);
+      for (Order o : attackList) {
+        if (p.color.equals(o.getPlayer().color)) {
+          if (temp.getSrc().equals(" ")) {
+            temp = o;
+          }
+          else {
+            temp.numUnit += o.numUnit;
+          }
+        }
+      }
+      if (!temp.getSrc().equals(" ")) {
+        res.add(temp);
+      }
+    }
+    return res;
   }
 }

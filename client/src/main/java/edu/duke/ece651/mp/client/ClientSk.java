@@ -18,6 +18,7 @@ public class ClientSk {
   private int num_units;
   public Player player;
   final BufferedReader inputReader;
+  final PrintStream out;
   private AbstractActionFactory Action;
 
   /**
@@ -26,10 +27,11 @@ public class ClientSk {
    *
    * @throws IOException
    */
-  public ClientSk(BufferedReader inputSource) throws IOException {
+  public ClientSk(BufferedReader inputSource, PrintStream outSource) throws IOException {
     socket = new Socket("0.0.0.0", 9999);
     this.map = null;
     this.inputReader = inputSource;
+    this.out = outSource;
     this.Action = new V1Action();
   }
 
@@ -56,7 +58,7 @@ public class ClientSk {
      */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.color = (String) ois.readObject();
-    System.out.print("You are " + color + " player, ");
+    out.print("You are " + color + " player, ");
   }
 
   public void accept_units() throws IOException, ClassNotFoundException {
@@ -66,8 +68,8 @@ public class ClientSk {
      */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.num_units = (int) ois.readObject();
-    System.out.println("you have " + num_units + " units totally");
-    System.out.println("Please place your units on each territory");
+    out.println("you have " + num_units + " units totally");
+    out.println("Please place your units on each territory");
   }
 
   public void set_player() {
@@ -84,11 +86,11 @@ public class ClientSk {
     for (Territory t : player.player_terri_set) {
       if (count == player.player_terri_set.size() - 1) {
         t.setBasicUnit(limit);
-        System.out.println("Remaining " + limit + " units are placed in " + t.getName());
+        out.println("Remaining " + limit + " units are placed in " + t.getName());
         return;
       }
-      System.out.println("How many units do you want to place in " + t.getName() + "?");
-      System.out.print("Please enter a integer: ");
+      out.println("How many units do you want to place in " + t.getName() + "?");
+      out.print("Please enter a integer: ");
       while (true) {
         try {
           int temp = try_readLine(limit);
@@ -96,7 +98,7 @@ public class ClientSk {
           t.setBasicUnit(temp);
           break;
         } catch (IllegalArgumentException | IOException e) {
-          System.out.println(e.getMessage());
+          out.println(e.getMessage());
         }
       }
       count++;
@@ -137,7 +139,7 @@ public class ClientSk {
   }
 
   public String read_string(String promt) throws IOException {
-    System.out.print(promt);
+    out.print(promt);
     String s = inputReader.readLine();
     return s;
   }
@@ -193,9 +195,9 @@ public class ClientSk {
   }
 
   public String collect_one_order(Orders orders) throws IOException {
-    System.out.println("You are the " + color + " player, what would you like to do?");
-    System.out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
-    System.out.println("Attention: please do some Move or Attack, then ends with Done.");
+    out.println("You are the " + color + " player, what would you like to do?");
+    out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
+    out.println("Attention: please do some Move or Attack, then ends with Done.");
     String action = null;
     while (true) {
       try {
@@ -204,7 +206,7 @@ public class ClientSk {
 
         break;
       } catch (IllegalArgumentException e) {
-        System.out.println(e.getMessage());
+        out.println(e.getMessage());
       }
     }
     while (true) {
@@ -222,7 +224,7 @@ public class ClientSk {
             res = parse_check_add(action, orders);
           }
           if (res != null) {
-            System.out.println(res);
+            out.println(res);
           }
         } while (res != null);
         break;

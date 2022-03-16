@@ -9,6 +9,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+
 /**
  * The high-level controlling of game, such as
  * ServerSk manipulate the serverSocket to accept clients,
@@ -185,6 +187,20 @@ public class ServerSk {
     }
   }
 
+
+  public void do_attack(ArrayList<Player> players){
+    for (Map.Entry<String, ArrayList<Order>> entry : AttackMap.entrySet()) {
+      ArrayList<Order> attackList = entry.getValue();
+      String des = entry.getKey();
+      Player defender = Action.get_player(players, des);
+      ArrayList<Order> refineList = Action.refineAttack(attackList, players);
+      ArrayList<Integer> randoms = Action.getRandoms(attackList.size());
+      for (int i : randoms) {
+        defender = Action.Attack(attackList.get(i).player, defender, attackList.get(i).getSrc(), des, attackList.get(i).getNumUnit());
+      }
+    }
+  }
+
   public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
     ArrayList<Orders> ordersList = new ArrayList<Orders>();
     for (Socket s : socket_list) {
@@ -193,7 +209,10 @@ public class ServerSk {
       ordersList.add(temp);
     }
     do_move(ordersList, players);
-    //do_attack();
+    //Attack begin;
+    Action.loseAttackUnit(ordersList, players);
+    AttackMap = Action.   (ordersList, players);
+    do_attack(players);
     Action.Done(players);
   }
 

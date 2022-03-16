@@ -18,8 +18,12 @@ public interface AbstractActionFactory {
   public void Done(ArrayList<Player> players);
   public String checkForMove(Player player, String src, String dest, int numUnit);
   public String checkForAttack(Player attacker, String src, String dest, int numUnit);
+
   public Player getPlayer(String dest, ArrayList<Player> players);
   public HashMap<String, ArrayList<Order>> arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players);
   public ArrayList<Integer> getRandomIdx(int sz);
   
+  public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players);
+  public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players);
+
 }
