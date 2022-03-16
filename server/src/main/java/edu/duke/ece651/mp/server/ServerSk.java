@@ -22,7 +22,7 @@ public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
   private AbstractActionFactory Action;
-  private HashMap<String, ArrayList<Order>> AttackMap;
+  
   /**
    * build a listening socket on port 9999, init all the rooms
    * @param rooms, all the rooms preparing for game starting
@@ -32,6 +32,7 @@ public class ServerSk {
     this.serverSocket = new ServerSocket(9999);
     this.rooms = rooms;
     this.Action = new V1Action();
+    this.AttackMap = new HashMap<String, ArrayList<Order>>();
   }
 
   /**
