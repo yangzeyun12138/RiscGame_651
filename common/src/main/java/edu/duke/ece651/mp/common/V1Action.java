@@ -243,4 +243,17 @@ public class V1Action implements AbstractActionFactory {
     }
     return res;
   }
+
+  @Override
+  public int getIndexFromPlayers(ArrayList<Player> players, String color){
+    int counter = 0;
+    for(Player player : players){
+      if(player.color.equals(color)){
+        break;
+      } else{
+        counter++;
+      }
+    }
+    return counter;
+  }
 }
