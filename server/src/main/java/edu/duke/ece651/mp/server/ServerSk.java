@@ -20,6 +20,7 @@ public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
   private AbstractActionFactory Action;
+  private HashMap<String, ArrayList<Order>> AttackMap;
   /**
    * build a listening socket on port 9999, init all the rooms
    * @param rooms, all the rooms preparing for game starting
@@ -225,8 +226,8 @@ public class ServerSk {
     return null;
   }
 
-  /*public void arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
+  public void arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
     
-    }*/
+  }
   
 }
