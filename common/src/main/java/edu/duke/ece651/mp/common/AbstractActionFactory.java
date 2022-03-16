@@ -20,4 +20,5 @@ public interface AbstractActionFactory {
   public String checkForMove(Player player, String src, String dest, int numUnit);
   public String checkForAttack(Player attacker, String src, String dest, int numUnit);
   public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players);
+  public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players);
 }

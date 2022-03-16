@@ -187,11 +187,16 @@ public class ServerSk {
   }
 
 
-
-
-  public void do_attack(){
+  public void do_attack(ArrayList<Player> players){
     for (Map.Entry<String, ArrayList<Order>> entry : AttackMap.entrySet()) {
-
+      ArrayList<Order> attackList = entry.getValue();
+      String des = entry.getKey();
+      Player defender = Action.get_player(players, des);
+      ArrayList<Order> refineList = Action.refineAttack(attackList, players);
+      ArrayList<Integer> randoms = Action.getRandoms(attackList.size());
+      for (int i : randoms) {
+        defender = Action.Attack(attackList.get(i).player, defender, attackList.get(i).getSrc(), des, attackList.get(i).getNumUnit());
+      }
     }
   }
 
@@ -205,7 +210,8 @@ public class ServerSk {
     do_move(ordersList, players);
     //Attack begin;
     Action.loseAttackUnit(ordersList, players);
-    do_attack();
+    AttackMap = Action.   (ordersList, players);
+    do_attack(players);
     Action.Done(players);
   }
 
@@ -220,27 +226,6 @@ public class ServerSk {
     for (Socket s : socket_list) {
       s.close();
     }
-  }
-
-  /**
-   * getPlayer() can help the server to get the Player based on the name of the destination territory
-   *@param dest is the name of the destination territory
-   *@param players is the ArrayList of players
-   *@return returns the player
-   */
-  public Player getPlayer(String dest, ArrayList<Player> players){
-    for(Player p : players){
-      for(Territory t : p.player_terri_set){
-        if(t.getName().equals(dest)){
-          return p;
-        }
-      }
-    }
-    return null;
-  }
-
-  public void arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
-    
   }
   
 }

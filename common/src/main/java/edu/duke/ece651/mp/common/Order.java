@@ -4,7 +4,7 @@ public class Order implements java.io.Serializable{
   private static final long serialVersionUID = 1L;
   final String src;
   final String dest;
-  final int numUnit;
+  public int numUnit;
   public Player player;
   public Order(Player player, String src, String dest, int numUnit){
     this.src = src;

@@ -30,7 +30,6 @@ public class BasicMap implements GameMap, java.io.Serializable{
   public BasicMap deep_copy() {
     BasicMap deep_copy = null;
     try {
-      // 写入字节流
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       ObjectOutputStream oos = new ObjectOutputStream(baos);
       oos.writeObject(this);

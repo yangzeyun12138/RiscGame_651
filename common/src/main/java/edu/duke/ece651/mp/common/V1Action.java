@@ -1,5 +1,7 @@
 package edu.duke.ece651.mp.common;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.*;
 import java.util.Random;
 public class V1Action implements AbstractActionFactory {
@@ -155,5 +157,27 @@ public class V1Action implements AbstractActionFactory {
         attackerTerri.loseUnit(o.getNumUnit());
       }
     }
+  }
+
+  @Override
+  public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players) {
+    ArrayList<Order> res = new ArrayList<Order>();
+    for (Player p : players) {
+      Order temp = new Order(p, " ", " ", 0);
+      for (Order o : attackList) {
+        if (p.color.equals(o.getPlayer().color)) {
+          if (temp.getSrc().equals(" ")) {
+            temp = o;
+          }
+          else {
+            temp.numUnit += o.numUnit;
+          }
+        }
+      }
+      if (!temp.getSrc().equals(" ")) {
+        res.add(temp);
+      }
+    }
+    return res;
   }
 }
