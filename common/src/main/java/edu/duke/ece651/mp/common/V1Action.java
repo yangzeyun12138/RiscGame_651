@@ -2,6 +2,7 @@ package edu.duke.ece651.mp.common;
 
 import java.util.*;
 import java.util.Random;
+import java.io.*;
 public class V1Action implements AbstractActionFactory {
   @Override
   public String checkForMove(Player player, String src, String dest, int numUnit){
@@ -60,7 +61,7 @@ public class V1Action implements AbstractActionFactory {
    * @param numUnit is the number of Unit that join the attack.
    */
   @Override
-  public void Attack (Player attacker, Player defender, String src, String dest, int numUnit){
+  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit){
     String checkResult = checkForAttack(attacker, src, dest, numUnit);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
@@ -88,6 +89,9 @@ public class V1Action implements AbstractActionFactory {
       defenderTerri.changeColor(attacker.getColor());
       defenderTerri.setBasicUnit(numUnit);
       attacker.player_terri_set.add(defenderTerri);
+      return attacker;
+    } else {
+      return defender;
     }
     
   }
@@ -192,6 +196,14 @@ public class V1Action implements AbstractActionFactory {
        }
     }
   }
- 
-  
+  @Override
+  public ArrayList<Integer> getRandomIdx(int sz){
+    ArrayList<Integer> numlist = new ArrayList<Integer>();
+    for (int i = 0; i< sz; i++){
+      numlist.add(i);
+    }
+    
+    Collections.shuffle(numlist,new Random());
+    return numlist;
+  }
 }

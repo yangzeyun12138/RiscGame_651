@@ -195,4 +195,13 @@ public class V1ActionTest {
     players.add(player2);
     return players;
   }
+
+  @Test
+  public void test_getRandomIndex(){
+    AbstractActionFactory Action = new V1Action();
+    ArrayList<Integer> numlist = Action.getRandomIdx(10);
+    for(int i = 0; i < numlist.size(); i++){
+      System.out.println("numlist[" + i + "]: " + numlist.get(i));
+    }
+  }
 }
