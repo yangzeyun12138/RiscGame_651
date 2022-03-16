@@ -184,6 +184,28 @@ public class ServerSk {
     }
   }
 
+  public Territory FindTerritory(Player player, String name){
+    for(Territory t : player.player_terri_set){
+      if(t.getName().equals(name)){
+        return t;
+      }
+    }
+    return null;
+  }
+
+  public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players) {
+    for (int i = 0; i < ordersList.size(); i++) {
+      for (Order o : ordersList.get(i).AttackList) {
+        Territory attackerTerri = FindTerritory(players.get(i), o.getSrc());
+        attackerTerri.loseUnit(o.getNumUnit());
+      }
+    }
+  }
+
+  public void do_attack(){
+
+  }
+
   public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
     ArrayList<Orders> ordersList = new ArrayList<Orders>();
     for (Socket s : socket_list) {
@@ -192,7 +214,9 @@ public class ServerSk {
       ordersList.add(temp);
     }
     do_move(ordersList, players);
-    //do_attack();
+    //Attack begin;
+    loseAttackUnit(ordersList, players);
+    do_attack();
     Action.Done(players);
   }
 

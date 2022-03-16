@@ -62,15 +62,16 @@ public class V1Action implements AbstractActionFactory {
    */
   @Override
   public void Attack (Player attacker, Player defender, String src, String dest, int numUnit){
+
     String checkResult = checkForAttack(attacker, src, dest, numUnit);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
     }
     
-    Territory attackerTerri = findTerritory(attacker, src);
+    //Territory attackerTerri = findTerritory(attacker, src);
     Territory defenderTerri = findTerritory(defender, dest);
     // Attacker lose units that is attacking
-    attackerTerri.loseUnit(numUnit);
+    //attackerTerri.loseUnit(numUnit);
     // Attacker win Defender
     boolean unitRemain = (numUnit > 0) && (defenderTerri.countUnit() > 0);
     while(unitRemain){
