@@ -146,4 +146,14 @@ public class V1Action implements AbstractActionFactory {
       }
     }
   }
+
+  @Override
+  public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players) {
+    for (int i = 0; i < ordersList.size(); i++) {
+      for (Order o : ordersList.get(i).AttackList) {
+        Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
+        attackerTerri.loseUnit(o.getNumUnit());
+      }
+    }
+  }
 }
