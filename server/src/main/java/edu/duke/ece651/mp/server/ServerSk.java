@@ -30,6 +30,7 @@ public class ServerSk {
     this.serverSocket = new ServerSocket(9999);
     this.rooms = rooms;
     this.Action = new V1Action();
+    this.AttackMap = new HashMap<String, ArrayList<Order>>();
   }
 
   /**
@@ -227,7 +228,27 @@ public class ServerSk {
   }
 
   public void arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
-    
+    for(Orders orders : ordersList){
+      for(Order order : orders.AttackList){
+        String dest = order.getDest();
+        updatePlayer(order, players);
+        if(!AttackMap.containsKey(dest)){
+          ArrayList<Order> temp = new ArrayList<Order>();
+          temp.add(order);
+          AttackMap.put(dest, temp);
+        } else{
+          AttackMap.get(dest).add(order);
+        }
+      }
+    }
+  }
+
+  public void updatePlayer(Order order, ArrayList<Player> players){
+    for(Player new_player : players){
+       if(order.getPlayer().getColor().equals(new_player.getColor())){
+          order.player = new_player;
+       }
+    }
   }
   
 }

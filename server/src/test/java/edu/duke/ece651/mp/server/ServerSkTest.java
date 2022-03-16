@@ -71,4 +71,33 @@ class ServerSkTest {
     th.interrupt();
     th.join();
   }
+
+  @Test
+  public void test_getPlayer() throws IOException, ClassNotFoundException{
+    Player player = makePlayer();
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(player);
+    ArrayList<GameMap> maps = new ArrayList<>();
+    Server server = new Server();
+    GameMap gm = server.create_one_map("Territory.txt", 3);
+    maps.add(gm);
+    ServerSk serverSk = new ServerSk(maps);
+    Player return_player = serverSk.getPlayer("Gondor", players);
+    assertEquals("Red", return_player.color);
+  }
+
+  public Player makePlayer(){
+    HashSet<Territory> test_territory = new HashSet<>();
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red");
+    lt1.addNeigh(lt2);
+    lt2.addNeigh(lt1);
+    lt1.setBasicUnit(3);
+    lt2.setBasicUnit(4);
+    test_territory.add(lt1);
+    test_territory.add(lt2);
+    Player player = new Player("Red", test_territory);
+    return player;
+  }
+
 }
