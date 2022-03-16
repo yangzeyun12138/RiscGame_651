@@ -207,7 +207,6 @@ public class ClientSk {
         System.out.println(e.getMessage());
       }
     }
-    System.out.println("ck");
     while (true) {
       String res = null;
       if (action.equals("D")) {
