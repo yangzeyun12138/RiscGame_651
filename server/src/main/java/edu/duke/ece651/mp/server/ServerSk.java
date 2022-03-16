@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
 /**
  * The high-level controlling of game, such as
  * ServerSk manipulate the serverSocket to accept clients,
@@ -21,7 +20,6 @@ public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
   private AbstractActionFactory Action;
-
   /**
    * build a listening socket on port 9999, init all the rooms
    * @param rooms, all the rooms preparing for game starting
@@ -209,4 +207,26 @@ public class ServerSk {
       s.close();
     }
   }
+
+  /**
+   * getPlayer() can help the server to get the Player based on the name of the destination territory
+   *@param dest is the name of the destination territory
+   *@param players is the ArrayList of players
+   *@return returns the player
+   */
+  public Player getPlayer(String dest, ArrayList<Player> players){
+    for(Player p : players){
+      for(Territory t : p.player_terri_set){
+        if(t.getName().equals(dest)){
+          return p;
+        }
+      }
+    }
+    return null;
+  }
+
+  /*public void arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
+    
+    }*/
+  
 }

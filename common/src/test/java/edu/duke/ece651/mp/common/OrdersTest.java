@@ -3,7 +3,7 @@ package edu.duke.ece651.mp.common;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-
+import java.util.HashSet;
 public class OrdersTest {
   @Test
   public void test_orders() {
@@ -17,7 +17,19 @@ public class OrdersTest {
     int numUnit2 = 3;
     Order order2 = new Order(src2, dest2, numUnit2);
 
-    Orders orders = new Orders();
+    HashSet<Territory> test_territory = new HashSet<>();
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red");
+    lt1.addNeigh(lt2);
+    lt2.addNeigh(lt1);
+    lt1.setBasicUnit(3);
+    lt2.setBasicUnit(4);
+    test_territory.add(lt1);
+    test_territory.add(lt2);
+    Player player = new Player("Red", test_territory);
+   
+    Orders orders = new Orders(player);
+    assertEquals("Red", orders.player.color);
     orders.MoveList.add(order1);
     orders.AttackList.add(order2);
     assertEquals(1, orders.MoveList.size());
