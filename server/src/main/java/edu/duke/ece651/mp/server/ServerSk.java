@@ -22,6 +22,7 @@ public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
   private AbstractActionFactory Action;
+  private HashMap<String, ArrayList<Order>> AttackMap;
   
   /**
    * build a listening socket on port 9999, init all the rooms
@@ -192,11 +193,11 @@ public class ServerSk {
     for (Map.Entry<String, ArrayList<Order>> entry : AttackMap.entrySet()) {
       ArrayList<Order> attackList = entry.getValue();
       String des = entry.getKey();
-      Player defender = Action.get_player(players, des);
+      Player defender = Action.getPlayer(des, players);
       ArrayList<Order> refineList = Action.refineAttack(attackList, players);
-      ArrayList<Integer> randoms = Action.getRandoms(attackList.size());
+      ArrayList<Integer> randoms = Action.getRandomIdx(refineList.size());
       for (int i : randoms) {
-        defender = Action.Attack(attackList.get(i).player, defender, attackList.get(i).getSrc(), des, attackList.get(i).getNumUnit());
+        defender = Action.Attack(refineList.get(i).player, defender, refineList.get(i).getSrc(), des, refineList.get(i).getNumUnit());
       }
     }
   }
@@ -211,7 +212,7 @@ public class ServerSk {
     do_move(ordersList, players);
     //Attack begin;
     Action.loseAttackUnit(ordersList, players);
-    AttackMap = Action.   (ordersList, players);
+    AttackMap = Action.arrangeAttackOrder(ordersList, players);
     do_attack(players);
     Action.Done(players);
   }

@@ -200,15 +200,15 @@ public class V1Action implements AbstractActionFactory {
     }
   }
   @Override
-  public ArrayList<Integer> getRandomIdx(int sz){
+  public ArrayList<Integer> getRandomIdx(int sz) {
     ArrayList<Integer> numlist = new ArrayList<Integer>();
-    for (int i = 0; i< sz; i++){
+    for (int i = 0; i < sz; i++) {
       numlist.add(i);
     }
-    
-    Collections.shuffle(numlist,new Random());
-    return numlist;
 
+    Collections.shuffle(numlist, new Random());
+    return numlist;
+  }
   @Override
   public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players) {
     for (int i = 0; i < ordersList.size(); i++) {

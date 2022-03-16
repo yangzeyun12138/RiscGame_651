@@ -201,13 +201,15 @@ public class V1ActionTest {
   }
 
   @Test
-  public void test_getRandomIndex(){
+  public void test_getRandomIndex() {
     AbstractActionFactory Action = new V1Action();
     ArrayList<Integer> numlist = Action.getRandomIdx(10);
-    for(int i = 0; i < numlist.size(); i++){
+    for (int i = 0; i < numlist.size(); i++) {
       System.out.println("numlist[" + i + "]: " + numlist.get(i));
     }
+  }
 
+  @Test
   public void test_loseAttackUnit(){
     V1Action action = new V1Action();
     ArrayList<Player> players = new ArrayList<>();
