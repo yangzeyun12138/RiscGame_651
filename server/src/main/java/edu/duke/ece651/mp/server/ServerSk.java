@@ -209,13 +209,39 @@ public class ServerSk {
       Orders temp = (Orders) ois.readObject();
       ordersList.add(temp);
     }
-
-    do_move(ordersList, players);
-    Action.loseAttackUnit(ordersList, players);
-    AttackMap = Action.arrangeAttackOrder(ordersList, players);
-    do_attack(players);
+    while (true) {
+      try {
+        do_move(ordersList, players);
+        Action.loseAttackUnit(ordersList, players);
+        AttackMap = Action.arrangeAttackOrder(ordersList, players);
+        do_attack(players);
+        break;
+      } catch (IllegalArgumentException e) {
+        System.out.println(e.getMessage());
+        int space = e.getMessage().indexOf(" ");
+        String temp_color = e.getMessage().substring(0, space);
+        int skIndex = Action.getIndexFromPlayers(players, temp_color);
+        Orders new_orders = getNewOrders(socket_list.get(skIndex), e.getMessage());
+        ordersList.get(skIndex) = new_orders;
+      }
+    }
     Action.Done(players);
   }
+
+  public Orders getNewOrders(Socket sk, String msg) throws IOException, ClassNotFoundException {
+    ObjectOutputStream oos = null;
+    try {
+      oos = new ObjectOutputStream(sk.getOutputStream());
+      oos.writeObject(msg);
+      oos.flush();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+    ObjectInputStream ois = new ObjectInputStream(sk.getInputStream());
+    Orders temp = (Orders) ois.readObject();
+    return temp;
+  }
+
 
   public void do_turns(ArrayList<Socket> socket_list, ArrayList<Player> players){
 

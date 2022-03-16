@@ -21,7 +21,7 @@ public class AdjacencyRuleChecker extends AttackChecker {
         }
       }
     }
-    return "Invalid Attack: The destination territory is not adjacent to the source territory!";
+    return new String(player.color + " player. Invalid Attack: The destination territory is not adjacent to the source territory!");
   }
 
   public AdjacencyRuleChecker(AttackChecker next){

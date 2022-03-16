@@ -14,7 +14,7 @@ public class FactionRuleChecker extends AttackChecker {
   protected String checkMyRule(Player player, String src, String dest, int numUnit){
     for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(dest)){
-        return "Invalid Attack: The destination territory and the source territory are in the same faction!";
+        return new String(player.color + " player. Invalid Attack: The destination territory and the source territory are in the same faction!");
       }
     }
     return null;

@@ -17,10 +17,10 @@ public class UnitRuleChecker extends MoveChecker{
     for (Territory t: player.player_terri_set){
       if (t.getName().equals(src)){
         if (t.countUnit() < numUnit){
-          return "The movement is Invalid: the number of unit within the territory is less than the number you want to move!";
+          return new String(player.color + " player. The movement is Invalid: the number of unit within the territory is less than the number you want to move!");
         }
         if(numUnit < 0){
-          return "The movement is Invalid: the Unit to move cannot be negative!";
+          return new String(player.color + " player. The movement is Invalid: the Unit to move cannot be negative!");
         }
       }
     }
