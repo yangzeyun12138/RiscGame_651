@@ -151,8 +151,21 @@ public class ClientSk {
     String src = new String();
     String des = new String();
     int index1 = order.indexOf(" ");
+    if (index1 == -1) {
+      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
+              "numUnitsToDestination\n");
+    }
     src = order.substring(0, index1);
     int index2 = order.indexOf(" ", index1 + 1);
+    if (index2 == -1) {
+      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
+              "numUnitsToDestination\n");
+    }
+    int index3 = order.indexOf(" ", index2 + 1);
+    if (index3 != -1) {
+      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
+              "numUnitsToDestination\n");
+    }
     des = order.substring(index1 + 1, index2);
     String numMove = order.substring(index2 + 1);
     for (int i = 0; i < numMove.length(); i++) {
@@ -185,7 +198,6 @@ public class ClientSk {
   }
 
   public void check_action(String s) {
-
     if (s.length() != 1) {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
     }
@@ -203,7 +215,6 @@ public class ClientSk {
       try {
         action = new String(inputReader.readLine());
         check_action(action);
-
         break;
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage());
