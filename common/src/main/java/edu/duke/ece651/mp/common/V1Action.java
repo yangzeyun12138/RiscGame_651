@@ -214,7 +214,10 @@ public class V1Action implements AbstractActionFactory {
     for (int i = 0; i < ordersList.size(); i++) {
       for (Order o : ordersList.get(i).AttackList) {
         Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
-        attackerTerri.loseUnit(o.getNumUnit());
+        boolean res = attackerTerri.loseUnit(o.getNumUnit());
+        if (res == false) {
+          throw new IllegalArgumentException("Invalid orders");
+        }
       }
     }
   }
