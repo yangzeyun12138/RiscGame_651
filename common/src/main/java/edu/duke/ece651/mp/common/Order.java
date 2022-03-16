@@ -5,10 +5,12 @@ public class Order implements java.io.Serializable{
   final String src;
   final String dest;
   final int numUnit;
-  public Order(String src, String dest, int numUnit){
+  final Player player;
+  public Order(Player player, String src, String dest, int numUnit){
     this.src = src;
     this.dest = dest;
     this.numUnit = numUnit;
+    this.player = player;
   }
 
   public String getSrc(){
@@ -21,5 +23,9 @@ public class Order implements java.io.Serializable{
 
   public int getNumUnit(){
     return this.numUnit;
+  }
+
+  public Player getPlayer(){
+    return this.player;
   }
 }
