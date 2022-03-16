@@ -20,7 +20,7 @@ public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
   private AbstractActionFactory Action;
-  private HashMap<String, ArrayList<Order>> AttackMap;
+  
   /**
    * build a listening socket on port 9999, init all the rooms
    * @param rooms, all the rooms preparing for game starting
@@ -207,47 +207,6 @@ public class ServerSk {
   public void close_all_sk(ArrayList<Socket> socket_list) throws IOException {
     for (Socket s : socket_list) {
       s.close();
-    }
-  }
-
-  /**
-   * getPlayer() can help the server to get the Player based on the name of the destination territory
-   *@param dest is the name of the destination territory
-   *@param players is the ArrayList of players
-   *@return returns the player
-   */
-  public Player getPlayer(String dest, ArrayList<Player> players){
-    for(Player p : players){
-      for(Territory t : p.player_terri_set){
-        if(t.getName().equals(dest)){
-          return p;
-        }
-      }
-    }
-    return null;
-  }
-
-  public void arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
-    for(Orders orders : ordersList){
-      for(Order order : orders.AttackList){
-        String dest = order.getDest();
-        updatePlayer(order, players);
-        if(!AttackMap.containsKey(dest)){
-          ArrayList<Order> temp = new ArrayList<Order>();
-          temp.add(order);
-          AttackMap.put(dest, temp);
-        } else{
-          AttackMap.get(dest).add(order);
-        }
-      }
-    }
-  }
-
-  public void updatePlayer(Order order, ArrayList<Player> players){
-    for(Player new_player : players){
-       if(order.getPlayer().getColor().equals(new_player.getColor())){
-          order.player = new_player;
-       }
     }
   }
   

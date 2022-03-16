@@ -3,7 +3,6 @@ package edu.duke.ece651.mp.common;
 import java.util.*;
 import java.util.Random;
 public class V1Action implements AbstractActionFactory {
-
   @Override
   public String checkForMove(Player player, String src, String dest, int numUnit){
     MoveChecker UnitCheck = new UnitRuleChecker(null);
@@ -62,10 +61,10 @@ public class V1Action implements AbstractActionFactory {
    */
   @Override
   public void Attack (Player attacker, Player defender, String src, String dest, int numUnit){
-    /*String checkResult = checkForAttack(attacker, src, dest, numUnit);
+    String checkResult = checkForAttack(attacker, src, dest, numUnit);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
-      }*/
+     }
     
     //Territory attackerTerri = findTerritory(attacker, src);
     Territory defenderTerri = findTerritory(defender, dest);
@@ -147,4 +146,52 @@ public class V1Action implements AbstractActionFactory {
       }
     }
   }
+
+   /**
+   * getPlayer() can help the server to get the Player based on the name of the destination territory
+   *@param dest is the name of the destination territory
+   *@param players is the ArrayList of players
+   *@return returns the player
+   */
+  @Override
+  public Player getPlayer(String dest, ArrayList<Player> players){
+    for(Player p : players){
+      for(Territory t : p.player_terri_set){
+        if(t.getName().equals(dest)){
+          return p;
+        }
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public HashMap<String, ArrayList<Order>> arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
+    HashMap<String, ArrayList<Order>> AttackMap = new HashMap<String, ArrayList<Order>>();
+    for(Orders orders : ordersList){
+      for(Order order : orders.AttackList){
+        String dest = order.getDest();
+        updatePlayer(order, players);
+        if(!AttackMap.containsKey(dest)){
+          ArrayList<Order> temp = new ArrayList<Order>();
+          temp.add(order);
+          AttackMap.put(dest, temp);
+        } else{
+          AttackMap.get(dest).add(order);
+        }
+      }
+    }
+    return AttackMap;
+  }
+
+  
+  public void updatePlayer(Order order, ArrayList<Player> players){
+    for(Player new_player : players){
+       if(order.getPlayer().getColor().equals(new_player.getColor())){
+          order.player = new_player;
+       }
+    }
+  }
+ 
+  
 }
