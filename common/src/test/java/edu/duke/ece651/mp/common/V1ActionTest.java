@@ -107,4 +107,101 @@ public class V1ActionTest {
     action.Done(arrayList);
     assertEquals(lt5_numUnit + 1, lt5.countUnit());
   }
+
+  @Test
+  public void test_getPlayer() {
+    Player player = makePlayer1();
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(player);
+    AbstractActionFactory Action = new V1Action();
+    assertEquals("Red", Action.getPlayer("Gondor", players).color);
+    assertNull(Action.getPlayer("Oz", players));
+  }
+
+  @Test
+  public void test_arrangeAttackOrder(){ 
+    ArrayList<Player> players = makePlayer2();
+    Player player1 = players.get(0);
+    Player player2 = players.get(1);
+    Order order1 = new Order(player1, "Gondor", "Oz", 1);
+    Order order2 = new Order(player1, "Hogwarts", "Oz", 1);
+    Order order3 = new Order(player2, "Oz", "Gondor", 1);
+    Order order4 = new Order(player2, "Oz", "Hogwarts", 1);
+    Orders orders1 = new Orders();
+    Orders orders2 = new Orders();
+    orders1.AttackList.add(order1);
+    orders1.AttackList.add(order2);
+    orders2.AttackList.add(order3);
+    orders2.AttackList.add(order4);
+    ArrayList<Orders> ordersList = new ArrayList<Orders>();
+    ordersList.add(orders1);
+    ordersList.add(orders2);
+    AbstractActionFactory Action = new V1Action();
+    HashMap<String, ArrayList<Order>> AttackMap = Action.arrangeAttackOrder(ordersList, players);
+    ArrayList<Order> Oz_dest = AttackMap.get("Oz");
+    assertEquals(order1.getSrc(), Oz_dest.get(0).getSrc());
+    assertEquals(order2.getSrc(), Oz_dest.get(1).getSrc());
+    ArrayList<Order> Gondor_dest = AttackMap.get("Gondor");
+    assertEquals(order3.getSrc(), Gondor_dest.get(0).getSrc());
+    ArrayList<Order> Hogwarts_dest = AttackMap.get("Hogwarts");
+    assertEquals(order4.getSrc(), Hogwarts_dest.get(0).getSrc());
+    
+  }
+
+  public Player makePlayer1(){
+    HashSet<Territory> test_territory = new HashSet<>();
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red"); 
+    LandTerritory lt3 = new LandTerritory("Oz", "Green");
+    lt1.addNeigh(lt2);
+    lt1.addNeigh(lt3);
+    lt2.addNeigh(lt1);
+    lt3.addNeigh(lt1);
+    lt1.setBasicUnit(3);
+    lt2.setBasicUnit(4);
+    test_territory.add(lt1);
+    test_territory.add(lt2);
+    Player player = new Player("Red", test_territory);
+    return player;
+  }
+
+  public ArrayList<Player> makePlayer2(){
+    HashSet<Territory> test_territory1 = new HashSet<>();
+    HashSet<Territory> test_territory2 = new HashSet<>();
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red"); 
+    LandTerritory lt3 = new LandTerritory("Oz", "Green");
+    LandTerritory lt4 = new LandTerritory("Narnia", "Green");
+    lt1.addNeigh(lt2);
+    lt1.addNeigh(lt3);
+    lt2.addNeigh(lt1);
+    lt2.addNeigh(lt3);
+    lt3.addNeigh(lt1);
+    lt3.addNeigh(lt2);
+    lt3.addNeigh(lt4);
+    lt4.addNeigh(lt3);
+    lt1.setBasicUnit(3);
+    lt2.setBasicUnit(4);
+    lt3.setBasicUnit(3);
+    lt4.setBasicUnit(4);
+    test_territory1.add(lt1);
+    test_territory1.add(lt2);
+    test_territory2.add(lt3);
+    test_territory2.add(lt4);
+    Player player1 = new Player("Red", test_territory1);
+    Player player2 = new Player("Green", test_territory2);
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(player1);
+    players.add(player2);
+    return players;
+  }
+
+  @Test
+  public void test_getRandomIndex(){
+    AbstractActionFactory Action = new V1Action();
+    ArrayList<Integer> numlist = Action.getRandomIdx(10);
+    for(int i = 0; i < numlist.size(); i++){
+      System.out.println("numlist[" + i + "]: " + numlist.get(i));
+    }
+  }
 }

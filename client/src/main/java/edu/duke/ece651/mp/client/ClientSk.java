@@ -166,7 +166,7 @@ public class ClientSk {
       }
       else {
         //new a order class, add it to orders moveList
-        orders.MoveList.add(new Order(src, des, num_move));
+        orders.MoveList.add(new Order(player, src, des, num_move));
       }
     }
     else {
@@ -176,7 +176,7 @@ public class ClientSk {
       }
       else {
         //new a order class, add it to orders attackList
-        orders.AttackList.add(new Order(src, des, num_move));
+        orders.AttackList.add(new Order(player, src, des, num_move));
       }
     }
     return null;

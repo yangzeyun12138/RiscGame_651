@@ -5,7 +5,7 @@ public class Order implements java.io.Serializable{
   final String src;
   final String dest;
   final int numUnit;
-  final Player player;
+  public Player player;
   public Order(Player player, String src, String dest, int numUnit){
     this.src = src;
     this.dest = dest;
