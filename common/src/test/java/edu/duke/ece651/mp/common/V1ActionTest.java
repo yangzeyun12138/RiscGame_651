@@ -303,4 +303,11 @@ public class V1ActionTest {
     assertEquals(2, res.get(1).numUnit);
 
   }
+
+  @Test
+  public void test_getIndexFromPlayers(){
+    ArrayList<Player> players = makePlayer2();
+    AbstractActionFactory Action = new V1Action();
+    assertEquals(1, Action.getIndexFromPlayers(players, "Green"));
+  }
 }
