@@ -68,7 +68,7 @@ public class ServerSk {
           send_num_units(socket_list, map.get_num_units());
           accept_player(socket_list, map.get_player_list());
           send_map_to_all(socket_list, map);
-          do_one_turn(socket_list, map.get_player_list(), map);
+          do_one_turn(socket_list, map.get_player_list());
           send_map_to_all(socket_list, map);
         } catch (IOException | ClassNotFoundException ex) {
           ex.printStackTrace();
@@ -202,17 +202,15 @@ public class ServerSk {
     }
   }
 
-  public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players, GameMap map) throws IOException, ClassNotFoundException{
+  public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
     ArrayList<Orders> ordersList = new ArrayList<Orders>();
     for (Socket s : socket_list) {
       ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
       Orders temp = (Orders) ois.readObject();
       ordersList.add(temp);
     }
+
     do_move(ordersList, players);
-    //Attack begin;
-    BasicMapDisplay toDisplay = new BasicMapDisplay((BasicMap)map);
-    System.out.println(toDisplay.display());
     Action.loseAttackUnit(ordersList, players);
     AttackMap = Action.arrangeAttackOrder(ordersList, players);
     do_attack(players);
