@@ -244,6 +244,12 @@ public class V1Action implements AbstractActionFactory {
     return res;
   }
 
+  /**
+   *getIndexFromPlayers() can provide the index of specific color from ArrayList<Player>.
+   *@param players is the ArrayList<Player> that represents all players in the game.
+   *@param color is the color of the player you want to find.
+   *@return the index of specific color inside of the ArrayList<Player>.
+*/
   @Override
   public int getIndexFromPlayers(ArrayList<Player> players, String color){
     int counter = 0;
@@ -257,6 +263,11 @@ public class V1Action implements AbstractActionFactory {
     return counter;
   }
 
+  /**
+   *checkWin() can check whether there is a winner in a current round.
+   *@param players is the ArrayList<Player> that represents all players in the game.
+   *@return returns the color of the winner, and returns NULL as there is no winner now. 
+*/
   @Override
   public String checkWin(ArrayList<Player> players){
     int index = 0;

@@ -49,7 +49,10 @@ public class Player implements java.io.Serializable{
     return this.color;
   }
 
-
+  /**
+   * deep_copy() can get the deep copy of the current player
+   * @return Player which is the deep copy of the current player.
+*/
   public Player deep_copy() {
       Player deep_copy = null;
       try {
@@ -66,6 +69,11 @@ public class Player implements java.io.Serializable{
       return deep_copy;
   }
 
+
+  /**
+   * checkLose() can check whether the current player has lost the game or not
+   * @return return true represents lose; return false represents current player hasn't lost
+   */
   public boolean checkLose(){
     if(player_terri_set.size() == 0){
       return true;
