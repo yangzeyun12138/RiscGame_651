@@ -256,4 +256,24 @@ public class V1Action implements AbstractActionFactory {
     }
     return counter;
   }
+
+  @Override
+  public String checkWin(ArrayList<Player> players){
+    int index = 0;
+    int counter = 0;
+    int num_players = players.size();
+    for(int i = 0; i < players.size(); i++){
+      Player curr_player = players.get(i);
+      if(!curr_player.checkLose()){
+        // if curr_player hasn't lost the game
+        index = i;
+        counter++;
+      }
+    }
+    if(counter == 1){
+      return players.get(index).color;
+    }
+    return null;
+  }
+
 }

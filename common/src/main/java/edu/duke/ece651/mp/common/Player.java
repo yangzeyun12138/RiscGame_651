@@ -66,4 +66,10 @@ public class Player implements java.io.Serializable{
       return deep_copy;
   }
 
+  public boolean checkLose(){
+    if(player_terri_set.size() == 0){
+      return true;
+    }
+    return false;
+  }
 }

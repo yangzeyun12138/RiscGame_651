@@ -26,4 +26,5 @@ public interface AbstractActionFactory {
   public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players);
   public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players);
   public int getIndexFromPlayers(ArrayList<Player> players, String color);
+  public String checkWin(ArrayList<Player> players);
 }
