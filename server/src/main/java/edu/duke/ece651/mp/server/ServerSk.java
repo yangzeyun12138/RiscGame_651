@@ -65,7 +65,7 @@ public class ServerSk {
         try {
           send_map_to_all(socket_list, map);
           send_color(socket_list, map.get_player_list());
-          send_num_units(socket_list, map.get_num_units());
+          send_num_units(socket_list, map.get_num_units(), map.get_player_list());
           accept_player(socket_list, map.get_player_list());
           send_map_to_all(socket_list, map);
           do_one_turn(socket_list, map.get_player_list());
@@ -121,56 +121,69 @@ public class ServerSk {
    */
   public void send_map_to_all(ArrayList<Socket> socket_list, GameMap map) throws IOException {
     ObjectOutputStream oos = null;
-    for (Socket s : socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
       try {
         oos = new ObjectOutputStream(s.getOutputStream());
         oos.writeObject(map);
         oos.flush();
       } catch (IOException ex) {
         ex.printStackTrace();
+        toDelete.add(i);
       }
-      /*finally {
-        try {
-          //oos.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }*/
+    }
+    for (int i = 0; i < toDelete.size(); i++) {
+      Player temp = map.get_player_list().remove(i);
+      map.get_player_list().add(temp);
+      socket_list.remove(i);
     }
   }
 
   public void send_color(ArrayList<Socket> socket_list, ArrayList<Player> player_list) throws IOException {
-
     ObjectOutputStream oos = null;
-    int i = 0;
-    for (Socket s : socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
+      Player p = player_list.get(i);
       try {
         oos = new ObjectOutputStream(s.getOutputStream());
-        oos.writeObject(player_list.get(i).color);
+        oos.writeObject(p.color);
         oos.flush();
-        i++;
       } catch (IOException ex) {
         ex.printStackTrace();
+        toDelete.add(i);
       }
-
+    }
+    for (int i = 0; i < toDelete.size(); i++) {
+      Player temp = player_list.remove(i);
+      player_list.add(temp);
+      socket_list.remove(i);
     }
   }
 
-  public void send_num_units(ArrayList<Socket> socket_list, int num_units) throws IOException {
+  public void send_num_units(ArrayList<Socket> socket_list, int num_units, ArrayList<Player> players) throws IOException {
     ObjectOutputStream oos = null;
-    for (Socket s : socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
       try {
         oos = new ObjectOutputStream(s.getOutputStream());
         oos.writeObject(num_units);
         oos.flush();
       } catch (IOException ex) {
         ex.printStackTrace();
+        toDelete.add(i);
       }
-
+    }
+    for (int i = 0; i < toDelete.size(); i++) {
+      Player temp = players.remove(i);
+      players.add(temp);
+      socket_list.remove(i);
     }
   }
 
-  public void accept_player(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException {
+  public void accept_player(ArrayList<Socket> socket_list, ArrayList<Player> players) throws ClassNotFoundException, IOException {
     players.clear();
     for (Socket s : socket_list) {
       ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
@@ -203,11 +216,23 @@ public class ServerSk {
   }
 
   public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
     ArrayList<Orders> ordersList = new ArrayList<Orders>();
-    for (Socket s : socket_list) {
-      ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
-      Orders temp = (Orders) ois.readObject();
-      ordersList.add(temp);
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
+      try {
+        ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+        Orders temp = (Orders) ois.readObject();
+        ordersList.add(temp);
+      } catch (IOException ex) {
+        ex.printStackTrace();
+        toDelete.add(i);
+      }
+    }
+    for (int i = 0; i < toDelete.size(); i++) {
+      Player temp = players.remove(i);
+      players.add(temp);
+      socket_list.remove(i);
     }
     while (true) {
       try {
@@ -216,20 +241,39 @@ public class ServerSk {
           Player temp = players.get(i).deep_copy();
           playersCopy.add(temp);
         }
+        System.out.println("before do_move");
         do_move(ordersList, playersCopy);
+        System.out.println("before loseAttack");
         Action.loseAttackUnit(ordersList, playersCopy);
+        System.out.println("before arrange");
         AttackMap = Action.arrangeAttackOrder(ordersList, playersCopy);
+        System.out.println("before do_attack");
         do_attack(playersCopy);
+        //for test
+
+        for (Player p : playersCopy) {
+          System.out.println(p.toString());
+        }
+
         ObjectOutputStream oos = null;
-        try {
-          for (int i = 0; i < socket_list.size(); i++) {
+        toDelete.clear();
+
+        for (int i = 0; i < socket_list.size(); i++) {
+          try {
             oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
             oos.writeObject("Total success");
             oos.flush();
+          } catch (IOException ex) {
+            ex.printStackTrace();
+            toDelete.add(i);
           }
-        } catch (IOException ex) {
-          ex.printStackTrace();
         }
+        for (int i = 0; i < toDelete.size(); i++) {
+          Player temp = players.remove(i);
+          players.add(temp);
+          socket_list.remove(i);
+        }
+
         players.clear();
         for (int i = 0; i < playersCopy.size(); i++) {
           players.add(playersCopy.get(i));
@@ -240,31 +284,57 @@ public class ServerSk {
         int space = e.getMessage().indexOf(" ");
         String temp_color = e.getMessage().substring(0, space);
         int skIndex = Action.getIndexFromPlayers(players, temp_color);
-        Orders new_orders = getNewOrders(socket_list, skIndex, e.getMessage());
-        ordersList.set(skIndex, new_orders);
+        Orders new_orders = getNewOrders(socket_list, skIndex, e.getMessage(), players);
+        if (new_orders != null) {
+          ordersList.set(skIndex, new_orders);
+        }
+        else {
+          ordersList.remove(skIndex);
+        }
+        //for test
+        System.out.println("Orders list--------------");
+        for (int i = 0; i < ordersList.size(); i++) {
+          System.out.println(i + ": " + ordersList.get(i).MoveList.size());
+        }
       }
     }
     Action.Done(players);
   }
 
-  public Orders getNewOrders(ArrayList<Socket> socket_list, int skIndex, String msg) throws IOException, ClassNotFoundException {
+  public Orders getNewOrders(ArrayList<Socket> socket_list, int skIndex, String msg, ArrayList<Player> players) throws IOException, ClassNotFoundException {
     ObjectOutputStream oos = null;
-    try {
-      for (int i = 0; i < socket_list.size(); i++) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      try {
         oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
         if (i == skIndex) {
           oos.writeObject(msg);
-        }
-        else {
+        } else {
           oos.writeObject("Success");
         }
         oos.flush();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+        toDelete.add(i);
       }
+    }
+    for (int i = 0; i < toDelete.size(); i++) {
+      Player temp = players.remove(i);
+      players.add(temp);
+      socket_list.remove(i);
+    }
+
+    Orders temp = new Orders();
+    try {
+      ObjectInputStream ois = new ObjectInputStream(socket_list.get(skIndex).getInputStream());
+      temp = (Orders) ois.readObject();
     } catch (IOException ex) {
       ex.printStackTrace();
+      Player temp_p = players.remove(skIndex);
+      players.add(temp_p);
+      socket_list.remove(skIndex);
+      temp = null;
     }
-    ObjectInputStream ois = new ObjectInputStream(socket_list.get(skIndex).getInputStream());
-    Orders temp = (Orders) ois.readObject();
     return temp;
   }
 
