@@ -211,33 +211,59 @@ public class ServerSk {
     }
     while (true) {
       try {
-        do_move(ordersList, players);
-        Action.loseAttackUnit(ordersList, players);
-        AttackMap = Action.arrangeAttackOrder(ordersList, players);
-        do_attack(players);
+        ArrayList<Player> playersCopy = new ArrayList<Player>();
+        for (int i = 0; i < players.size(); i++) {
+          Player temp = players.get(i).deep_copy();
+          playersCopy.add(temp);
+        }
+        do_move(ordersList, playersCopy);
+        Action.loseAttackUnit(ordersList, playersCopy);
+        AttackMap = Action.arrangeAttackOrder(ordersList, playersCopy);
+        do_attack(playersCopy);
+        ObjectOutputStream oos = null;
+        try {
+          for (int i = 0; i < socket_list.size(); i++) {
+            oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+            oos.writeObject("Total success");
+            oos.flush();
+          }
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+        players.clear();
+        for (int i = 0; i < playersCopy.size(); i++) {
+          players.add(playersCopy.get(i));
+        }
         break;
       } catch (IllegalArgumentException e) {
         System.out.println(e.getMessage());
         int space = e.getMessage().indexOf(" ");
         String temp_color = e.getMessage().substring(0, space);
         int skIndex = Action.getIndexFromPlayers(players, temp_color);
-        Orders new_orders = getNewOrders(socket_list.get(skIndex), e.getMessage());
-        ordersList.get(skIndex) = new_orders;
+        Orders new_orders = getNewOrders(socket_list, skIndex, e.getMessage());
+        ordersList.set(skIndex, new_orders);
       }
     }
     Action.Done(players);
   }
 
-  public Orders getNewOrders(Socket sk, String msg) throws IOException, ClassNotFoundException {
+  public Orders getNewOrders(ArrayList<Socket> socket_list, int skIndex, String msg) throws IOException, ClassNotFoundException {
     ObjectOutputStream oos = null;
     try {
-      oos = new ObjectOutputStream(sk.getOutputStream());
-      oos.writeObject(msg);
-      oos.flush();
+      for (int i = 0; i < socket_list.size(); i++) {
+        oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+        if (i == skIndex) {
+          oos.writeObject(msg);
+        }
+        else {
+          oos.writeObject("Success");
+        }
+        oos.flush();
+      }
     } catch (IOException ex) {
       ex.printStackTrace();
     }
-    ObjectInputStream ois = new ObjectInputStream(sk.getInputStream());
+    ObjectInputStream ois = new ObjectInputStream(socket_list.get(skIndex).getInputStream());
     Orders temp = (Orders) ois.readObject();
     return temp;
   }

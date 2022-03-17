@@ -22,6 +22,7 @@ public class Client {
         String map_show2 = new String(clientSk.accept_map());
         System.out.print(map_show2);
         clientSk.collect_orders_and_send();
+        clientSk.if_end_one_turn();
         String map_show3 = new String(clientSk.accept_map());
         System.out.print(map_show3);
         //clientSk.close_client();

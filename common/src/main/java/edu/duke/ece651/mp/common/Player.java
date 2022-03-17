@@ -1,5 +1,6 @@
 package edu.duke.ece651.mp.common;
 
+import java.io.*;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -47,4 +48,22 @@ public class Player implements java.io.Serializable{
   public String getColor(){
     return this.color;
   }
+
+
+  public Player deep_copy() {
+      Player deep_copy = null;
+      try {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          ObjectOutputStream oos = new ObjectOutputStream(baos);
+          oos.writeObject(this);
+
+          ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+          ObjectInputStream ois = new ObjectInputStream(bais);
+          deep_copy = (Player) ois.readObject();
+      } catch (ClassNotFoundException | IOException e) {
+          e.printStackTrace();
+      }
+      return deep_copy;
+  }
+
 }

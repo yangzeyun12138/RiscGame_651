@@ -244,6 +244,22 @@ public class ClientSk {
     return action;
   }
 
+  public void if_end_one_turn() throws IOException, ClassNotFoundException {
+    String res = null;
+    while(true) {
+      ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+      res = (String) ois.readObject();
+      if (res.equals("Total success")) {
+        break;
+      }
+      if (!res.equals("Success")) {
+        out.print(res);
+        out.print("Please enter all your orders again for this turn\n");
+        collect_orders_and_send();
+      }
+    }
+  }
+
   public void collect_orders_and_send() throws IOException {
     Orders orders = new Orders();
     String temp = new String();
