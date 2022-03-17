@@ -116,11 +116,11 @@ public class V1Action implements AbstractActionFactory {
     int Dice1 = rand1.nextInt(max - min + 1) + min;
     int Dice2 = rand2.nextInt(max - min + 1) + min;
     if (Dice1 > Dice2){
+      // Attacker wins this round!
       return true;
-    }else if (Dice2 > Dice1){
+    } else{
+      // Defender wins this round
       return false;
-    }else{
-      return rollDice();
     }
   }
 
