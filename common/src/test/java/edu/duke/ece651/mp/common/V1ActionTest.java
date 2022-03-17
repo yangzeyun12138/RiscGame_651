@@ -310,4 +310,13 @@ public class V1ActionTest {
     AbstractActionFactory Action = new V1Action();
     assertEquals(1, Action.getIndexFromPlayers(players, "Green"));
   }
+
+  @Test
+  public void test_checkWin(){
+    ArrayList<Player> players = makePlayer2();
+    AbstractActionFactory Action = new V1Action();
+    assertNull(Action.checkWin(players));
+    players.get(0).player_terri_set.clear();
+    assertEquals("Green",Action.checkWin(players));
+  }
 }

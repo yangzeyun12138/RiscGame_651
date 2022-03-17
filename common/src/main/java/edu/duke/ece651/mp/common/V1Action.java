@@ -116,11 +116,11 @@ public class V1Action implements AbstractActionFactory {
     int Dice1 = rand1.nextInt(max - min + 1) + min;
     int Dice2 = rand2.nextInt(max - min + 1) + min;
     if (Dice1 > Dice2){
+      // Attacker wins this round!
       return true;
-    }else if (Dice2 > Dice1){
+    } else{
+      // Defender wins this round
       return false;
-    }else{
-      return rollDice();
     }
   }
 
@@ -244,6 +244,12 @@ public class V1Action implements AbstractActionFactory {
     return res;
   }
 
+  /**
+   *getIndexFromPlayers() can provide the index of specific color from ArrayList<Player>.
+   *@param players is the ArrayList<Player> that represents all players in the game.
+   *@param color is the color of the player you want to find.
+   *@return the index of specific color inside of the ArrayList<Player>.
+*/
   @Override
   public int getIndexFromPlayers(ArrayList<Player> players, String color){
     int counter = 0;
@@ -256,4 +262,29 @@ public class V1Action implements AbstractActionFactory {
     }
     return counter;
   }
+
+  /**
+   *checkWin() can check whether there is a winner in a current round.
+   *@param players is the ArrayList<Player> that represents all players in the game.
+   *@return returns the color of the winner, and returns NULL as there is no winner now. 
+*/
+  @Override
+  public String checkWin(ArrayList<Player> players){
+    int index = 0;
+    int counter = 0;
+    int num_players = players.size();
+    for(int i = 0; i < players.size(); i++){
+      Player curr_player = players.get(i);
+      if(!curr_player.checkLose()){
+        // if curr_player hasn't lost the game
+        index = i;
+        counter++;
+      }
+    }
+    if(counter == 1){
+      return players.get(index).color;
+    }
+    return null;
+  }
+
 }

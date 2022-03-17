@@ -47,6 +47,8 @@ public class PathRuleChecker extends MoveChecker{
     return new String(player.color + " player. The movement is Invalid: the Path between src and dest Territory cannot be found\n");
   }
 
+ 
+
   public PathRuleChecker(MoveChecker next){
     super(next);
   }

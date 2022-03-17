@@ -31,7 +31,7 @@ public class MoveCheckerTest {
     LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
     dest = "Scadrial";
     result = MC.checkMyRule(player, src, dest, numUnit);
-    assertEquals("The movement is Invalid: the Path between src and dest Territory cannot be found", result );
+    assertEquals("Red player. The movement is Invalid: the Path between src and dest Territory cannot be found\n", result );
 
     //Test for Color!
     lt2.addNeigh(lt4);
@@ -71,11 +71,11 @@ public class MoveCheckerTest {
     // Over
     numUnit = 4;
     result = MC.checkMyRule(player, src, dest, numUnit);
-    assertEquals("The movement is Invalid: the number of unit within the territory is less than the number you want to move!", result);
+    assertEquals("Red player. The movement is Invalid: the number of unit within the territory is less than the number you want to move!\n", result);
     // Smaller than 0
     numUnit = -1;
     result = MC.checkMyRule(player, src, dest, numUnit);
-    assertEquals("The movement is Invalid: the Unit to move cannot be negative!", result);
+    assertEquals("Red player. The movement is Invalid: the Unit to move cannot be negative!\n", result);
   }
 
   @Test
@@ -105,7 +105,7 @@ public class MoveCheckerTest {
 
     numUnit = 4;
     result = PathCheck.checkMovement(player, src, dest, numUnit);
-    assertEquals("The movement is Invalid: the number of unit within the territory is less than the number you want to move!", result); 
+    assertEquals("Red player. The movement is Invalid: the number of unit within the territory is less than the number you want to move!\n", result); 
 
   }
 }

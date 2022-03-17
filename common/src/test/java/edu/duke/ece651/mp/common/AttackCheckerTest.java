@@ -40,12 +40,12 @@ public class AttackCheckerTest {
     numUnit = 4;
     dest = "Hogwarts";
     result = Faction.checkAttack(player, src, dest, numUnit);
-    assertEquals("Invalid Attack: The destination territory and the source territory are in the same faction!", result); 
+    assertEquals("Red player. Invalid Attack: The destination territory and the source territory are in the same faction!\n", result); 
 
     src = "Hogwarts";
     dest = "Oz";
     result = Faction.checkAttack(player, src, dest, numUnit);
-    assertEquals("Invalid Attack: The destination territory is not adjacent to the source territory!", result);
+    assertEquals("Red player. Invalid Attack: The destination territory is not adjacent to the source territory!\n", result);
    }
 
 }
