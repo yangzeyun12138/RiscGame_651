@@ -6,7 +6,7 @@ Riverrun:Casterly_Rock, Kingslanding, Twins, Eyrie
 Casterly_Rock:Iron_Island, High_Garden, Riverrun
 High_Garden:Casterly_Rock, Sunspear, Kingslanding
 Kingslanding:High_Garden, Stormland, Dragonstone, Riverrun
-Sunspear:High_Garden, Stromland
+Sunspear:High_Garden, Stormland
 Eyrie:Riverrun, Twins, Dragonstone
 Dragonstone:Eyrie, Kingslanding, Stormland
 Stormland:Kingslanding, Sunspear, Eyrie

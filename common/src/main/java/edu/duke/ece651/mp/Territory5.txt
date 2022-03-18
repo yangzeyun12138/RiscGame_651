@@ -13,4 +13,3 @@ Copenhagen:London, Berlin, St_Petersburg
 Warsaw:Berlin, Frankfurt, Moscow, St_Petersburg, Constantinople
 Moscow:St_Petersburg, Warsaw, Constantinople
 St_Petersburg:Copenhagen, Warsaw, Moscow
-

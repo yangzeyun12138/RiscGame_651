@@ -33,7 +33,7 @@ class MapDisplayTest {
 
     @Test
     public void test_parse_display() throws IOException {
-        String filename = "Territory.txt";
+        String filename = "Territory3.txt";
         int numPlayer = 3;
         Parse parse = new Parse();
         HashSet<Territory> result = parse.parseTerritoryNeighbor(filename, numPlayer);

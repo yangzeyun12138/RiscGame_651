@@ -104,12 +104,18 @@ public class ServerSk {
   }
 
   public void handleDisconnection(ArrayList<Player> players, ArrayList<Socket> socket_list, ArrayList<Integer> toDelete) {
+    ArrayList<Socket> temp_sk_list = new ArrayList<Socket>();
+    ArrayList<Player> temp_players = new ArrayList<Player>();
     for (int i = 0; i < toDelete.size(); i++) {
       int index = toDelete.get(i);
-      Player temp = players.remove(index);
-      players.add(temp);
-      socket_list.remove(index);
+      temp_players.add(players.get(index));
+      temp_sk_list.add(socket_list.get(index));
       socket_len--;
+    }
+    for (int i = 0; i< temp_sk_list.size(); i++) {
+      socket_list.remove(temp_sk_list.get(i));
+      players.add(temp_players.get(i));
+      players.remove(temp_players.get(i));
     }
   }
 
@@ -223,11 +229,11 @@ public class ServerSk {
         Orders temp = (Orders) ois.readObject();
         ordersList.add(temp);
       } catch (IOException ex) {
+
         System.out.println(players.get(i).color + " player disconnect!");
         toDelete.add(i);
       }
     }
-
     if (toDelete.size() != 0) {
       handleDisconnection(players, socket_list, toDelete);
     }

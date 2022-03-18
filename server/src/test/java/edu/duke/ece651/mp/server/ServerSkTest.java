@@ -43,7 +43,7 @@ class ServerSkTest {
         try {
           ArrayList<GameMap> maps = new ArrayList<>();
           Server server = new Server();
-          GameMap gm = server.create_one_map("Territory.txt", 3);
+          GameMap gm = server.create_one_map("Territory3.txt", 3);
           maps.add(gm);
           ServerSk serverSk = new ServerSk(maps);
           serverSk.build_server();
