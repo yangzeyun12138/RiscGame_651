@@ -185,6 +185,7 @@ class ServerSkTest {
     clientSk2.accept_map();
     clientSk2.set_player();
     assertEquals("Lose", clientSk2.accept_string());
+    assertEquals("y", clientSk2.handle_lose());
     assertEquals("noBodyWin", clientSk2.accept_string());
 
     clientSk3.if_end_one_turn();
@@ -415,13 +416,14 @@ class ServerSkTest {
     clientSk1.accept_map();
     clientSk1.set_player();
     assertEquals("notLose", clientSk1.accept_string());
-    assertEquals("noBodyWin", clientSk1.accept_string());
+    assertFalse(clientSk1.turn_end_helper());
 
     clientSk2.if_end_one_turn();
     clientSk2.accept_map();
     clientSk2.set_player();
     assertEquals("Lose", clientSk2.accept_string());
     //assertEquals("noBodyWin", clientSk2.accept_string());
+    assertEquals("n", clientSk2.handle_lose());
     clientSk2.close_client();
 
     clientSk3.if_end_one_turn();
@@ -461,6 +463,7 @@ class ServerSkTest {
     clientSk1.accept_map();
     clientSk1.set_player();
     assertEquals("Lose", clientSk1.accept_string());
+    assertTrue(clientSk1.is_last_loser());
     assertEquals("Blue player win!", clientSk1.accept_string());
 
 

@@ -20,6 +20,7 @@ public class ClientSk {
   final BufferedReader inputReader;
   final PrintStream out;
   private AbstractActionFactory Action;
+  private ArrayList<Player> players;
 
   /**
    * connect to the local host on 9999 port
@@ -33,6 +34,7 @@ public class ClientSk {
     this.inputReader = inputSource;
     this.out = outSource;
     this.Action = new V1Action();
+    this.players = new ArrayList<Player>();
   }
 
 
@@ -96,6 +98,7 @@ public class ClientSk {
         this.player = p;
       }
     }
+    this.players = map.get_player_list();
   }
 
   public void init_unit() {
@@ -163,7 +166,7 @@ public class ClientSk {
   }
 
 
-  public String parse_check_add(String action, Orders orders) throws IOException {
+  public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException {
     String order = read_string("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
             "numUnitsToDestination\n");
     String src = new String();
@@ -248,9 +251,9 @@ public class ClientSk {
         do {
           if (action.equals("M")) {
 
-            res = parse_check_add(action, orders);
+            res = parse_check_add(action, orders, players);
           } else {
-            res = parse_check_add(action, orders);
+            res = parse_check_add(action, orders, players);
           }
           if (res != null) {
             out.println(res);
