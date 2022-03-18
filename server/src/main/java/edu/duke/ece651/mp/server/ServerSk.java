@@ -104,24 +104,12 @@ public class ServerSk {
   }
 
   public void handleDisconnection(ArrayList<Player> players, ArrayList<Socket> socket_list, ArrayList<Integer> toDelete) {
-    System.out.println("toDelete: ");
-    for (int i : toDelete) {
-      System.out.println(i);
-    }
-    System.out.println("before remove player");
-    for (int i = 0; i < players.size(); i++) {
-      System.out.println(players.get(i));
-    }
     for (int i = 0; i < toDelete.size(); i++) {
       int index = toDelete.get(i);
       Player temp = players.remove(index);
       players.add(temp);
       socket_list.remove(index);
 
-    }
-    System.out.println("after remove player");
-    for (int i = 0; i < players.size(); i++) {
-      System.out.println(players.get(i));
     }
   }
 
@@ -143,7 +131,6 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
-        System.out.println("in send map");
       }
     }
     /*
@@ -243,7 +230,6 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
-        System.out.println("in do one turn catch");
       }
     }
     /*
@@ -263,16 +249,10 @@ public class ServerSk {
         Action.loseAttackUnit(ordersList, playersCopy);
         AttackMap = Action.arrangeAttackOrder(ordersList, playersCopy);
         do_attack(playersCopy);
-        //for test
-        /*
-        for (Player p : playersCopy) {
-          System.out.println(p.toString());
-        }
-        */
+
         ObjectOutputStream oos = null;
         toDelete.clear();
-        System.out.println("before send total success, socketList size:");
-        System.out.println(socket_list.size());
+
         for (int i = 0; i < socket_list.size(); i++) {
           try {
             oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
@@ -281,7 +261,6 @@ public class ServerSk {
           } catch (IOException ex) {
             ex.printStackTrace();
             toDelete.add(i);
-            System.out.println("in send total success catch");
           }
         }
         /*
@@ -328,7 +307,6 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
-        System.out.println("in send success catch");
       }
     }
     /*
@@ -373,7 +351,6 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
-        System.out.println("in handle protential lose catch");
       }
     }
     /*
@@ -388,7 +365,6 @@ public class ServerSk {
       Socket s = socket_list.get(i);
       ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
       String temp = (String) ois.readObject();
-      System.out.println(i + temp);
       if (temp.equals("n")){
         toDelete.add(i);
         socket_len--;
@@ -398,7 +374,6 @@ public class ServerSk {
       handleDisconnection(players, socket_list, toDelete);
     }
 
-    System.out.println("after delete player " + socket_list.size());
   }
 
   public void handleWin(ArrayList<Player> players, String res, ArrayList<Socket> socket_list) {
@@ -412,7 +387,6 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
-        System.out.println("in handle win catch");
       }
     }
     /*
@@ -426,20 +400,10 @@ public class ServerSk {
   public void do_turns(ArrayList<Socket> socket_list, GameMap map) throws IOException, ClassNotFoundException {
     ArrayList<Player> players = map.get_player_list();
     while (true) {
-      System.out.println("Socket list size");
-      System.out.println(socket_list.size());
       do_one_turn(socket_list, map.get_player_list());
       send_map_to_all(socket_list, map);
       //checkLose
-      System.out.println("before lose socket");
-      for (int i = 0; i < socket_list.size(); i++) {
-        System.out.println(socket_list.get(i));
-      }
       handlePotentialLose(players, socket_list);
-      System.out.println("after lose socket");
-      for (int i = 0; i < socket_list.size(); i++) {
-        System.out.println(socket_list.get(i));
-      }
       //checkWin
       String res = Action.checkWin(players);
       if (res != null) {
@@ -459,7 +423,6 @@ public class ServerSk {
           } catch (IOException ex) {
             ex.printStackTrace();
             toDelete.add(i);
-            System.out.println("in send nobodywin catch");
           }
         }
         /*

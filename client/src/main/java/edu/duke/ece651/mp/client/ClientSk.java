@@ -300,10 +300,8 @@ public class ClientSk {
   }
 
   public boolean turn_end_helper() throws IOException, ClassNotFoundException {
-    out.println("before receive nobodywin");
     ObjectInputStream ois_new = new ObjectInputStream(socket.getInputStream());
     String res = (String) ois_new.readObject();
-    out.println("after receive nobodywin");
     if (!res.equals("noBodyWin")) {
       out.println(res);
       close_client();
@@ -320,7 +318,7 @@ public class ClientSk {
       send_orders(new_orders);
       if_end_one_turn();
       String map_show = new String(accept_map());
-      System.out.print(map_show);
+      out.print(map_show);
       set_player();
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String) ois.readObject();
@@ -337,7 +335,7 @@ public class ClientSk {
       collect_orders_and_send();
       if_end_one_turn();
       String map_show = new String(accept_map());
-      System.out.print(map_show);
+      out.print(map_show);
       set_player();
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String)ois.readObject();
@@ -361,12 +359,10 @@ public class ClientSk {
       if (turn_end_helper()) {
         return;
       }
-      out.println("after turn_end_helper");
     }
   }
 
   public void send_orders(Orders orders) {
-    out.println("send orders successfully");
     ObjectOutputStream oos = null;
     try {
       oos = new ObjectOutputStream(socket.getOutputStream());
