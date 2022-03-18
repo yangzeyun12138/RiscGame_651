@@ -27,7 +27,7 @@ public class Parse {
   /**
    *parseTerritory: generate hashset of territory with color and name
    *@calledby: parseTerritoryNeighbor() 
-   *@param: lines is the whole the valid context for the whole text file of Territory(e.g. Territory.txt)
+   *@param: lines is the whole the valid context for the whole text file of Territory(e.g. Territory3.txt)
    *@return: HashSet<territory>
    */
   public HashSet<Territory> parseTerritory(ArrayList<String> lines, int numPlayers) throws IOException{
@@ -41,13 +41,13 @@ public class Parse {
     for(int i = 0; i < lines.size(); i++){
       String line = lines.get(i);
       if(!line.contains(":")){
-        throw new IllegalArgumentException("There is no content or There is no ':' in Territory.txt\n");
+        throw new IllegalArgumentException("There is no content or There is no ':' in Territory3.txt\n");
       }
       String[] separateLine = line.split(separate);
       if(separateLine.length != desiredLength){
         throw new IllegalArgumentException("There is no territory name in front of the ':'\n");
       }
-      String Color = color_list.get(i/numPlayers);
+      String Color = color_list.get(i/(lines.size()/numPlayers));
       Territory currTerritory = new LandTerritory(separateLine[0], Color);
       territorySet.add(currTerritory);
     }
@@ -57,7 +57,7 @@ public class Parse {
   /**
    *parseTerritoryFile: read from file and store information as a map
    *@calledby: parseTerritoryNeighbor()
-   *@param: lines is the whole the valid context for the whole text file of Territory(e.g. Territory.txt)
+   *@param: lines is the whole the valid context for the whole text file of Territory(e.g. Territory3.txt)
    *@return: HashMap<String,ArrayList<String>>,of territory name
    */
   private HashMap<String,ArrayList<String>> parseTerritoryFile(String filename, ArrayList<String> lines) throws IOException{
@@ -114,7 +114,6 @@ public class Parse {
         currTerritory.addNeigh(neighborTerri);
       }
     }
-
     return territorySet;
       //return null;
     }

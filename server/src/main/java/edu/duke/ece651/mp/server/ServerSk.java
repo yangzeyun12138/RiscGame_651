@@ -9,6 +9,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+
 /**
  * The high-level controlling of game, such as
  * ServerSk manipulate the serverSocket to accept clients,
@@ -20,17 +22,21 @@ public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
   private AbstractActionFactory Action;
-  
+  //might be a HashMap List if more than one room
+  private HashMap<String, ArrayList<Order>> AttackMap;
+  //might be a ArrayList if more than one room
+  private int socket_len;
   /**
    * build a listening socket on port 9999, init all the rooms
    * @param rooms, all the rooms preparing for game starting
    * @throws IOException
    */
-  public ServerSk(ArrayList<GameMap> rooms) throws IOException {
-    this.serverSocket = new ServerSocket(9999);
+  public ServerSk(ArrayList<GameMap> rooms, int port) throws IOException {
+    this.serverSocket = new ServerSocket(port);
     this.rooms = rooms;
     this.Action = new V1Action();
     this.AttackMap = new HashMap<String, ArrayList<Order>>();
+    this.socket_len = rooms.get(0).get_num_players();
   }
 
   /**
@@ -62,29 +68,16 @@ public class ServerSk {
         try {
           send_map_to_all(socket_list, map);
           send_color(socket_list, map.get_player_list());
-          send_num_units(socket_list, map.get_num_units());
+          send_num_units(socket_list, map.get_num_units(), map.get_player_list());
           accept_player(socket_list, map.get_player_list());
           send_map_to_all(socket_list, map);
-          do_one_turn(socket_list, map.get_player_list());
-          send_map_to_all(socket_list, map);
+          do_turns(socket_list, map);
         } catch (IOException | ClassNotFoundException ex) {
           ex.printStackTrace();
         }
-        /*
-        finally {
-          try {
-            close_all_sk(socket_list);
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-        }
-
-         */
 
       }
     }).start();
-
-
   }
 
 
@@ -110,6 +103,22 @@ public class ServerSk {
     return ans_list;
   }
 
+  public void handleDisconnection(ArrayList<Player> players, ArrayList<Socket> socket_list, ArrayList<Integer> toDelete) {
+    ArrayList<Socket> temp_sk_list = new ArrayList<Socket>();
+    ArrayList<Player> temp_players = new ArrayList<Player>();
+    for (int i = 0; i < toDelete.size(); i++) {
+      int index = toDelete.get(i);
+      temp_players.add(players.get(index));
+      temp_sk_list.add(socket_list.get(index));
+      socket_len--;
+    }
+    for (int i = 0; i< temp_sk_list.size(); i++) {
+      socket_list.remove(temp_sk_list.get(i));
+      players.add(temp_players.get(i));
+      players.remove(temp_players.get(i));
+    }
+  }
+
   /**
    * send room map to all of them
    * @param socket_list
@@ -118,56 +127,67 @@ public class ServerSk {
    */
   public void send_map_to_all(ArrayList<Socket> socket_list, GameMap map) throws IOException {
     ObjectOutputStream oos = null;
-    for (Socket s : socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
       try {
         oos = new ObjectOutputStream(s.getOutputStream());
         oos.writeObject(map);
         oos.flush();
       } catch (IOException ex) {
-        ex.printStackTrace();
+        System.out.println(map.get_player_list().get(i).color + " player disconnect!");
+        toDelete.add(i);
       }
-      /*finally {
-        try {
-          //oos.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }*/
     }
+
+    if (toDelete.size() != 0) {
+      handleDisconnection(map.get_player_list(), socket_list, toDelete);
+    }
+
   }
 
   public void send_color(ArrayList<Socket> socket_list, ArrayList<Player> player_list) throws IOException {
-
     ObjectOutputStream oos = null;
-    int i = 0;
-    for (Socket s : socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
+      Player p = player_list.get(i);
       try {
         oos = new ObjectOutputStream(s.getOutputStream());
-        oos.writeObject(player_list.get(i).color);
+        oos.writeObject(p.color);
         oos.flush();
-        i++;
       } catch (IOException ex) {
-        ex.printStackTrace();
+        System.out.println(player_list.get(i).color + " player disconnect!");
+        toDelete.add(i);
       }
+    }
 
+    if (toDelete.size() != 0) {
+      handleDisconnection(player_list, socket_list, toDelete);
     }
   }
 
-  public void send_num_units(ArrayList<Socket> socket_list, int num_units) throws IOException {
+  public void send_num_units(ArrayList<Socket> socket_list, int num_units, ArrayList<Player> players) throws IOException {
     ObjectOutputStream oos = null;
-    for (Socket s : socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
       try {
         oos = new ObjectOutputStream(s.getOutputStream());
         oos.writeObject(num_units);
         oos.flush();
       } catch (IOException ex) {
-        ex.printStackTrace();
+        System.out.println(players.get(i).color + " player disconnect!");
+        toDelete.add(i);
       }
+    }
 
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
     }
   }
 
-  public void accept_player(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException {
+  public void accept_player(ArrayList<Socket> socket_list, ArrayList<Player> players) throws ClassNotFoundException, IOException {
     players.clear();
     for (Socket s : socket_list) {
       ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
@@ -185,20 +205,216 @@ public class ServerSk {
     }
   }
 
-  public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
-    ArrayList<Orders> ordersList = new ArrayList<Orders>();
-    for (Socket s : socket_list) {
-      ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
-      Orders temp = (Orders) ois.readObject();
-      ordersList.add(temp);
+
+  public void do_attack(ArrayList<Player> players){
+    for (Map.Entry<String, ArrayList<Order>> entry : AttackMap.entrySet()) {
+      ArrayList<Order> attackList = entry.getValue();
+      String des = entry.getKey();
+      Player defender = Action.getPlayer(des, players);
+      ArrayList<Order> refineList = Action.refineAttack(attackList, players);
+      ArrayList<Integer> randoms = Action.getRandomIdx(refineList.size());
+      for (int i : randoms) {
+        defender = Action.Attack(refineList.get(i).player, defender, refineList.get(i).getSrc(), des, refineList.get(i).getNumUnit(), players);
+      }
     }
-    do_move(ordersList, players);
-    //do_attack();
+  }
+
+  public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    ArrayList<Orders> ordersList = new ArrayList<Orders>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
+      try {
+        ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+        Orders temp = (Orders) ois.readObject();
+        ordersList.add(temp);
+      } catch (IOException ex) {
+
+        System.out.println(players.get(i).color + " player disconnect!");
+        toDelete.add(i);
+      }
+    }
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
+    }
+
+    while (true) {
+      try {
+        ArrayList<Player> playersCopy = new ArrayList<Player>();
+        for (int i = 0; i < players.size(); i++) {
+          Player temp = players.get(i).deep_copy();
+          playersCopy.add(temp);
+        }
+        do_move(ordersList, playersCopy);
+        Action.loseAttackUnit(ordersList, playersCopy);
+        AttackMap = Action.arrangeAttackOrder(ordersList, playersCopy);
+        do_attack(playersCopy);
+
+        ObjectOutputStream oos = null;
+        toDelete.clear();
+
+        for (int i = 0; i < socket_list.size(); i++) {
+          try {
+            oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+            oos.writeObject("Total success");
+            oos.flush();
+          } catch (IOException ex) {
+            System.out.println(players.get(i).color + " player disconnect!");
+            toDelete.add(i);
+          }
+        }
+
+        if (toDelete.size() != 0) {
+          handleDisconnection(playersCopy, socket_list, toDelete);
+        }
+
+        players.clear();
+        for (int i = 0; i < playersCopy.size(); i++) {
+          players.add(playersCopy.get(i));
+        }
+        break;
+      } catch (IllegalArgumentException e) {
+        System.out.println(e.getMessage());
+        int space = e.getMessage().indexOf(" ");
+        String temp_color = e.getMessage().substring(0, space);
+        int skIndex = Action.getIndexFromPlayers(players, temp_color);
+        Orders new_orders = getNewOrders(socket_list, skIndex, e.getMessage(), players);
+        if (new_orders != null) {
+          ordersList.set(skIndex, new_orders);
+        }
+        else {
+          ordersList.remove(skIndex);
+        }
+      }
+    }
     Action.Done(players);
   }
 
+  public Orders getNewOrders(ArrayList<Socket> socket_list, int skIndex, String msg, ArrayList<Player> players) throws IOException, ClassNotFoundException {
+    ObjectOutputStream oos = null;
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      try {
+        oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+        if (i == skIndex) {
+          oos.writeObject(msg);
+        } else {
+          oos.writeObject("Success");
+        }
+        oos.flush();
+      } catch (IOException ex) {
+        System.out.println(players.get(i).color + " player disconnect!");
+        toDelete.add(i);
+      }
+    }
 
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
+    }
 
+    Orders temp = new Orders();
+    try {
+      ObjectInputStream ois = new ObjectInputStream(socket_list.get(skIndex).getInputStream());
+      temp = (Orders) ois.readObject();
+    } catch (IOException ex) {
+      System.out.println(players.get(skIndex).color + " player disconnect!");
+      Player temp_p = players.remove(skIndex);
+      players.add(temp_p);
+      socket_list.remove(skIndex);
+      temp = null;
+
+    }
+    return temp;
+  }
+
+  public void handlePotentialLose(ArrayList<Player> players, ArrayList<Socket> socket_list) throws IOException, ClassNotFoundException {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_len; i++) {
+      Player p = players.get(i);
+      ObjectOutputStream oos = null;
+
+      Socket s = socket_list.get(i);
+      //send lose
+      try {
+        oos = new ObjectOutputStream(s.getOutputStream());
+        if (p.checkLose()) {
+          oos.writeObject("Lose");
+        }
+        else {
+          oos.writeObject("notLose");
+        }
+        oos.flush();
+      } catch (IOException ex) {
+        System.out.println(players.get(i).color + " player disconnect!");
+        toDelete.add(i);
+      }
+    }
+
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
+    }
+
+  }
+
+  public void handleWin(ArrayList<Player> players, String res, ArrayList<Socket> socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      ObjectOutputStream oos = null;
+      try {
+        oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+        oos.writeObject(res + " player win!");
+        oos.flush();
+      } catch (IOException ex) {
+        System.out.println(players.get(i).color + " player disconnect!");
+        toDelete.add(i);
+      }
+    }
+
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
+    }
+
+  }
+
+  public void do_turns(ArrayList<Socket> socket_list, GameMap map) throws IOException, ClassNotFoundException {
+    ArrayList<Player> players = map.get_player_list();
+    while (true) {
+      do_one_turn(socket_list, map.get_player_list());
+      send_map_to_all(socket_list, map);
+      //checkLose
+      handlePotentialLose(players, socket_list);
+      //checkWin
+      String res = Action.checkWin(players);
+      if (res != null) {
+        handleWin(map.get_player_list(), res, socket_list);
+        for (int i = 0; i < socket_len; i++) {
+          System.out.println(players.get(i).color + " player disconnect!");
+        }
+        close_all_sk(socket_list);
+        break;
+      }
+      else {
+        ArrayList<Integer> toDelete = new ArrayList<Integer>();
+        ObjectOutputStream oos = null;
+
+        for (int i = 0; i < socket_list.size(); i++) {
+          try {
+            oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+            oos.writeObject("noBodyWin");
+            oos.flush();
+          } catch (IOException ex) {
+            System.out.println(map.get_player_list().get(i).color + " player disconnect!");
+            toDelete.add(i);
+          }
+        }
+
+        if (toDelete.size() != 0) {
+          handleDisconnection(players, socket_list, toDelete);
+        }
+
+      }
+    }
+  }
   /**
    * close all the client socket in the room after game ends
    * @param socket_list

@@ -14,7 +14,7 @@ public class ParseTest {
   @Test
   public void test_readfile() throws IOException {
     //String directory = System.getProperty("user.dir") + "/src/main/java/ece651/eval1/";
-    String filename = "Territory.txt";
+    String filename = "Territory3.txt";
     Parse parse = new Parse();
     ArrayList<String> lines = parse.readfile(filename);
     assertEquals(lines.get(0), "Gondor:Mordor, Oz");
@@ -23,7 +23,7 @@ public class ParseTest {
 
   @Test
   public void test_parseTerritory() throws IOException{
-    String filename = "Territory.txt";
+    String filename = "Territory3.txt";
     String color = "Green";
     Parse parse = new Parse();
     ArrayList<String> lines = parse.readfile(filename);
@@ -80,7 +80,7 @@ public class ParseTest {
 
   @Test
   public void test_parseTerritoryNeighbor () throws IOException{
-    String filename = "Territory.txt";
+    String filename = "Territory3.txt";
     int numPlayer = 3;
     Parse parse = new Parse();
     HashSet<Territory> result = parse.parseTerritoryNeighbor(filename, numPlayer);

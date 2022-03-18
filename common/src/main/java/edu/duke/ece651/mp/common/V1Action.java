@@ -6,7 +6,8 @@ import java.io.*;
 public class V1Action implements AbstractActionFactory {
   @Override
   public String checkForMove(Player player, String src, String dest, int numUnit){
-    MoveChecker UnitCheck = new UnitRuleChecker(null);
+    MoveChecker NameCheck = new NameMoveRuleChecker(null);
+    MoveChecker UnitCheck = new UnitRuleChecker(NameCheck);
     MoveChecker PathCheck = new PathRuleChecker(UnitCheck);
     String result = PathCheck.checkMovement(player, src, dest, numUnit);
     return result;
@@ -45,10 +46,11 @@ public class V1Action implements AbstractActionFactory {
    * @param numUnit is the number of Unit that join the attack.
    * @return returns null if there is no error. returns string argument when there is an error.
    */
-  public String checkForAttack(Player attacker, String src, String dest, int numUnit){
-    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(null);
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players){
+    AttackChecker NameCheck = new NameAttackRuleChecker(null);
+    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(NameCheck);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
-    String result = FactionCheck.checkAttack(attacker, src, dest, numUnit);
+    String result = FactionCheck.checkAttack(attacker, src, dest, numUnit, players);
     return result;
   }
 
@@ -59,20 +61,22 @@ public class V1Action implements AbstractActionFactory {
    * @param src is the name of the source territory
    * @param dest is the name of the destination territory
    * @param numUnit is the number of Unit that join the attack.
+   * @param players is the ArrayList<Player> of all players.
    */
   @Override
-  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit){
-    String checkResult = checkForAttack(attacker, src, dest, numUnit);
+
+  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players){
+
+    String checkResult = checkForAttack(attacker, src, dest, numUnit, players);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
      }
     
     //Territory attackerTerri = findTerritory(attacker, src);
     Territory defenderTerri = findTerritory(defender, dest);
-
     // Attacker lose units that is attacking
     //attackerTerri.loseUnit(numUnit);
-    
+
     // Attacker win Defender
     boolean unitRemain = (numUnit > 0) && (defenderTerri.countUnit() > 0);
     while(unitRemain){
@@ -89,11 +93,31 @@ public class V1Action implements AbstractActionFactory {
       defenderTerri.changeColor(attacker.getColor());
       defenderTerri.setBasicUnit(numUnit);
       attacker.player_terri_set.add(defenderTerri);
+      changeAllColor(players, defenderTerri.getName(), attacker.getColor());
       return attacker;
     } else {
       return defender;
     }
     
+  }
+
+  /**
+   * changeAllColor() would help to change whole the color of the Territory that is gotten by the attacker from all players.
+   * To be more specific, owing to deep_copy(), the name of the Territory of all players' neighbor list are not the same.
+   * @param players is all players.
+   * @param t_name is the territory that is gotten by the attacker.
+   * @param color is the color of the attacker.
+*/
+  public void changeAllColor(ArrayList<Player> players, String t_name, String color){
+    for(Player p : players){
+      for(Territory t : p.player_terri_set){
+        for(Territory curr_neigh: t.getNeigh()){
+          if(curr_neigh.getName().equals(t_name)){
+            curr_neigh.changeColor(color);
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -114,11 +138,11 @@ public class V1Action implements AbstractActionFactory {
     int Dice1 = rand1.nextInt(max - min + 1) + min;
     int Dice2 = rand2.nextInt(max - min + 1) + min;
     if (Dice1 > Dice2){
+      // Attacker wins this round!
       return true;
-    }else if (Dice2 > Dice1){
+    } else{
+      // Defender wins this round
       return false;
-    }else{
-      return rollDice();
     }
   }
 
@@ -150,6 +174,7 @@ public class V1Action implements AbstractActionFactory {
       }
     }
   }
+
 
    /**
    * getPlayer() can help the server to get the Player based on the name of the destination territory
@@ -197,13 +222,91 @@ public class V1Action implements AbstractActionFactory {
     }
   }
   @Override
-  public ArrayList<Integer> getRandomIdx(int sz){
+  public ArrayList<Integer> getRandomIdx(int sz) {
     ArrayList<Integer> numlist = new ArrayList<Integer>();
-    for (int i = 0; i< sz; i++){
+    for (int i = 0; i < sz; i++) {
       numlist.add(i);
     }
-    
-    Collections.shuffle(numlist,new Random());
+
+    Collections.shuffle(numlist, new Random());
     return numlist;
   }
+  @Override
+  public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players) {
+    for (int i = 0; i < ordersList.size(); i++) {
+      for (Order o : ordersList.get(i).AttackList) {
+        Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
+        boolean res = attackerTerri.loseUnit(o.getNumUnit());
+        if (res == false) {
+          throw new IllegalArgumentException(players.get(i).color + " player has invalid attack orders. The numUnits is insufficient.\n");
+        }
+      }
+    }
+  }
+
+  @Override
+  public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players) {
+    ArrayList<Order> res = new ArrayList<Order>();
+    for (Player p : players) {
+      Order temp = new Order(p, " ", " ", 0);
+      for (Order o : attackList) {
+        if (p.color.equals(o.getPlayer().color)) {
+          if (temp.getSrc().equals(" ")) {
+            temp = o;
+          }
+          else {
+            temp.numUnit += o.numUnit;
+          }
+        }
+      }
+      if (!temp.getSrc().equals(" ")) {
+        res.add(temp);
+      }
+    }
+    return res;
+  }
+
+  /**
+   *getIndexFromPlayers() can provide the index of specific color from ArrayList<Player>.
+   *@param players is the ArrayList<Player> that represents all players in the game.
+   *@param color is the color of the player you want to find.
+   *@return the index of specific color inside of the ArrayList<Player>.
+*/
+  @Override
+  public int getIndexFromPlayers(ArrayList<Player> players, String color){
+    int counter = 0;
+    for(Player player : players){
+      if(player.color.equals(color)){
+        break;
+      } else{
+        counter++;
+      }
+    }
+    return counter;
+  }
+
+  /**
+   *checkWin() can check whether there is a winner in a current round.
+   *@param players is the ArrayList<Player> that represents all players in the game.
+   *@return returns the color of the winner, and returns NULL as there is no winner now. 
+*/
+  @Override
+  public String checkWin(ArrayList<Player> players){
+    int index = 0;
+    int counter = 0;
+    int num_players = players.size();
+    for(int i = 0; i < players.size(); i++){
+      Player curr_player = players.get(i);
+      if(!curr_player.checkLose()){
+        // if curr_player hasn't lost the game
+        index = i;
+        counter++;
+      }
+    }
+    if(counter == 1){
+      return players.get(index).color;
+    }
+    return null;
+  }
+
 }

@@ -2,7 +2,11 @@ package edu.duke.ece651.mp.common;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.checkerframework.checker.units.qual.A;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.awt.desktop.AppForegroundListener;
 import java.util.*;
 public class V1ActionTest {
   @Test
@@ -45,12 +49,14 @@ public class V1ActionTest {
 
   }
 
+  @Disabled
   @Test
   public void test_rolldice(){
     V1Action action = new V1Action();
     assertTrue(action.rollDice());
   }
 
+  @Disabled
   @Test
   public void test_Attack(){
     HashSet<Territory> test_territory1 = new HashSet<>();
@@ -80,11 +86,18 @@ public class V1ActionTest {
     Player attacker = new Player("Red", test_territory1);
     Player defender = new Player("Blue", test_territory2);
     V1Action action = new V1Action();
-    action.Attack(attacker, defender, "Mordor", "Scadrial", 1);
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(attacker);
+    players.add(defender);
+    action.Attack(attacker, defender, "Mordor", "Scadrial", 1, players);
     Territory taken = action.findTerritory(attacker, "Scadrial");
+    Territory left = action.findTerritory(defender, "Elantris");
     assertEquals(taken.getColor(), "Red");
     assertEquals(taken.countUnit(), 1);
-   assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1));
+    for(Territory neigh : left.getNeigh()){
+      assertEquals("Red", neigh.getColor());
+    }
+    assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1, players));
   }
 
   @Test
@@ -109,6 +122,7 @@ public class V1ActionTest {
   }
 
   @Test
+
   public void test_getPlayer() {
     Player player = makePlayer1();
     ArrayList<Player> players = new ArrayList<Player>();
@@ -197,11 +211,122 @@ public class V1ActionTest {
   }
 
   @Test
-  public void test_getRandomIndex(){
+  public void test_getRandomIndex() {
     AbstractActionFactory Action = new V1Action();
     ArrayList<Integer> numlist = Action.getRandomIdx(10);
-    for(int i = 0; i < numlist.size(); i++){
+    for (int i = 0; i < numlist.size(); i++) {
       System.out.println("numlist[" + i + "]: " + numlist.get(i));
     }
+  }
+
+  @Test
+  public void test_loseAttackUnit(){
+    V1Action action = new V1Action();
+    ArrayList<Player> players = new ArrayList<>();
+    ArrayList<Orders> Orders  = new ArrayList<>();
+    HashSet<Territory> test_territory1 = new HashSet<>();
+    LandTerritory lt1 = new LandTerritory("Mordor", "Red");
+    LandTerritory lt2 = new LandTerritory("Gondor", "Red");
+
+    lt1.addNeigh(lt2);
+    lt2.addNeigh(lt1);
+    lt1.setBasicUnit(3);
+    lt2.setBasicUnit(4);
+    test_territory1.add(lt1);
+    test_territory1.add(lt2);
+    Player p1 = new Player("Red", test_territory1);
+
+    HashSet<Territory> test_territory2 = new HashSet<>();
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue");
+
+    lt4.addNeigh(lt5);
+    lt5.addNeigh(lt4);
+    lt4.setBasicUnit(5);
+    lt5.setBasicUnit(6);
+    test_territory2.add(lt4);
+    test_territory2.add(lt5);
+    Player p2 = new Player("Blue", test_territory2);
+
+    players.add(p1);
+    players.add(p2);
+
+
+    Orders os1 = new Orders();
+    Orders os2 = new Orders();
+    Order oA1 = new Order(p1, "Gondor", "Elantris", 1);
+    Order oA2 = new Order(p2, "Scadrial", "Mordor",1);
+    os1.AttackList.add(oA1);
+    os2.AttackList.add(oA2);
+    Orders.add(os1);
+    Orders.add(os2);
+    action.loseAttackUnit(Orders, players);
+    int lt1unit = lt1.countUnit();
+    int lt4unit = lt4.countUnit();
+    assertEquals(3, lt1unit);
+    assertEquals(4, lt4unit);
+  }
+
+  @Test
+  public void test_refine() {
+    V1Action action = new V1Action();
+    ArrayList<Player> players = new ArrayList<>();
+    ArrayList<Orders> Orders  = new ArrayList<>();
+    HashSet<Territory> test_territory1 = new HashSet<>();
+    LandTerritory lt1 = new LandTerritory("Mordor", "Red");
+    LandTerritory lt2 = new LandTerritory("Gondor", "Red");
+
+    lt1.addNeigh(lt2);
+    lt2.addNeigh(lt1);
+    lt1.setBasicUnit(3);
+    lt2.setBasicUnit(4);
+    test_territory1.add(lt1);
+    test_territory1.add(lt2);
+    Player p1 = new Player("Red", test_territory1);
+
+    HashSet<Territory> test_territory2 = new HashSet<>();
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue");
+
+    lt4.addNeigh(lt5);
+    lt5.addNeigh(lt4);
+    lt4.setBasicUnit(5);
+    lt5.setBasicUnit(6);
+    test_territory2.add(lt4);
+    test_territory2.add(lt5);
+    Player p2 = new Player("Blue", test_territory2);
+
+    players.add(p1);
+    players.add(p2);
+    ArrayList<Order> oList = new ArrayList<Order>();
+    Order o1 = new Order(players.get(0), "Mordor", "Elantris", 1);
+    Order o2 = new Order(players.get(1), "Scadrial", "Elantris", 1);
+    Order o3 = new Order(players.get(0), "Gondor", "Elantris", 2);
+    Order o4 = new Order(players.get(1), "Gondor", "Elantris", 1);
+    oList.add(o1);
+    oList.add(o2);
+    oList.add(o3);
+    oList.add(o4);
+    ArrayList<Order> res = action.refineAttack(oList, players);
+    assertEquals(2, res.size());
+    assertEquals(3, res.get(0).numUnit);
+    assertEquals(2, res.get(1).numUnit);
+
+  }
+
+  @Test
+  public void test_getIndexFromPlayers(){
+    ArrayList<Player> players = makePlayer2();
+    AbstractActionFactory Action = new V1Action();
+    assertEquals(1, Action.getIndexFromPlayers(players, "Green"));
+  }
+
+  @Test
+  public void test_checkWin(){
+    ArrayList<Player> players = makePlayer2();
+    AbstractActionFactory Action = new V1Action();
+    assertNull(Action.checkWin(players));
+    players.get(0).player_terri_set.clear();
+    assertEquals("Green",Action.checkWin(players));
   }
 }

@@ -1,5 +1,6 @@
 package edu.duke.ece651.mp.common;
 
+import java.io.*;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -46,5 +47,37 @@ public class Player implements java.io.Serializable{
   
   public String getColor(){
     return this.color;
+  }
+
+  /**
+   * deep_copy() can get the deep copy of the current player
+   * @return Player which is the deep copy of the current player.
+*/
+  public Player deep_copy() {
+      Player deep_copy = null;
+      try {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          ObjectOutputStream oos = new ObjectOutputStream(baos);
+          oos.writeObject(this);
+
+          ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+          ObjectInputStream ois = new ObjectInputStream(bais);
+          deep_copy = (Player) ois.readObject();
+      } catch (ClassNotFoundException | IOException e) {
+          e.printStackTrace();
+      }
+      return deep_copy;
+  }
+
+
+  /**
+   * checkLose() can check whether the current player has lost the game or not
+   * @return return true represents lose; return false represents current player hasn't lost
+   */
+  public boolean checkLose(){
+    if(player_terri_set.size() == 0){
+      return true;
+    }
+    return false;
   }
 }

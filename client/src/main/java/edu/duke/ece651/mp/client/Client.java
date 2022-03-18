@@ -11,19 +11,11 @@ import java.io.StringReader;
 public class Client {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        ClientSk clientSk = new ClientSk(input);
-        String map_show1 = new String(clientSk.accept_map());
-        System.out.print(map_show1);
-        clientSk.accept_color();
-        clientSk.accept_units();
-        clientSk.set_player();
-        clientSk.init_unit();
-        clientSk.send_player();
-        String map_show2 = new String(clientSk.accept_map());
-        System.out.print(map_show2);
-        clientSk.collect_orders_and_send();
-        String map_show3 = new String(clientSk.accept_map());
-        System.out.print(map_show3);
-        //clientSk.close_client();
+        System.out.println("Please enter the server host name");
+        String hostName = input.readLine();
+        System.out.println("Please enter the server port number");
+        String port = input.readLine();
+        ClientSk clientSk = new ClientSk(hostName, port, input, System.out);
+        clientSk.game_begin();
     }
 }

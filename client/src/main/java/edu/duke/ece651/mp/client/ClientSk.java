@@ -12,13 +12,15 @@ import java.util.ArrayList;
  */
 public class ClientSk {
   public BasicMap map;
-  private Socket socket;
+  public Socket socket;
   private MapDisplay toDisplay;
   private String color;
   private int num_units;
   public Player player;
   final BufferedReader inputReader;
+  final PrintStream out;
   private AbstractActionFactory Action;
+  private ArrayList<Player> players;
 
   /**
    * connect to the local host on 9999 port
@@ -26,11 +28,13 @@ public class ClientSk {
    *
    * @throws IOException
    */
-  public ClientSk(BufferedReader inputSource) throws IOException {
-    socket = new Socket("0.0.0.0", 9999);
+  public ClientSk(String Hostname, String port, BufferedReader inputSource, PrintStream outSource) throws IOException {
+    socket = new Socket(Hostname, Integer.parseInt(port));
     this.map = null;
     this.inputReader = inputSource;
+    this.out = outSource;
     this.Action = new V1Action();
+    this.players = new ArrayList<Player>();
   }
 
 
@@ -41,6 +45,24 @@ public class ClientSk {
    * @throws IOException
    * @throws ClassNotFoundException
    */
+  public void game_begin() throws IOException, ClassNotFoundException {
+    String map_show1 = new String(accept_map());
+    out.print(map_show1);
+    accept_color();
+    accept_units();
+    set_player();
+    init_unit();
+    send_player();
+    String map_show2 = new String(accept_map());
+    out.print(map_show2);
+    do_turns();
+  }
+
+  public String accept_string() throws IOException, ClassNotFoundException {
+    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+    return  (String) ois.readObject();
+  }
+
   public String accept_map() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     map = (BasicMap) ois.readObject();
@@ -56,7 +78,7 @@ public class ClientSk {
      */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.color = (String) ois.readObject();
-    System.out.print("You are " + color + " player, ");
+    out.print("You are " + color + " player, ");
   }
 
   public void accept_units() throws IOException, ClassNotFoundException {
@@ -66,8 +88,8 @@ public class ClientSk {
      */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.num_units = (int) ois.readObject();
-    System.out.println("you have " + num_units + " units totally");
-    System.out.println("Please place your units on each territory");
+    out.println("you have " + num_units + " units totally");
+    out.println("Please place your units on each territory");
   }
 
   public void set_player() {
@@ -76,6 +98,7 @@ public class ClientSk {
         this.player = p;
       }
     }
+    this.players = map.get_player_list();
   }
 
   public void init_unit() {
@@ -84,11 +107,11 @@ public class ClientSk {
     for (Territory t : player.player_terri_set) {
       if (count == player.player_terri_set.size() - 1) {
         t.setBasicUnit(limit);
-        System.out.println("Remaining " + limit + " units are placed in " + t.getName());
+        out.println("Remaining " + limit + " units are placed in " + t.getName());
         return;
       }
-      System.out.println("How many units do you want to place in " + t.getName() + "?");
-      System.out.print("Please enter a integer: ");
+      out.println("How many units do you want to place in " + t.getName() + "?");
+      out.print("Please enter a integer: ");
       while (true) {
         try {
           int temp = try_readLine(limit);
@@ -96,7 +119,7 @@ public class ClientSk {
           t.setBasicUnit(temp);
           break;
         } catch (IllegalArgumentException | IOException e) {
-          System.out.println(e.getMessage());
+          out.println(e.getMessage());
         }
       }
       count++;
@@ -137,20 +160,33 @@ public class ClientSk {
   }
 
   public String read_string(String promt) throws IOException {
-    System.out.print(promt);
+    out.print(promt);
     String s = inputReader.readLine();
     return s;
   }
 
 
-  public String parse_check_add(String action, Orders orders) throws IOException {
+  public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException {
     String order = read_string("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
             "numUnitsToDestination\n");
     String src = new String();
     String des = new String();
     int index1 = order.indexOf(" ");
+    if (index1 == -1) {
+      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
+              "numUnitsToDestination\n");
+    }
     src = order.substring(0, index1);
     int index2 = order.indexOf(" ", index1 + 1);
+    if (index2 == -1) {
+      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
+              "numUnitsToDestination\n");
+    }
+    int index3 = order.indexOf(" ", index2 + 1);
+    if (index3 != -1) {
+      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
+              "numUnitsToDestination\n");
+    }
     des = order.substring(index1 + 1, index2);
     String numMove = order.substring(index2 + 1);
     for (int i = 0; i < numMove.length(); i++) {
@@ -170,7 +206,7 @@ public class ClientSk {
       }
     }
     else {
-      String temp = Action.checkForAttack(player, src, des, num_move);
+      String temp = Action.checkForAttack(player, src, des, num_move, players);
       if (temp != null) {
         return temp;
       }
@@ -183,7 +219,6 @@ public class ClientSk {
   }
 
   public void check_action(String s) {
-
     if (s.length() != 1) {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
     }
@@ -193,18 +228,17 @@ public class ClientSk {
   }
 
   public String collect_one_order(Orders orders) throws IOException {
-    System.out.println("You are the " + color + " player, what would you like to do?");
-    System.out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
-    System.out.println("Attention: please do some Move or Attack, then ends with Done.");
+    out.println("You are the " + color + " player, what would you like to do?");
+    out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
+    out.println("Attention: please do some Move or Attack, then ends with Done.");
     String action = null;
     while (true) {
       try {
         action = new String(inputReader.readLine());
         check_action(action);
-
         break;
       } catch (IllegalArgumentException e) {
-        System.out.println(e.getMessage());
+        out.println(e.getMessage());
       }
     }
     while (true) {
@@ -217,18 +251,34 @@ public class ClientSk {
         do {
           if (action.equals("M")) {
 
-            res = parse_check_add(action, orders);
+            res = parse_check_add(action, orders, players);
           } else {
-            res = parse_check_add(action, orders);
+            res = parse_check_add(action, orders, players);
           }
           if (res != null) {
-            System.out.println(res);
+            out.println(res);
           }
         } while (res != null);
         break;
       }
     }
     return action;
+  }
+
+  public void if_end_one_turn() throws IOException, ClassNotFoundException {
+    String res = null;
+    while(true) {
+      ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+      res = (String) ois.readObject();
+      if (res.equals("Total success")) {
+        break;
+      }
+      if (!res.equals("Success")) {
+        out.print(res);
+        out.print("Please enter all your orders again for this turn\n");
+        collect_orders_and_send();
+      }
+    }
   }
 
   public void collect_orders_and_send() throws IOException {
@@ -238,6 +288,110 @@ public class ClientSk {
       temp = collect_one_order(orders);
     } while (!temp.equals("D"));
     send_orders(orders);
+  }
+
+  public String handle_lose() throws IOException {
+    out.println("You lose! Do you want to keep watching game going? Please enter y or n. y means yes, n means no.");
+    while (true) {
+      String s = inputReader.readLine();
+      try {
+        if (s.length() != 1) {
+          throw new IllegalArgumentException("You should enter y or n");
+        } else if (!s.equals("y") && !s.equals("n")) {
+          throw new IllegalArgumentException("You should enter y or n");
+        } else {
+          return s;
+        }
+      } catch (IllegalArgumentException e) {
+        out.println(e.getMessage());
+      }
+
+    }
+  }
+
+
+  public boolean turn_end_helper() throws IOException, ClassNotFoundException {
+    ObjectInputStream ois_new = new ObjectInputStream(socket.getInputStream());
+    String res = (String) ois_new.readObject();
+    if (!res.equals("noBodyWin")) {
+      out.println(res);
+      close_client();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public void do_turns_as_watch() throws IOException, ClassNotFoundException {
+    while (true) {
+      Orders new_orders = new Orders();
+      send_orders(new_orders);
+      if_end_one_turn();
+      String map_show = new String(accept_map());
+      out.print(map_show);
+      set_player();
+      ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+      String res = (String) ois.readObject();
+      if (turn_end_helper()) {
+        return;
+      }
+    }
+  }
+
+  public boolean is_last_loser() {
+    ArrayList<Player> players = map.get_player_list();
+    int count = 0;
+    for(int i = 0; i < players.size(); i++){
+      if (!players.get(i).checkLose()) {
+        count++;
+      }
+    }
+    if (count == 1) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public void do_turns() throws IOException, ClassNotFoundException {
+    String s = null;
+    while (true) {
+      collect_orders_and_send();
+      if_end_one_turn();
+      String map_show = new String(accept_map());
+      out.print(map_show);
+      set_player();
+      ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+      String res = (String)ois.readObject();
+      if (res.equals("Lose")) {
+        if (is_last_loser()) {
+          out.println("You lose!");
+          s = "y";
+        }
+        else {
+          s = handle_lose();
+        }
+        if (s.equals("y")) {
+          //send_string("y");
+          if (turn_end_helper()) {
+            return;
+          }
+          do_turns_as_watch();
+          return;
+        }
+        else {
+          //send_string("n");
+          close_client();
+          return;
+        }
+      }
+      //send_string("end");
+      if (turn_end_helper()) {
+        return;
+      }
+    }
   }
 
   public void send_orders(Orders orders) {
