@@ -11,7 +11,9 @@ import java.io.StringReader;
 public class Client {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        ClientSk clientSk = new ClientSk(input, System.out);
+        System.out.println("Please enter the server host name");
+        String hostName = input.readLine();
+        ClientSk clientSk = new ClientSk(hostName ,input, System.out);
         String map_show1 = new String(clientSk.accept_map());
         System.out.print(map_show1);
         clientSk.accept_color();

@@ -27,8 +27,8 @@ public class ClientSk {
    *
    * @throws IOException
    */
-  public ClientSk(BufferedReader inputSource, PrintStream outSource) throws IOException {
-    socket = new Socket("0.0.0.0", 9999);
+  public ClientSk(String Hostname, BufferedReader inputSource, PrintStream outSource) throws IOException {
+    socket = new Socket(Hostname, 9999);
     this.map = null;
     this.inputReader = inputSource;
     this.out = outSource;
