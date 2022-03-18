@@ -203,7 +203,7 @@ public class ClientSk {
       }
     }
     else {
-      String temp = Action.checkForAttack(player, src, des, num_move);
+      String temp = Action.checkForAttack(player, src, des, num_move, players);
       if (temp != null) {
         return temp;
       }

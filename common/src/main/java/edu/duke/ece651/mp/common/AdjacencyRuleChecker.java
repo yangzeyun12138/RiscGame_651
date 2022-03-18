@@ -11,7 +11,7 @@ public class AdjacencyRuleChecker extends AttackChecker {
    *@param numUnit is the number of unit that player wants to do the attack.
    *@return return the error string, and return null if there is no error. 
    */
-  protected String checkMyRule(Player player, String src, String dest, int numUnit){
+  protected String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players){
     for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(src)){
         for(Territory neigh : curr_t.getNeigh()){

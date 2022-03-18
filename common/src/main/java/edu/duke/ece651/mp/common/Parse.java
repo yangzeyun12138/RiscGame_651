@@ -114,7 +114,6 @@ public class Parse {
         currTerritory.addNeigh(neighborTerri);
       }
     }
-
     return territorySet;
       //return null;
     }

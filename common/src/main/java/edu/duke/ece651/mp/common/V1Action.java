@@ -6,7 +6,8 @@ import java.io.*;
 public class V1Action implements AbstractActionFactory {
   @Override
   public String checkForMove(Player player, String src, String dest, int numUnit){
-    MoveChecker UnitCheck = new UnitRuleChecker(null);
+    MoveChecker NameCheck = new NameMoveRuleChecker(null);
+    MoveChecker UnitCheck = new UnitRuleChecker(NameCheck);
     MoveChecker PathCheck = new PathRuleChecker(UnitCheck);
     String result = PathCheck.checkMovement(player, src, dest, numUnit);
     return result;
@@ -45,10 +46,11 @@ public class V1Action implements AbstractActionFactory {
    * @param numUnit is the number of Unit that join the attack.
    * @return returns null if there is no error. returns string argument when there is an error.
    */
-  public String checkForAttack(Player attacker, String src, String dest, int numUnit){
-    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(null);
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players){
+    AttackChecker NameCheck = new NameAttackRuleChecker(null);
+    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(NameCheck);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
-    String result = FactionCheck.checkAttack(attacker, src, dest, numUnit);
+    String result = FactionCheck.checkAttack(attacker, src, dest, numUnit, players);
     return result;
   }
 
@@ -59,19 +61,19 @@ public class V1Action implements AbstractActionFactory {
    * @param src is the name of the source territory
    * @param dest is the name of the destination territory
    * @param numUnit is the number of Unit that join the attack.
+   * @param players is the ArrayList<Player> of all players.
    */
   @Override
 
-  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit){
+  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players){
 
-    String checkResult = checkForAttack(attacker, src, dest, numUnit);
+    String checkResult = checkForAttack(attacker, src, dest, numUnit, players);
     if (checkResult != null){
       throw new IllegalArgumentException(checkResult);
      }
     
     //Territory attackerTerri = findTerritory(attacker, src);
     Territory defenderTerri = findTerritory(defender, dest);
-
     // Attacker lose units that is attacking
     //attackerTerri.loseUnit(numUnit);
 
@@ -91,11 +93,31 @@ public class V1Action implements AbstractActionFactory {
       defenderTerri.changeColor(attacker.getColor());
       defenderTerri.setBasicUnit(numUnit);
       attacker.player_terri_set.add(defenderTerri);
+      changeAllColor(players, defenderTerri.getName(), attacker.getColor());
       return attacker;
     } else {
       return defender;
     }
     
+  }
+
+  /**
+   * changeAllColor() would help to change whole the color of the Territory that is gotten by the attacker from all players.
+   * To be more specific, owing to deep_copy(), the name of the Territory of all players' neighbor list are not the same.
+   * @param players is all players.
+   * @param t_name is the territory that is gotten by the attacker.
+   * @param color is the color of the attacker.
+*/
+  public void changeAllColor(ArrayList<Player> players, String t_name, String color){
+    for(Player p : players){
+      for(Territory t : p.player_terri_set){
+        for(Territory curr_neigh: t.getNeigh()){
+          if(curr_neigh.getName().equals(t_name)){
+            curr_neigh.changeColor(color);
+          }
+        }
+      }
+    }
   }
 
   /**
