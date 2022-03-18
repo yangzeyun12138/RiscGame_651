@@ -269,7 +269,104 @@ public class ClientSk {
     send_orders(orders);
   }
 
+  public String handle_lose() throws IOException {
+    out.println("You lose! Do you want to keep watching game going? Please enter y or n. y means yes, n means no.");
+    while (true) {
+      String s = inputReader.readLine();
+      try {
+        if (s.length() != 1) {
+          throw new IllegalArgumentException("You should enter y or n");
+        } else if (!s.equals("y") && !s.equals("n")) {
+          throw new IllegalArgumentException("You should enter y or n");
+        } else {
+          return s;
+        }
+      } catch (IllegalArgumentException e) {
+        out.println(e.getMessage());
+      }
+
+    }
+  }
+
+  public void send_string(String promt) {
+    ObjectOutputStream oos = null;
+    try {
+      oos = new ObjectOutputStream(socket.getOutputStream());
+      oos.writeObject(promt);
+      oos.flush();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public boolean turn_end_helper() throws IOException, ClassNotFoundException {
+    out.println("before receive nobodywin");
+    ObjectInputStream ois_new = new ObjectInputStream(socket.getInputStream());
+    String res = (String) ois_new.readObject();
+    out.println("after receive nobodywin");
+    if (!res.equals("noBodyWin")) {
+      out.println(res);
+      close_client();
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public void do_turns_as_watch() throws IOException, ClassNotFoundException {
+    while (true) {
+      Orders new_orders = new Orders();
+      send_orders(new_orders);
+      if_end_one_turn();
+      String map_show = new String(accept_map());
+      System.out.print(map_show);
+      set_player();
+      ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+      String res = (String) ois.readObject();
+      send_string("end");
+      if (turn_end_helper()) {
+        return;
+      }
+    }
+  }
+
+  public void do_turns() throws IOException, ClassNotFoundException {
+    String s = null;
+    while (true) {
+      collect_orders_and_send();
+      if_end_one_turn();
+      String map_show = new String(accept_map());
+      System.out.print(map_show);
+      set_player();
+      ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+      String res = (String)ois.readObject();
+      if (res.equals("Lose")) {
+        s = handle_lose();
+        if (s.equals("y")) {
+          send_string("y");
+          if (turn_end_helper()) {
+            return;
+          }
+          do_turns_as_watch();
+          return;
+        }
+        else {
+          send_string("n");
+          close_client();
+          return;
+        }
+      }
+      send_string("end");
+      if (turn_end_helper()) {
+        return;
+      }
+      out.println("after turn_end_helper");
+    }
+  }
+
   public void send_orders(Orders orders) {
+    out.println("send orders successfully");
     ObjectOutputStream oos = null;
     try {
       oos = new ObjectOutputStream(socket.getOutputStream());

@@ -22,8 +22,10 @@ public class ServerSk {
   private ServerSocket serverSocket;
   private ArrayList<GameMap> rooms;
   private AbstractActionFactory Action;
+  //might be a HashMap List if more than one room
   private HashMap<String, ArrayList<Order>> AttackMap;
-  
+  //might be a ArrayList if more than one room
+  private int socket_len;
   /**
    * build a listening socket on port 9999, init all the rooms
    * @param rooms, all the rooms preparing for game starting
@@ -34,6 +36,7 @@ public class ServerSk {
     this.rooms = rooms;
     this.Action = new V1Action();
     this.AttackMap = new HashMap<String, ArrayList<Order>>();
+    this.socket_len = rooms.get(0).get_num_players();
   }
 
   /**
@@ -68,26 +71,13 @@ public class ServerSk {
           send_num_units(socket_list, map.get_num_units(), map.get_player_list());
           accept_player(socket_list, map.get_player_list());
           send_map_to_all(socket_list, map);
-          do_one_turn(socket_list, map.get_player_list());
-          send_map_to_all(socket_list, map);
+          do_turns(socket_list, map);
         } catch (IOException | ClassNotFoundException ex) {
           ex.printStackTrace();
         }
-        /*
-        finally {
-          try {
-            close_all_sk(socket_list);
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-        }
-
-         */
 
       }
     }).start();
-
-
   }
 
 
@@ -113,6 +103,28 @@ public class ServerSk {
     return ans_list;
   }
 
+  public void handleDisconnection(ArrayList<Player> players, ArrayList<Socket> socket_list, ArrayList<Integer> toDelete) {
+    System.out.println("toDelete: ");
+    for (int i : toDelete) {
+      System.out.println(i);
+    }
+    System.out.println("before remove player");
+    for (int i = 0; i < players.size(); i++) {
+      System.out.println(players.get(i));
+    }
+    for (int i = 0; i < toDelete.size(); i++) {
+      int index = toDelete.get(i);
+      Player temp = players.remove(index);
+      players.add(temp);
+      socket_list.remove(index);
+
+    }
+    System.out.println("after remove player");
+    for (int i = 0; i < players.size(); i++) {
+      System.out.println(players.get(i));
+    }
+  }
+
   /**
    * send room map to all of them
    * @param socket_list
@@ -131,13 +143,15 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
+        System.out.println("in send map");
       }
     }
-    for (int i = 0; i < toDelete.size(); i++) {
-      Player temp = map.get_player_list().remove(i);
-      map.get_player_list().add(temp);
-      socket_list.remove(i);
+    /*
+    if (toDelete.size() != 0) {
+      handleDisconnection(map.get_player_list(), socket_list, toDelete);
     }
+
+     */
   }
 
   public void send_color(ArrayList<Socket> socket_list, ArrayList<Player> player_list) throws IOException {
@@ -155,11 +169,12 @@ public class ServerSk {
         toDelete.add(i);
       }
     }
-    for (int i = 0; i < toDelete.size(); i++) {
-      Player temp = player_list.remove(i);
-      player_list.add(temp);
-      socket_list.remove(i);
+    /*
+    if (toDelete.size() != 0) {
+      handleDisconnection(player_list, socket_list, toDelete);
     }
+
+     */
   }
 
   public void send_num_units(ArrayList<Socket> socket_list, int num_units, ArrayList<Player> players) throws IOException {
@@ -176,11 +191,12 @@ public class ServerSk {
         toDelete.add(i);
       }
     }
-    for (int i = 0; i < toDelete.size(); i++) {
-      Player temp = players.remove(i);
-      players.add(temp);
-      socket_list.remove(i);
+    /*
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
     }
+
+     */
   }
 
   public void accept_player(ArrayList<Socket> socket_list, ArrayList<Player> players) throws ClassNotFoundException, IOException {
@@ -227,13 +243,15 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
+        System.out.println("in do one turn catch");
       }
     }
-    for (int i = 0; i < toDelete.size(); i++) {
-      Player temp = players.remove(i);
-      players.add(temp);
-      socket_list.remove(i);
+    /*
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
     }
+
+     */
     while (true) {
       try {
         ArrayList<Player> playersCopy = new ArrayList<Player>();
@@ -241,23 +259,20 @@ public class ServerSk {
           Player temp = players.get(i).deep_copy();
           playersCopy.add(temp);
         }
-        System.out.println("before do_move");
         do_move(ordersList, playersCopy);
-        System.out.println("before loseAttack");
         Action.loseAttackUnit(ordersList, playersCopy);
-        System.out.println("before arrange");
         AttackMap = Action.arrangeAttackOrder(ordersList, playersCopy);
-        System.out.println("before do_attack");
         do_attack(playersCopy);
         //for test
-
+        /*
         for (Player p : playersCopy) {
           System.out.println(p.toString());
         }
-
+        */
         ObjectOutputStream oos = null;
         toDelete.clear();
-
+        System.out.println("before send total success, socketList size:");
+        System.out.println(socket_list.size());
         for (int i = 0; i < socket_list.size(); i++) {
           try {
             oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
@@ -266,14 +281,16 @@ public class ServerSk {
           } catch (IOException ex) {
             ex.printStackTrace();
             toDelete.add(i);
+            System.out.println("in send total success catch");
           }
         }
-        for (int i = 0; i < toDelete.size(); i++) {
-          Player temp = players.remove(i);
-          players.add(temp);
-          socket_list.remove(i);
+        /*
+        if (toDelete.size() != 0) {
+          handleDisconnection(playersCopy, socket_list, toDelete);
         }
 
+
+         */
         players.clear();
         for (int i = 0; i < playersCopy.size(); i++) {
           players.add(playersCopy.get(i));
@@ -290,11 +307,6 @@ public class ServerSk {
         }
         else {
           ordersList.remove(skIndex);
-        }
-        //for test
-        System.out.println("Orders list--------------");
-        for (int i = 0; i < ordersList.size(); i++) {
-          System.out.println(i + ": " + ordersList.get(i).MoveList.size());
         }
       }
     }
@@ -316,13 +328,15 @@ public class ServerSk {
       } catch (IOException ex) {
         ex.printStackTrace();
         toDelete.add(i);
+        System.out.println("in send success catch");
       }
     }
-    for (int i = 0; i < toDelete.size(); i++) {
-      Player temp = players.remove(i);
-      players.add(temp);
-      socket_list.remove(i);
+    /*
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
     }
+
+     */
 
     Orders temp = new Orders();
     try {
@@ -334,13 +348,128 @@ public class ServerSk {
       players.add(temp_p);
       socket_list.remove(skIndex);
       temp = null;
+
     }
     return temp;
   }
 
+  public void handlePotentialLose(ArrayList<Player> players, ArrayList<Socket> socket_list) throws IOException, ClassNotFoundException {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_len; i++) {
+      Player p = players.get(i);
+      ObjectOutputStream oos = null;
 
-  public void do_turns(ArrayList<Socket> socket_list, ArrayList<Player> players){
+      Socket s = socket_list.get(i);
+      //send lose
+      try {
+        oos = new ObjectOutputStream(s.getOutputStream());
+        if (p.checkLose()) {
+          oos.writeObject("Lose");
+        }
+        else {
+          oos.writeObject("notLose");
+        }
+        oos.flush();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+        toDelete.add(i);
+        System.out.println("in handle protential lose catch");
+      }
+    }
+    /*
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
+    }
 
+     */
+    //accept if watch
+    toDelete.clear();
+    for (int i = 0 ; i < socket_list.size(); i++) {
+      Socket s = socket_list.get(i);
+      ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+      String temp = (String) ois.readObject();
+      System.out.println(i + temp);
+      if (temp.equals("n")){
+        toDelete.add(i);
+        socket_len--;
+      }
+    }
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
+    }
+
+    System.out.println("after delete player " + socket_list.size());
+  }
+
+  public void handleWin(ArrayList<Player> players, String res, ArrayList<Socket> socket_list) {
+    ArrayList<Integer> toDelete = new ArrayList<Integer>();
+    for (int i = 0; i < socket_list.size(); i++) {
+      ObjectOutputStream oos = null;
+      try {
+        oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+        oos.writeObject(res + " player win!");
+        oos.flush();
+      } catch (IOException ex) {
+        ex.printStackTrace();
+        toDelete.add(i);
+        System.out.println("in handle win catch");
+      }
+    }
+    /*
+    if (toDelete.size() != 0) {
+      handleDisconnection(players, socket_list, toDelete);
+    }
+
+     */
+  }
+
+  public void do_turns(ArrayList<Socket> socket_list, GameMap map) throws IOException, ClassNotFoundException {
+    ArrayList<Player> players = map.get_player_list();
+    while (true) {
+      System.out.println("Socket list size");
+      System.out.println(socket_list.size());
+      do_one_turn(socket_list, map.get_player_list());
+      send_map_to_all(socket_list, map);
+      //checkLose
+      System.out.println("before lose socket");
+      for (int i = 0; i < socket_list.size(); i++) {
+        System.out.println(socket_list.get(i));
+      }
+      handlePotentialLose(players, socket_list);
+      System.out.println("after lose socket");
+      for (int i = 0; i < socket_list.size(); i++) {
+        System.out.println(socket_list.get(i));
+      }
+      //checkWin
+      String res = Action.checkWin(players);
+      if (res != null) {
+        handleWin(map.get_player_list(), res, socket_list);
+        close_all_sk(socket_list);
+        break;
+      }
+      else {
+        ArrayList<Integer> toDelete = new ArrayList<Integer>();
+        ObjectOutputStream oos = null;
+
+        for (int i = 0; i < socket_list.size(); i++) {
+          try {
+            oos = new ObjectOutputStream(socket_list.get(i).getOutputStream());
+            oos.writeObject("noBodyWin");
+            oos.flush();
+          } catch (IOException ex) {
+            ex.printStackTrace();
+            toDelete.add(i);
+            System.out.println("in send nobodywin catch");
+          }
+        }
+        /*
+        if (toDelete.size() != 0) {
+          handleDisconnection(players, socket_list, toDelete);
+        }
+
+         */
+      }
+    }
   }
   /**
    * close all the client socket in the room after game ends
