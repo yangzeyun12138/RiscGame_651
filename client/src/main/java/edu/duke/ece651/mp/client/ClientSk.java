@@ -322,10 +322,25 @@ public class ClientSk {
       set_player();
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String) ois.readObject();
-      send_string("end");
       if (turn_end_helper()) {
         return;
       }
+    }
+  }
+
+  public boolean is_last_loser() {
+    ArrayList<Player> players = map.get_player_list();
+    int count = 0;
+    for(int i = 0; i < players.size(); i++){
+      if (!players.get(i).checkLose()) {
+        count++;
+      }
+    }
+    if (count == 1) {
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
@@ -340,9 +355,15 @@ public class ClientSk {
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String)ois.readObject();
       if (res.equals("Lose")) {
-        s = handle_lose();
+        if (is_last_loser()) {
+          out.println("You lose!");
+          s = "y";
+        }
+        else {
+          s = handle_lose();
+        }
         if (s.equals("y")) {
-          send_string("y");
+          //send_string("y");
           if (turn_end_helper()) {
             return;
           }
@@ -350,12 +371,12 @@ public class ClientSk {
           return;
         }
         else {
-          send_string("n");
+          //send_string("n");
           close_client();
           return;
         }
       }
-      send_string("end");
+      //send_string("end");
       if (turn_end_helper()) {
         return;
       }
