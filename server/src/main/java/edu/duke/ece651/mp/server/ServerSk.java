@@ -208,7 +208,7 @@ public class ServerSk {
       ArrayList<Order> refineList = Action.refineAttack(attackList, players);
       ArrayList<Integer> randoms = Action.getRandomIdx(refineList.size());
       for (int i : randoms) {
-        defender = Action.Attack(refineList.get(i).player, defender, refineList.get(i).getSrc(), des, refineList.get(i).getNumUnit());
+        defender = Action.Attack(refineList.get(i).player, defender, refineList.get(i).getSrc(), des, refineList.get(i).getNumUnit(), players);
       }
     }
   }

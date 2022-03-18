@@ -83,11 +83,18 @@ public class V1ActionTest {
     Player attacker = new Player("Red", test_territory1);
     Player defender = new Player("Blue", test_territory2);
     V1Action action = new V1Action();
-    action.Attack(attacker, defender, "Mordor", "Scadrial", 1);
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(attacker);
+    players.add(defender);
+    action.Attack(attacker, defender, "Mordor", "Scadrial", 1, players);
     Territory taken = action.findTerritory(attacker, "Scadrial");
+    Territory left = action.findTerritory(defender, "Elantris");
     assertEquals(taken.getColor(), "Red");
     assertEquals(taken.countUnit(), 1);
-   assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1));
+    for(Territory neigh : left.getNeigh()){
+      assertEquals("Red", neigh.getColor());
+    }
+    assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1, players));
   }
 
   @Test

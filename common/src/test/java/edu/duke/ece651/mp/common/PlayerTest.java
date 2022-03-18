@@ -46,6 +46,13 @@ class PlayerTest {
     Player p = new Player("Red", test_territory);
     Player new_p = p.deep_copy();
     p.color = "Black";
+    System.out.println("Previous Mordor: " + lt2);
+    for(Territory t : new_p.player_terri_set){
+      if(t.getName().equals("Hogwalts")){
+        System.out.println("Later Mordor: " + t.getNeigh().get(0));
+      }
+    }
+    
     assertNotEquals(p.color, new_p.color);
   }
 
