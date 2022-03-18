@@ -17,7 +17,7 @@ public class Server {
         Server server = new Server();
         GameMap gm = server.create_one_map("Territory2.txt", 2);
         maps.add(gm);
-        ServerSk serverSk = new ServerSk(maps);
+        ServerSk serverSk = new ServerSk(maps, 9999);
         serverSk.build_server();
     }
 

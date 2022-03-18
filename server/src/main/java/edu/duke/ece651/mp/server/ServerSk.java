@@ -31,8 +31,8 @@ public class ServerSk {
    * @param rooms, all the rooms preparing for game starting
    * @throws IOException
    */
-  public ServerSk(ArrayList<GameMap> rooms) throws IOException {
-    this.serverSocket = new ServerSocket(9999);
+  public ServerSk(ArrayList<GameMap> rooms, int port) throws IOException {
+    this.serverSocket = new ServerSocket(port);
     this.rooms = rooms;
     this.Action = new V1Action();
     this.AttackMap = new HashMap<String, ArrayList<Order>>();

@@ -136,9 +136,12 @@ public class LandTerritory implements Territory, java.io.Serializable {
    */
   @Override
   public void setBasicUnit(int numUnit){
+    /*
     if(this.units.size() != 0){
       throw new IllegalArgumentException("Can only set units in placement Phase, but this LandTerritory already has this number of units: " + this.units.size());
     }
+    */
+
     for (int i = 0; i<numUnit; i++){
       Unit u = new BasicUnit();
       this.addUnit(u);
@@ -163,5 +166,4 @@ public class LandTerritory implements Territory, java.io.Serializable {
     this.color = Color;
   }
 
- 
 }

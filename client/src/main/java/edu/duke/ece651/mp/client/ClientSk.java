@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class ClientSk {
   public BasicMap map;
-  private Socket socket;
+  public Socket socket;
   private MapDisplay toDisplay;
   private String color;
   private int num_units;
@@ -27,8 +27,8 @@ public class ClientSk {
    *
    * @throws IOException
    */
-  public ClientSk(String Hostname, BufferedReader inputSource, PrintStream outSource) throws IOException {
-    socket = new Socket(Hostname, 9999);
+  public ClientSk(String Hostname, String port, BufferedReader inputSource, PrintStream outSource) throws IOException {
+    socket = new Socket(Hostname, Integer.parseInt(port));
     this.map = null;
     this.inputReader = inputSource;
     this.out = outSource;
@@ -43,6 +43,24 @@ public class ClientSk {
    * @throws IOException
    * @throws ClassNotFoundException
    */
+  public void game_begin() throws IOException, ClassNotFoundException {
+    String map_show1 = new String(accept_map());
+    out.print(map_show1);
+    accept_color();
+    accept_units();
+    set_player();
+    init_unit();
+    send_player();
+    String map_show2 = new String(accept_map());
+    out.print(map_show2);
+    do_turns();
+  }
+
+  public String accept_string() throws IOException, ClassNotFoundException {
+    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+    return  (String) ois.readObject();
+  }
+
   public String accept_map() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     map = (BasicMap) ois.readObject();
@@ -288,16 +306,6 @@ public class ClientSk {
     }
   }
 
-  public void send_string(String promt) {
-    ObjectOutputStream oos = null;
-    try {
-      oos = new ObjectOutputStream(socket.getOutputStream());
-      oos.writeObject(promt);
-      oos.flush();
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-  }
 
   public boolean turn_end_helper() throws IOException, ClassNotFoundException {
     ObjectInputStream ois_new = new ObjectInputStream(socket.getInputStream());

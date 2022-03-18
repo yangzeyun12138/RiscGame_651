@@ -13,16 +13,9 @@ public class Client {
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Please enter the server host name");
         String hostName = input.readLine();
-        ClientSk clientSk = new ClientSk(hostName ,input, System.out);
-        String map_show1 = new String(clientSk.accept_map());
-        System.out.print(map_show1);
-        clientSk.accept_color();
-        clientSk.accept_units();
-        clientSk.set_player();
-        clientSk.init_unit();
-        clientSk.send_player();
-        String map_show2 = new String(clientSk.accept_map());
-        System.out.print(map_show2);
-        clientSk.do_turns();
+        System.out.println("Please enter the server port number");
+        String port = input.readLine();
+        ClientSk clientSk = new ClientSk(hostName, port, input, System.out);
+        clientSk.game_begin();
     }
 }

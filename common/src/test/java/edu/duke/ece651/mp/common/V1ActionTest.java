@@ -3,6 +3,7 @@ package edu.duke.ece651.mp.common;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.checkerframework.checker.units.qual.A;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.awt.desktop.AppForegroundListener;
@@ -48,12 +49,14 @@ public class V1ActionTest {
 
   }
 
+  @Disabled
   @Test
   public void test_rolldice(){
     V1Action action = new V1Action();
     assertTrue(action.rollDice());
   }
 
+  @Disabled
   @Test
   public void test_Attack(){
     HashSet<Territory> test_territory1 = new HashSet<>();
