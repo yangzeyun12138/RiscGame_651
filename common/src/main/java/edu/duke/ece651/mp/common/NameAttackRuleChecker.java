@@ -14,7 +14,6 @@ public class NameAttackRuleChecker extends AttackChecker {
   protected String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players){
     boolean src_check = false;
     boolean dest_check = false;
-
     for(Territory t : player.player_terri_set){
         if(t.getName().equals(src)){
           src_check = true;

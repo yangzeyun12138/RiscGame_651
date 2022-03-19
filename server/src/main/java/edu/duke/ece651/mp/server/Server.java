@@ -21,6 +21,13 @@ public class Server {
         serverSk.build_server();
     }
 
+    /**
+     *
+     * @param filename used to parse to generate a map
+     * @param numPlayer
+     * @return the generated game map
+     * @throws IOException
+     */
     public GameMap create_one_map(String filename, int numPlayer) throws IOException {
         Parse parse = new Parse();
         HashSet<Territory> result = parse.parseTerritoryNeighbor(filename, numPlayer);

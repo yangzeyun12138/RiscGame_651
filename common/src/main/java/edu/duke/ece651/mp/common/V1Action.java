@@ -6,10 +6,10 @@ import java.io.*;
 public class V1Action implements AbstractActionFactory {
   @Override
   public String checkForMove(Player player, String src, String dest, int numUnit){
-    MoveChecker NameCheck = new NameMoveRuleChecker(null);
-    MoveChecker UnitCheck = new UnitRuleChecker(NameCheck);
+    MoveChecker UnitCheck = new UnitRuleChecker(null);
     MoveChecker PathCheck = new PathRuleChecker(UnitCheck);
-    String result = PathCheck.checkMovement(player, src, dest, numUnit);
+    MoveChecker NameCheck = new NameMoveRuleChecker(PathCheck);
+    String result = NameCheck.checkMovement(player, src, dest, numUnit);
     return result;
   }  
    /**
@@ -47,10 +47,10 @@ public class V1Action implements AbstractActionFactory {
    * @return returns null if there is no error. returns string argument when there is an error.
    */
   public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players){
-    AttackChecker NameCheck = new NameAttackRuleChecker(null);
-    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(NameCheck);
+    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(null);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
-    String result = FactionCheck.checkAttack(attacker, src, dest, numUnit, players);
+    AttackChecker NameCheck = new NameAttackRuleChecker(FactionCheck);
+    String result = NameCheck.checkAttack(attacker, src, dest, numUnit, players);
     return result;
   }
 

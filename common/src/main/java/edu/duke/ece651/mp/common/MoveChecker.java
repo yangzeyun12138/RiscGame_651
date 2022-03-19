@@ -11,8 +11,9 @@ public abstract class MoveChecker{
 
   public String checkMovement(Player player, String src, String dest, int numUnit){
     //if we fail our own rule: stop the movement is not legal
-    if (checkMyRule(player, src, dest, numUnit)!= null){
-      return checkMyRule(player, src, dest, numUnit);
+    String res = checkMyRule(player, src, dest, numUnit);
+    if (res != null){
+      return res;
     }
     //otherwise, ask the rest of the chain of rules
     if (next != null){
