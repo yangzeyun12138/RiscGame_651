@@ -57,41 +57,67 @@ public class ClientSk {
     out.print(map_show2);
     do_turns();
   }
-
+  
+  /**
+   * Made the client to accept the string
+  
+   *@return A String that the client receive  
+   *@throws IOException
+   *@throws ClassNotFoundException 
+   */
   public String accept_string() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     return  (String) ois.readObject();
   }
+  
+  /**
+   * Made the client to accept the map and return the map
 
+   *@return A String that the client receive the map  
+   *@throws IOException
+   *@throws ClassNotFoundException 
+   */
   public String accept_map() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     map = (BasicMap) ois.readObject();
     toDisplay = new BasicMapDisplay(map);
     return toDisplay.display();
   }
+  
+  /**
 
+   * Made the client to accept the its player color
+   *@return void
+   *@throws IOException
+   *@throws ClassNotFoundException 
+   */
   public void accept_color() throws IOException, ClassNotFoundException {
-    /*
-    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    this.color = in.readLine();
-
-     */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.color = (String) ois.readObject();
     out.print("You are " + color + " player, ");
   }
 
+
+  /**
+
+   *Made the client to accept the its player color
+   *@return void
+   *@throws IOException
+   *@throws ClassNotFoundException    
+   */
   public void accept_units() throws IOException, ClassNotFoundException {
-    /*
-    DataInputStream dis = new DataInputStream(socket.getInputStream());
-    this.num_units = dis.readInt();
-     */
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.num_units = (int) ois.readObject();
     out.println("you have " + num_units + " units totally");
     out.println("Please place your units on each territory");
   }
 
+  
+   /**
+
+   *Update the player's infomation when client receive the map
+   *@return void
+   */  
   public void set_player() {
     for (Player p : map.get_player_list()) {
       if (this.color.equals(p.color)) {
@@ -100,7 +126,11 @@ public class ClientSk {
     }
     this.players = map.get_player_list();
   }
+   /**
 
+   *Prompt the player to input the unit and then init the unit for each playe   *r's Territory
+   *@return void
+   */  
   public void init_unit() {
     int limit = num_units;
     int count = 0;
@@ -126,7 +156,11 @@ public class ClientSk {
     }
   }
 
-
+  /**
+   *Prompt the player to enter the unit they want to place in his territory 
+   *@return the number that the player enter
+   *@param limit is the number of player that can put maximum unit 
+   */
   public int try_readLine(int limit) throws IOException {
     String s = inputReader.readLine();
     for (int i = 0; i < s.length(); i++) {
@@ -159,13 +193,27 @@ public class ClientSk {
     }
   }
 
+  /**
+   *Read the player's input 
+   *@return  player's input string
+   *@param prompt is the input that the player enter
+   *@throws IOException
+   */  
   public String read_string(String promt) throws IOException {
     out.print(promt);
     String s = inputReader.readLine();
     return s;
   }
-
-
+  
+  /**
+   *Parse the players input(orders) and check the player's input format, if 
+   *the format is correct, the action will add to orders list  
+   *@return if input format is correct, return null, otherwise return error i   *nfo
+   *@param action is one of String M, A, D that player choose to enter
+   *@param orders is the players orders
+   *@param players is the list of the all player
+   *@throws IOException
+   */  
   public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException {
     String order = read_string("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
             "numUnitsToDestination\n");
@@ -218,6 +266,11 @@ public class ClientSk {
     return null;
   }
 
+  /**
+   *Check the format of the player's input action  
+   *@return void
+   *@param s is the player's input of the action
+   */
   public void check_action(String s) {
     if (s.length() != 1) {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
@@ -227,6 +280,12 @@ public class ClientSk {
     }
   }
 
+  /**
+   *collect one order of the player in one turn
+   *@return the action of the player
+   *@param orders is the player's orders
+   *@throws IOException
+   */
   public String collect_one_order(Orders orders) throws IOException {
     out.println("You are the " + color + " player, what would you like to do?");
     out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
@@ -265,6 +324,13 @@ public class ClientSk {
     return action;
   }
 
+  /**
+   *judge if one turn is end, if end, client will receive "Total Sucess"  
+   *if not end, client input is invalid, client will notify player enter
+   *order again
+   *@return void
+   *@thorws IOException, ClassNotFoundException
+   */  
   public void if_end_one_turn() throws IOException, ClassNotFoundException {
     String res = null;
     while(true) {
@@ -281,6 +347,11 @@ public class ClientSk {
     }
   }
 
+  /**
+   *collect orders of the player in one turn, until the player input D 
+   *@return void  
+   *@throws IOException
+   */
   public void collect_orders_and_send() throws IOException {
     Orders orders = new Orders();
     String temp = new String();
@@ -290,6 +361,11 @@ public class ClientSk {
     send_orders(orders);
   }
 
+  /**
+   *handle the situation that the player lose, if player lose, they will ente   *r the input to indicate them to watch the game or disconnect 
+   *@return the player's input string  
+   *@throws IOException
+   */  
   public String handle_lose() throws IOException {
     out.println("You lose! Do you want to keep watching game going? Please enter y or n. y means yes, n means no.");
     while (true) {
@@ -309,7 +385,11 @@ public class ClientSk {
     }
   }
 
-
+  /**
+   * Help to judge if one turn is end  
+   *@return if somebody is not win, return true, if somebody win, return fals   *e  
+   *@throws IOException, ClassNotFoundException
+   */  
   public boolean turn_end_helper() throws IOException, ClassNotFoundException {
     ObjectInputStream ois_new = new ObjectInputStream(socket.getInputStream());
     String res = (String) ois_new.readObject();
@@ -322,7 +402,11 @@ public class ClientSk {
       return false;
     }
   }
-
+  /**
+   *simulate the lose player  
+   *@return void
+   *@throws IOException, ClassNotFoundException
+*/
   public void do_turns_as_watch() throws IOException, ClassNotFoundException {
     while (true) {
       Orders new_orders = new Orders();
@@ -338,7 +422,10 @@ public class ClientSk {
       }
     }
   }
-
+  /**
+   *help to judge if the player is last loser  
+   *@return if the player is last loser, return true, otherwise return false 
+   */
   public boolean is_last_loser() {
     ArrayList<Player> players = map.get_player_list();
     int count = 0;
@@ -355,6 +442,11 @@ public class ClientSk {
     }
   }
 
+  /**
+   * do all turn in one game
+   *@return void
+   *@throws IOException, ClassNotFoundException
+   */
   public void do_turns() throws IOException, ClassNotFoundException {
     String s = null;
     while (true) {
@@ -393,7 +485,11 @@ public class ClientSk {
       }
     }
   }
-
+  /**
+   *Send the orders to client
+   *@return void
+   *@param orders is the player's order 
+   */  
   public void send_orders(Orders orders) {
     ObjectOutputStream oos = null;
     try {
@@ -405,6 +501,12 @@ public class ClientSk {
     }
   }
 
+
+  /**
+   *close the client 
+   *@return void
+   *@throws IOException
+   */
   public void close_client() throws IOException {
     socket.close();
   }
