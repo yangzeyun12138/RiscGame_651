@@ -76,7 +76,7 @@ public class ClientSk {
    *@return A String that the client receive the map  
    *@throws IOException
    *@throws ClassNotFoundException 
-   sss*/
+   */
   public String accept_map() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     map = (BasicMap) ois.readObject();
@@ -85,7 +85,7 @@ public class ClientSk {
   }
   
   /**
-s
+
    * Made the client to accept the its player color
    *@return void
    *@throws IOException
