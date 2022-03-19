@@ -103,6 +103,13 @@ public class ServerSk {
     return ans_list;
   }
 
+  /**
+   * Whenever find a IOexception from the socket we enter this function
+   * remove the client sercer from server list and then remove player from player list
+   * @param players all the players
+   * @param socket_list all the cleint socket
+   * @param toDelete index need to remove from these two lists
+   */
   public void handleDisconnection(ArrayList<Player> players, ArrayList<Socket> socket_list, ArrayList<Integer> toDelete) {
     ArrayList<Socket> temp_sk_list = new ArrayList<Socket>();
     ArrayList<Player> temp_players = new ArrayList<Player>();
@@ -120,7 +127,7 @@ public class ServerSk {
   }
 
   /**
-   * send room map to all of them
+   * send room map to all the cleints
    * @param socket_list
    * @param map
    * @throws IOException
@@ -146,6 +153,12 @@ public class ServerSk {
 
   }
 
+  /**
+   * send color to according client/player
+   * @param socket_list
+   * @param player_list
+   * @throws IOException
+   */
   public void send_color(ArrayList<Socket> socket_list, ArrayList<Player> player_list) throws IOException {
     ObjectOutputStream oos = null;
     ArrayList<Integer> toDelete = new ArrayList<Integer>();
@@ -167,6 +180,13 @@ public class ServerSk {
     }
   }
 
+  /**
+   * send init total num_units to all the clients
+   * @param socket_list
+   * @param num_units
+   * @param players
+   * @throws IOException
+   */
   public void send_num_units(ArrayList<Socket> socket_list, int num_units, ArrayList<Player> players) throws IOException {
     ObjectOutputStream oos = null;
     ArrayList<Integer> toDelete = new ArrayList<Integer>();
@@ -187,6 +207,13 @@ public class ServerSk {
     }
   }
 
+  /**
+   * accecpt the player object from all the cleints to do the initialization
+   * @param socket_list
+   * @param players
+   * @throws ClassNotFoundException
+   * @throws IOException
+   */
   public void accept_player(ArrayList<Socket> socket_list, ArrayList<Player> players) throws ClassNotFoundException, IOException {
     players.clear();
     for (Socket s : socket_list) {
@@ -196,6 +223,12 @@ public class ServerSk {
     }
   }
 
+
+  /**
+   * implement all the move orders
+   * @param ordersList the objects including orders from all the clients
+   * @param players
+   */
   public void do_move(ArrayList<Orders> ordersList, ArrayList<Player> players)  {
     for (int i = 0; i < ordersList.size(); i++) {
       for (Order o : ordersList.get(i).MoveList) {
@@ -205,7 +238,10 @@ public class ServerSk {
     }
   }
 
-
+  /**
+   * implement all the attack orders
+   * @param players
+   */
   public void do_attack(ArrayList<Player> players){
     for (Map.Entry<String, ArrayList<Order>> entry : AttackMap.entrySet()) {
       ArrayList<Order> attackList = entry.getValue();
@@ -219,6 +255,14 @@ public class ServerSk {
     }
   }
 
+  /**
+   * accept all the orders from all the clients, implement them and check if someone has invalid orders, ask this player
+   * to resend all orders for this turn
+   * @param socket_list
+   * @param players
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
   public void do_one_turn(ArrayList<Socket> socket_list, ArrayList<Player> players) throws IOException, ClassNotFoundException{
     ArrayList<Integer> toDelete = new ArrayList<Integer>();
     ArrayList<Orders> ordersList = new ArrayList<Orders>();
@@ -290,6 +334,16 @@ public class ServerSk {
     Action.Done(players);
   }
 
+  /**
+   * called by do_one_turn when find invalid orders, use this function new orders from this player
+   * @param socket_list
+   * @param skIndex the index where invalid orders happen
+   * @param msg error message
+   * @param players
+   * @return
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
   public Orders getNewOrders(ArrayList<Socket> socket_list, int skIndex, String msg, ArrayList<Player> players) throws IOException, ClassNotFoundException {
     ObjectOutputStream oos = null;
     ArrayList<Integer> toDelete = new ArrayList<Integer>();
@@ -327,6 +381,13 @@ public class ServerSk {
     return temp;
   }
 
+  /**
+   * check if someone lose at the end of every turn, if lose ask them if they will keep watching or disconnect
+   * @param players
+   * @param socket_list
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
   public void handlePotentialLose(ArrayList<Player> players, ArrayList<Socket> socket_list) throws IOException, ClassNotFoundException {
     ArrayList<Integer> toDelete = new ArrayList<Integer>();
     for (int i = 0; i < socket_len; i++) {
@@ -356,6 +417,12 @@ public class ServerSk {
 
   }
 
+  /**
+   * check if someone win the game at the end of each turn and send the winning info to all the players
+   * @param players
+   * @param res
+   * @param socket_list
+   */
   public void handleWin(ArrayList<Player> players, String res, ArrayList<Socket> socket_list) {
     ArrayList<Integer> toDelete = new ArrayList<Integer>();
     for (int i = 0; i < socket_list.size(); i++) {
@@ -376,6 +443,14 @@ public class ServerSk {
 
   }
 
+  /**
+   * game controller, do one turn first and then send result of this turn to all players.
+   * check win or lose and handle them.
+   * @param socket_list
+   * @param map
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
   public void do_turns(ArrayList<Socket> socket_list, GameMap map) throws IOException, ClassNotFoundException {
     ArrayList<Player> players = map.get_player_list();
     while (true) {

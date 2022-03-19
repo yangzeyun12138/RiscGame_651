@@ -14,6 +14,7 @@ public class UnitRuleChecker extends MoveChecker{
    */
   @Override
   protected String checkMyRule(Player player,String src,String dest,int numUnit){
+    System.out.println("in unit rule check");
     for (Territory t: player.player_terri_set){
       if (t.getName().equals(src)){
         if (t.countUnit() < numUnit){

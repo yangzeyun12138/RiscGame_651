@@ -11,8 +11,9 @@ public abstract class AttackChecker {
 
   public String checkAttack(Player player, String src, String dest, int numUnit, ArrayList<Player> players){
     //if we fail our own rule: stop the attack which is not legal
-    if (checkMyRule(player, src, dest, numUnit, players)!= null){
-      return checkMyRule(player, src, dest, numUnit, players);
+    String res = checkMyRule(player, src, dest, numUnit, players);
+    if (res != null){
+      return res;
     }
     //otherwise, ask the rest of the chain of rules
     if (next != null){
