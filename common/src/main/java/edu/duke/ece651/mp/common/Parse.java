@@ -35,7 +35,7 @@ public class Parse {
     ArrayList<String> color_list = new ArrayList<String>(parseColor("Color.txt", numPlayers));
     HashSet<Territory> territorySet = new HashSet<Territory>();
     String separate= ":";
-    int desiredLength = 2;
+    int desiredLength = 3;
 
     // Start to scan through all lines
     for(int i = 0; i < lines.size(); i++){
@@ -48,7 +48,10 @@ public class Parse {
         throw new IllegalArgumentException("There is no territory name in front of the ':'\n");
       }
       String Color = color_list.get(i/(lines.size()/numPlayers));
-      Territory currTerritory = new LandTerritory(separateLine[0], Color);
+      String sizeAndName = separateLine[0]; 
+      String terriName = separateLine[1];
+      int size = Integer.valueOf(separateLine[0]);
+      Territory currTerritory = new LandTerritory(terriName, Color, size);
       territorySet.add(currTerritory);
     }
     return territorySet;
@@ -70,14 +73,14 @@ public class Parse {
     for(int i = 0; i < lines.size(); i++){
       String line = lines.get(i);
       String[] separateLine = line.split(separate);
-      String[] neighborArray = separateLine[1].split(comma);
+      String[] neighborArray = separateLine[2].split(comma);
       // making neighborList by neighborArray
       ArrayList<String> neighborList = new ArrayList<String>();
       for(int j = 0 ; j < neighborArray.length; j++){
         neighborList.add(neighborArray[j]);
       }
       // put the (key, value) = (Territory's Name, neighborList) into the HashMap
-      territoryMap.put(separateLine[0],neighborList);
+      territoryMap.put(separateLine[1],neighborList);
     }
     return territoryMap;
   } 

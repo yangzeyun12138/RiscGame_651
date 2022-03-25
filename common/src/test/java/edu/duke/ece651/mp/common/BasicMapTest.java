@@ -17,9 +17,9 @@ public class BasicMapTest {
         test_color.add("Red");
         test_color.add("Blue");
         HashSet<Territory> test_territory = new HashSet<>();
-        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red");
+        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red", 2);
         test_territory.add(lt1);
-        LandTerritory lt2 = new LandTerritory("Modor", "Blue");
+        LandTerritory lt2 = new LandTerritory("Modor", "Blue", 3);
         test_territory.add(lt2);
         BasicMap bm = new BasicMap(testname, test_color, test_territory);
         bm.assign_all();
@@ -41,9 +41,9 @@ public class BasicMapTest {
         test_color.add("Red");
         test_color.add("Blue");
         HashSet<Territory> test_territory = new HashSet<>();
-        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red");
+        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red", 2);
         test_territory.add(lt1);
-        LandTerritory lt2 = new LandTerritory("Modor", "Blue");
+        LandTerritory lt2 = new LandTerritory("Modor", "Blue", 3);
         test_territory.add(lt2);
         BasicMap bm = new BasicMap(testname, test_color, test_territory);
         BasicMap bm2 = bm.deep_copy();

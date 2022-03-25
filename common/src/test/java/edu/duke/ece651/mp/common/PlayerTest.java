@@ -10,8 +10,8 @@ class PlayerTest {
     @Test
     public void test_toString(){
         HashSet<Territory> test_territory = new HashSet<>();
-        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red");
-        LandTerritory lt2 = new LandTerritory("Modor", "Blue");
+        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red", 2);
+        LandTerritory lt2 = new LandTerritory("Modor", "Blue", 3);
         lt1.getNeigh().add(lt2);
         lt2.getNeigh().add(lt1);
         test_territory.add(lt1);
@@ -24,8 +24,8 @@ class PlayerTest {
   @Test
   public void test_checkLose(){
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Hogwalts", "Red");
-    LandTerritory lt2 = new LandTerritory("Modor", "Blue");
+    LandTerritory lt1 = new LandTerritory("Hogwalts", "Red",2);
+    LandTerritory lt2 = new LandTerritory("Modor", "Blue",3);
     lt1.getNeigh().add(lt2);
     lt2.getNeigh().add(lt1);
     test_territory.add(lt1);
@@ -38,8 +38,8 @@ class PlayerTest {
   @Test
   public void test_deep_copy(){
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Hogwalts", "Red");
-    LandTerritory lt2 = new LandTerritory("Modor", "Blue");
+    LandTerritory lt1 = new LandTerritory("Hogwalts", "Red", 2);
+    LandTerritory lt2 = new LandTerritory("Modor", "Blue", 3);
     lt1.getNeigh().add(lt2);
     lt2.getNeigh().add(lt1);
     test_territory.add(lt1);
@@ -56,4 +56,27 @@ class PlayerTest {
     assertNotEquals(p.color, new_p.color);
   }
 
+  @Test
+  public void test_getTechLevel(){
+    HashSet<Territory> test_territory = new HashSet<>();
+    LandTerritory lt1 = new LandTerritory("Hogwalts", "Red", 2);
+    LandTerritory lt2 = new LandTerritory("Modor", "Blue", 3);
+    lt1.getNeigh().add(lt2);
+    lt2.getNeigh().add(lt1);
+    test_territory.add(lt1);
+    Player p = new Player("Red", test_territory);
+    assertEquals(1, p.getTechLevel());
+    assertEquals(90, p.getFood());
+    p.upgradeTechLevel();
+    assertEquals(2, p.getTechLevel());
+    assertThrows(IllegalArgumentException.class, ()->p.costFood(-1000));
+    p.costFood(30);
+    assertEquals(60, p.getFood());
+    assertThrows(IllegalArgumentException.class, ()->p.addFood(-1000));
+    p.addFood(5);
+    assertEquals(65, p.getFood());
+    
+    
+  }
+  
 }

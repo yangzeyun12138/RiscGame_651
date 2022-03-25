@@ -9,15 +9,17 @@ public class LandTerritory implements Territory, java.io.Serializable {
   public ArrayList<Territory> neighbors;
   protected String color;
   protected ArrayList<Unit> units;
+  protected final int size;
 
   /**Land Territory Constructor: initialize name, color, units, and neighbors
    *@param: Name: name of the LandTerritory; Color: Color of the LandTerritory;
    */
-  public LandTerritory(String Name, String Color){
+  public LandTerritory(String Name, String Color, final int size){
     this.name = Name;
     this.neighbors = new ArrayList<Territory>();
     this.color = Color;
     this.units = new ArrayList<Unit>();
+    this.size = size;
   }
 
   /**
@@ -164,6 +166,11 @@ public class LandTerritory implements Territory, java.io.Serializable {
   @Override
   public void changeColor(String Color){
     this.color = Color;
+  }
+
+  @Override
+  public int  getSize(){
+    return this.size;
   }
 
 }

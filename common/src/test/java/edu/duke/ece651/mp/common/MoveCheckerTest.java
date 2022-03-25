@@ -9,9 +9,9 @@ public class MoveCheckerTest {
   @Test
   public void test_PathRuleChecker() {
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red");
-    LandTerritory lt2 = new LandTerritory("Modor", "Red");
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    LandTerritory lt2 = new LandTerritory("Modor", "Red", 3);
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt2.addNeigh(lt3);
@@ -28,7 +28,7 @@ public class MoveCheckerTest {
     assertNull(result);
 
     //Test for Path!
-    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue", 2);
     dest = "Scadrial";
     result = MC.checkMyRule(player, src, dest, numUnit);
     assertEquals("Red player. The movement is Invalid: the Path between src and dest Territory cannot be found\n", result );
@@ -47,9 +47,9 @@ public class MoveCheckerTest {
   @Test
   public void test_Unit(){
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red");
-    LandTerritory lt2 = new LandTerritory("Modor", "Red");
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    LandTerritory lt2 = new LandTerritory("Modor", "Red", 3);
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt2.addNeigh(lt3);
@@ -81,9 +81,9 @@ public class MoveCheckerTest {
   @Test
   public void test_NameMoveRuleChecker(){
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red");
-    LandTerritory lt2 = new LandTerritory("Modor", "Red");
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    LandTerritory lt2 = new LandTerritory("Modor", "Red", 3);
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt2.addNeigh(lt3);
@@ -107,9 +107,9 @@ public class MoveCheckerTest {
   @Test
   public void test_AllRules(){
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red");
-    LandTerritory lt2 = new LandTerritory("Modor", "Red");
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    LandTerritory lt2 = new LandTerritory("Modor", "Red", 3);
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt2.addNeigh(lt3);

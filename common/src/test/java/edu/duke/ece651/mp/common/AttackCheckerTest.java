@@ -9,10 +9,10 @@ public class AttackCheckerTest {
    @Test
   public void test_AllRules(){
     HashSet<Territory> test_territory = new HashSet<>();
-    Territory lt3 = new LandTerritory("Hogwarts", "Red");
-    Territory lt2 = new LandTerritory("Modor", "Red");
-    Territory lt1 = new LandTerritory("Gondor", "Red");
-    Territory lt4 = new LandTerritory("Oz", "Green");
+    Territory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    Territory lt2 = new LandTerritory("Modor", "Red", 3);
+    Territory lt1 = new LandTerritory("Gondor", "Red", 4);
+    Territory lt4 = new LandTerritory("Oz", "Green", 4);
     lt1.addNeigh(lt2);
     lt1.addNeigh(lt4);
     lt2.addNeigh(lt1);

@@ -8,10 +8,14 @@ public class Player implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
     public String color;
     public HashSet<Territory> player_terri_set;
+    private int tech_level;
+    private int food;
 
     public Player(String color, HashSet<Territory> player_terri_set) {
         this.color = color;
         this.player_terri_set = player_terri_set;
+        this.tech_level = 1;
+        this.food = 90;
     }
 
     /**
@@ -79,5 +83,31 @@ public class Player implements java.io.Serializable{
       return true;
     }
     return false;
+  }
+
+  public int getTechLevel(){
+    return this.tech_level;
+  }
+
+  public void upgradeTechLevel(){
+    this.tech_level += 1;
+  }
+
+  public int getFood(){
+    return this.food;
+  }
+
+  public void costFood(int expense){
+    if(expense < 0){
+      throw new IllegalArgumentException("Cannot reduce negative food!");
+    }
+    this.food -= expense;
+  }
+
+  public void addFood(int add){
+    if(add < 0){
+      throw new IllegalArgumentException("Cannot add negative food!");
+    }
+    this.food += add;
   }
 }

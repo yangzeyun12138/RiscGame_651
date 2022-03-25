@@ -1,0 +1,15 @@
+London:Paris, Copenhagen
+Paris:London, Madrid, Rome, Berlin, Frankfurt
+Madrid:Paris, Tunisia
+Rome:Paris, Tunisia, Vienna
+Tunisia:Madrid, Cairo, Rome
+Cairo:Tunisia, Constantinople, Jerusalem
+Jerusalem:Constantinople, Cairo
+Constantinople:Vienna, Cairo, Jerusalem, Warsaw, Moscow
+Vienna:Frankfurt, Rome, Constantinople
+Frankfurt:Paris, Berlin, Vienna, Warsaw
+Berlin:Copenhagen, Paris, Frankfurt, Warsaw
+Copenhagen:London, Berlin, St_Petersburg
+Warsaw:Berlin, Frankfurt, Moscow, St_Petersburg, Constantinople
+Moscow:St_Petersburg, Warsaw, Constantinople
+St_Petersburg:Copenhagen, Warsaw, Moscow

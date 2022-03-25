@@ -131,8 +131,8 @@ public class V1Action implements AbstractActionFactory {
     long time_seed = System.currentTimeMillis();
     int seed1 = 100;
     int seed2 = seed1+1;
-    Random rand1 = new Random();
-    Random rand2 = new Random();
+    Random rand1 = new Random(seed1);
+    Random rand2 = new Random(seed2);
     
     
     int Dice1 = rand1.nextInt(max - min + 1) + min;
@@ -306,6 +306,16 @@ public class V1Action implements AbstractActionFactory {
     if(counter == 1){
       return players.get(index).color;
     }
+    return null;
+  }
+
+  @Override
+  public void Move(Player player, String src, String dest, int numUnit, int level){
+    
+  }
+
+  @Override
+  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players, int level){
     return null;
   }
 

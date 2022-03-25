@@ -8,8 +8,8 @@ public class OrdersTest {
   @Test
   public void test_orders() {
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
-    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red");
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red", 2);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt1.setBasicUnit(3);

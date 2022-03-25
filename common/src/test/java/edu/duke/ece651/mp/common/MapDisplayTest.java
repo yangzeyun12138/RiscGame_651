@@ -15,9 +15,9 @@ class MapDisplayTest {
         test_color.add("Red");
         test_color.add("Blue");
         HashSet<Territory> test_territory = new HashSet<>();
-        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red");
+        LandTerritory lt1 = new LandTerritory("Hogwalts", "Red", 2);
         test_territory.add(lt1);
-        LandTerritory lt2 = new LandTerritory("Modor", "Blue");
+        LandTerritory lt2 = new LandTerritory("Modor", "Blue", 3);
         test_territory.add(lt2);
         lt1.getNeigh().add(lt2);
         lt2.getNeigh().add(lt1);
