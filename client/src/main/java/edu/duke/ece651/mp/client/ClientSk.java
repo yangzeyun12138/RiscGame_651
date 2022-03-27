@@ -2,6 +2,7 @@ package edu.duke.ece651.mp.client;
 import com.google.common.annotations.VisibleForTesting;
 import edu.duke.ece651.mp.common.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -37,6 +38,95 @@ public class ClientSk {
     this.players = new ArrayList<Player>();
   }
 
+  public void new_game() {
+    Thread th = new Thread() {
+      @Override()
+      public void run() {
+        try {
+          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+          ClientSk clientSk = new ClientSk("0.0.0.0", "9999", input, System.out);
+          clientSk.game_begin();
+        } catch (Exception e) {
+        }
+      }
+    };
+    th.start();
+  }
+
+  public boolean check_username(String toCheck) {
+    for (int i = 0; i < toCheck.length(); i++) {
+      if (!Character.isLetterOrDigit(toCheck.charAt(i))){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public void do_register() throws IOException, ClassNotFoundException {
+    String ans1 = null;
+    String ans2 = null;
+    ans1 = read_string("register? Please enter y or n");
+    if (ans1.equals("y")) {
+      send_string("Need register");
+      while (true) {
+        ans1 = read_string("Please enter username: (username can only consist of numbers or letters)");
+        if (!check_username(ans1)) {
+          out.println("Username can only consist of numbers or letters! Please enter again");
+          continue;
+        }
+        send_string(ans1);
+        ans1 = accept_string();
+        if (!ans1.equals("Username valid")) {
+          out.println(ans1);
+          continue;
+        }
+        break;
+      }
+      while (true) {
+        ans1 = read_string("Please enter password");
+        ans2 = read_string("Please enter password again");
+        if (!ans1.equals(ans2)) {
+          continue;
+        }
+        send_string(ans1);
+        out.println("register success");
+        break;
+      }
+    }
+    else{
+      send_string("No need register");
+    }
+  }
+
+  public void do_login() throws IOException, ClassNotFoundException {
+    String ans1 = null;
+    while (true) {
+      ans1 = read_string("Please enter username: ");
+      send_string(ans1);
+      ans1 = accept_string();
+      if (!ans1.equals("Username valid")) {
+        out.println(ans1);
+        continue;
+      }
+      break;
+    }
+    while (true) {
+      ans1 = read_string("Please enter password:");
+      send_string(ans1);
+      ans1 = accept_string();
+      if (!ans1.equals("Password valid")) {
+        out.println(ans1);
+        continue;
+      }
+      out.println("login success");
+      break;
+    }
+  }
+
+  public void choose_room() throws IOException {
+    String ans = read_string("Please enter number of players");
+    send_string(ans);
+  }
 
   /**
    * Read a map object from the socket and display it
@@ -46,6 +136,15 @@ public class ClientSk {
    * @throws ClassNotFoundException
    */
   public void game_begin() throws IOException, ClassNotFoundException {
+    String ans1 = null;
+    String ans2 = null;
+    //register
+    do_register();
+    //login
+    do_login();
+    //choose room
+    choose_room();
+    //game begin
     String map_show1 = new String(accept_map());
     out.print(map_show1);
     accept_color();
@@ -193,14 +292,24 @@ public class ClientSk {
     }
   }
 
+  public void send_string(String toSend) {
+    ObjectOutputStream oos = null;
+    try {
+      oos = new ObjectOutputStream(socket.getOutputStream());
+      oos.writeObject(toSend);
+      oos.flush();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
   /**
    *Read the player's input 
    *@return  player's input string
    *@param prompt is the input that the player enter
    *@throws IOException
    */  
-  public String read_string(String promt) throws IOException {
-    out.print(promt);
+  public String read_string(String prompt) throws IOException {
+    out.println(prompt);
     String s = inputReader.readLine();
     return s;
   }
@@ -216,24 +325,24 @@ public class ClientSk {
    */  
   public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException {
     String order = read_string("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-            "numUnitsToDestination\n");
+            "numUnitsToDestination");
     String src = new String();
     String des = new String();
     int index1 = order.indexOf(" ");
     if (index1 == -1) {
       return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination\n");
+              "numUnitsToDestination");
     }
     src = order.substring(0, index1);
     int index2 = order.indexOf(" ", index1 + 1);
     if (index2 == -1) {
       return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination\n");
+              "numUnitsToDestination");
     }
     int index3 = order.indexOf(" ", index2 + 1);
     if (index3 != -1) {
       return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination\n");
+              "numUnitsToDestination");
     }
     des = order.substring(index1 + 1, index2);
     String numMove = order.substring(index2 + 1);

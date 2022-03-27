@@ -66,12 +66,6 @@ public class V1Action implements AbstractActionFactory {
   @Override
 
   public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players){
-
-    String checkResult = checkForAttack(attacker, src, dest, numUnit, players);
-    if (checkResult != null){
-      throw new IllegalArgumentException(checkResult);
-     }
-    
     //Territory attackerTerri = findTerritory(attacker, src);
     Territory defenderTerri = findTerritory(defender, dest);
     // Attacker lose units that is attacking
@@ -131,8 +125,8 @@ public class V1Action implements AbstractActionFactory {
     long time_seed = System.currentTimeMillis();
     int seed1 = 100;
     int seed2 = seed1+1;
-    Random rand1 = new Random();
-    Random rand2 = new Random();
+    Random rand1 = new Random(seed1);
+    Random rand2 = new Random(seed2);
     
     
     int Dice1 = rand1.nextInt(max - min + 1) + min;
@@ -236,6 +230,12 @@ public class V1Action implements AbstractActionFactory {
     for (int i = 0; i < ordersList.size(); i++) {
       for (Order o : ordersList.get(i).AttackList) {
         Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
+
+        String result = checkForAttack(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), players);
+        if (result != null) {
+          throw new IllegalArgumentException(result);
+        }
+
         boolean res = attackerTerri.loseUnit(o.getNumUnit());
         if (res == false) {
           throw new IllegalArgumentException(players.get(i).color + " player has invalid attack orders. The numUnits is insufficient.\n");
