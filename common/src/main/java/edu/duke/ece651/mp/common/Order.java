@@ -6,11 +6,16 @@ public class Order implements java.io.Serializable{
   final String dest;
   public int numUnit;
   public Player player;
-  public Order(Player player, String src, String dest, int numUnit){
+  public int currLevel;
+  public int afterLevel;
+
+  public Order(Player player, String src, String dest, int numUnit, int currLevel, int afterLevel){
     this.src = src;
     this.dest = dest;
     this.numUnit = numUnit;
     this.player = player;
+    this.currLevel = currLevel;
+    this.afterLevel = afterLevel;
   }
 
   public String getSrc(){

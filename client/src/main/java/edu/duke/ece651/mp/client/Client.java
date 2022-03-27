@@ -16,6 +16,7 @@ public class Client {
         System.out.println("Please enter the server port number");
         String port = input.readLine();
         ClientSk clientSk = new ClientSk(hostName, port, input, System.out);
+        //clientSk.new_game();
         clientSk.game_begin();
     }
 }
