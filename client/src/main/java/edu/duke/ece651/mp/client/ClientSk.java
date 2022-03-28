@@ -38,20 +38,6 @@ public class ClientSk {
     this.players = new ArrayList<Player>();
   }
 
-  public void new_game() {
-    Thread th = new Thread() {
-      @Override()
-      public void run() {
-        try {
-          BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-          ClientSk clientSk = new ClientSk("0.0.0.0", "9999", input, System.out);
-          clientSk.game_begin();
-        } catch (Exception e) {
-        }
-      }
-    };
-    th.start();
-  }
 
   public boolean check_username(String toCheck) {
     for (int i = 0; i < toCheck.length(); i++) {
@@ -136,25 +122,34 @@ public class ClientSk {
    * @throws ClassNotFoundException
    */
   public void game_begin() throws IOException, ClassNotFoundException {
-    String ans1 = null;
-    String ans2 = null;
-    //register
-    do_register();
-    //login
-    do_login();
-    //choose room
-    choose_room();
-    //game begin
-    String map_show1 = new String(accept_map());
-    out.print(map_show1);
-    accept_color();
-    accept_units();
-    set_player();
-    init_unit();
-    send_player();
-    String map_show2 = new String(accept_map());
-    out.print(map_show2);
-    do_turns();
+    Thread th = new Thread() {
+      @Override()
+      public void run() {
+        try {
+          String ans1 = null;
+          String ans2 = null;
+          //register
+          do_register();
+          //login
+          do_login();
+          //choose room
+          choose_room();
+          //game begin
+          String map_show1 = new String(accept_map());
+          out.print(map_show1);
+          accept_color();
+          accept_units();
+          set_player();
+          init_unit();
+          send_player();
+          String map_show2 = new String(accept_map());
+          out.print(map_show2);
+          do_turns();
+        } catch (Exception e) {
+        }
+      }
+    };
+    th.start();
   }
   
   /**
