@@ -8,9 +8,9 @@ public class BasicUnit implements Unit, java.io.Serializable {
   private int bonus;
   private int cost;
   public BasicUnit(){
-    this.level = 1;
-    this.bonus = 1;
-    this.cost = 3;
+    this.level = 0;
+    this.bonus = 0;
+    this.cost = 0;
   };
 
   @Override

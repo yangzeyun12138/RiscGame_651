@@ -15,7 +15,7 @@ public class Player implements java.io.Serializable{
         this.color = color;
         this.player_terri_set = player_terri_set;
         this.tech_level = 1;
-        this.food = 90;
+        this.food = 140;
     }
 
     /**
@@ -88,9 +88,15 @@ public class Player implements java.io.Serializable{
   public int getTechLevel(){
     return this.tech_level;
   }
-
+  //////////////////////////////////////////////
   public void upgradeTechLevel(){
+    LevelInfo info = new LevelInfo();
+    int totalCost = (info.getTechCost(this.tech_level + 1) - info.getTechCost(this.tech_level));
     this.tech_level += 1;
+    if(this.food < totalCost){
+      throw new IllegalArgumentException("The number of food is lower than the totalCost when upgrading tech level!\n");
+    }
+    this.food -= totalCost;
   }
 
   public int getFood(){

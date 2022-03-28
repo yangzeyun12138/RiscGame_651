@@ -14,12 +14,12 @@ public class LevelRuleChecker extends UpgradeChecker {
   protected String checkMyRule(Player player, String src, int numUnit, int level, int newLevel){
     for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(src)){
-        if(curr_t.countLevelUnit(level) < numUnit){
-          return new String(player.color + " player. Invalid Upgrade: The number of Unit on the specific territory is not enough!\n");
+        if(curr_t.countLevelUnit(level) >= numUnit){
+          return null;        
         }
       }
     }
-    return null;
+    return new String(player.color + " player. Invalid Upgrade: The number of Unit on the specific territory is not enough!\n");
   }
 
   public LevelRuleChecker(UpgradeChecker next){

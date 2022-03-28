@@ -95,8 +95,8 @@ public class LandTerritoryTest {
     Unit u2 = new BasicUnit();
     lt1.addUnit(u1);
     lt1.addUnit(u2);
-    assertFalse(lt1.upgradeUnit(3,1,3));
-    lt1.upgradeUnit(2, 1, 3);
+    assertFalse(lt1.upgradeUnit(3,0,3));
+    lt1.upgradeUnit(2, 0, 3);
     assertEquals(3, lt1.getLevelFromPosition(0));
   }
 
