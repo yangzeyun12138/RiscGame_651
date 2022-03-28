@@ -1,5 +1,7 @@
 package edu.duke.ece651.mp.common;
 
+import java.util.ArrayList;
+
 public class Order implements java.io.Serializable{
   private static final long serialVersionUID = 1L;
   final String src;
@@ -8,6 +10,7 @@ public class Order implements java.io.Serializable{
   public Player player;
   public int currLevel;
   public int afterLevel;
+  public ArrayList<Unit> unitList;
 
   public Order(Player player, String src, String dest, int numUnit, int currLevel, int afterLevel){
     this.src = src;
@@ -16,6 +19,7 @@ public class Order implements java.io.Serializable{
     this.player = player;
     this.currLevel = currLevel;
     this.afterLevel = afterLevel;
+    this.unitList = new ArrayList<>();
   }
 
   public String getSrc(){

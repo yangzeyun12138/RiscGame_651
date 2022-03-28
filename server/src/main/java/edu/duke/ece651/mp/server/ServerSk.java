@@ -397,11 +397,23 @@ public class ServerSk {
    * @param ordersList the objects including orders from all the clients
    * @param players
    */
-  public void do_move(ArrayList<Orders> ordersList, ArrayList<Player> players)  {
+  public void do_move_up(ArrayList<Orders> ordersList, ArrayList<Player> players)  {
     for (int i = 0; i < ordersList.size(); i++) {
       for (Order o : ordersList.get(i).MoveUpList) {
-        Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
-        Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
+        if (o.getSrc().equals(" ")) {
+          //upgrade total tech
+          players.get(i).upgradeTechLevel();
+        }
+        else if (o.getDest().equals(" ")){
+          //change unit type
+          Action.checkForUpgrade();
+          Action.Upgrade();
+        }
+        else {
+          //move
+          Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
+          Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
+        }
       }
     }
   }
@@ -419,7 +431,8 @@ public class ServerSk {
       ArrayList<Order> refineList = Action.refineAttack(attackList, players);
       ArrayList<Integer> randoms = Action.getRandomIdx(refineList.size());
       for (int i : randoms) {
-        defender = Action.Attack(refineList.get(i).player, defender, refineList.get(i).getSrc(), des, refineList.get(i).getNumUnit(), players);
+        defender = Action.Attack(refineList.get(i).player, defender, refineList.get(i).getSrc(), des,
+                refineList.get(i).unitList, players);
       }
     }
   }
@@ -456,7 +469,7 @@ public class ServerSk {
           Player temp = players.get(i).deep_copy();
           playersCopy.add(temp);
         }
-        do_move(ordersList, playersCopy);
+        do_move_up(ordersList, playersCopy);
         Action.loseAttackUnit(ordersList, playersCopy);
         int tempIndex = players.size() - 2;
         AttackMap_list.set(tempIndex, Action.arrangeAttackOrder(ordersList, playersCopy));

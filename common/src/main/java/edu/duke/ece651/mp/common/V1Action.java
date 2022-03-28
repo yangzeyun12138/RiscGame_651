@@ -26,7 +26,7 @@ public class V1Action implements AbstractActionFactory {
       // find src territory and dest territory
       for(Territory curr_t: player.player_terri_set){
         if(curr_t.getName().equals(src)){
-          curr_t.loseUnit(numUnit);
+          curr_t.loseUnits(numUnit);
         }
         if(curr_t.getName().equals(dest)){
           curr_t.addBasicUnit(numUnit);
@@ -236,7 +236,7 @@ public class V1Action implements AbstractActionFactory {
           throw new IllegalArgumentException(result);
         }
 
-        boolean res = attackerTerri.loseUnit(o.getNumUnit());
+        boolean res = attackerTerri.loseUnits(o.getNumUnit());
         if (res == false) {
           throw new IllegalArgumentException(players.get(i).color + " player has invalid attack orders. The numUnits is insufficient.\n");
         }

@@ -313,7 +313,17 @@ public class ClientSk {
     String s = inputReader.readLine();
     return s;
   }
-  
+
+  public boolean check_num(String toCheck) {
+    for (int i = 0; i < toCheck.length(); i++) {
+      if (!Character.isDigit(toCheck.charAt(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
   /**
    *Parse the players input(orders) and check the player's input format, if 
    *the format is correct, the action will add to orders list  
@@ -323,53 +333,89 @@ public class ClientSk {
    *@param players is the list of the all player
    *@throws IOException
    */  
-  public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException {
-    String order = read_string("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-            "numUnitsToDestination");
-    String src = new String();
-    String des = new String();
+  public String parse_check_add(String action, Orders orders, ArrayList<Player> players, Player temp_player) throws IOException {
+    String hint = null;
+    if (action.equals("C")) {
+      hint = "Please enter your order as following format\nterritoryName numToUp currLevel afterLevel";
+    } else {
+      hint = "Please enter your order as following format\nsourceTerritoryName destinationTerritoryName "  +
+            "numUnitsToDestination unitLevel";
+    }
+    String order = read_string(hint);
     int index1 = order.indexOf(" ");
     if (index1 == -1) {
-      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination");
+      return new String(hint);
     }
-    src = order.substring(0, index1);
     int index2 = order.indexOf(" ", index1 + 1);
     if (index2 == -1) {
-      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination");
+      return new String(hint);
     }
     int index3 = order.indexOf(" ", index2 + 1);
-    if (index3 != -1) {
-      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination");
+    if (index3 == -1) {
+      return new String(hint);
     }
-    des = order.substring(index1 + 1, index2);
-    String numMove = order.substring(index2 + 1);
-    for (int i = 0; i < numMove.length(); i++) {
-      if (!Character.isDigit(numMove.charAt(i))) {
-        return new String("Please enter a valid integer!");
+    int index4 = order.indexOf(" ", index3 + 1);
+    if (index4 != -1) {
+      return new String(hint);
+    }
+    String s1 = order.substring(0, index1);
+    String s2 = order.substring(index1 + 1, index2);
+    String s3 = order.substring(index2 + 1, index3);
+    String s4 = order.substring(index3 + 1);
+
+    if (action.equals("C")) {
+      //s1: territoryName, s2: numToUp, s3:currLevel, s4:afterLevel
+      if(check_num(s2)) {
+        return "Please enter a valid integer as numToUp!";
+      }
+      if(check_num(s3)) {
+        return "Please enter a valid integer as currLevel!";
+      }
+      if(check_num(s4)) {
+        return "Please enter a valid integer as afterLevel!";
+      }
+    } else {
+      //s1:sourceTerritoryName destinationTerritoryName numUnitsToDestination unitLevel
+      if(check_num(s3)) {
+        return "Please enter a valid integer as numUnitsToDestination!";
+      }
+      if(check_num(s4)) {
+        return "Please enter a valid integer as unitLevel!";
       }
     }
-    int num_move = Integer.parseInt(numMove);
+
     if (action.equals("M")) {
-      String temp = Action.checkForMove(player, src, des, num_move);
+      String temp = Action.checkForMove(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
       if (temp != null) {
         return temp;
       }
       else {
+        Action.Move(temp_player, s1, s2, s3, s4);
         //new a order class, add it to orders moveList
-        orders.MoveUpList.add(new Order(player, src, des, num_move, 0, 0));
+        orders.MoveUpList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
+      }
+    }
+    else if (action.equals("A")) {
+      String temp = Action.checkForAttack(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), players);
+      if (temp != null) {
+        return temp;
+      }
+      else {
+        temp_player.getTerritory(s1).loseUnits(Integer.parseInt(s3), Integer.parseInt(s4));
+        //new a order class, add it to orders attackList
+        orders.AttackList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
     }
     else {
-      String temp = Action.checkForAttack(player, src, des, num_move, players);
+      //Change
+      String temp = Action.checkForUpgrade();
       if (temp != null) {
         return temp;
       }
       else {
+        Action.Upgrade();
         //new a order class, add it to orders attackList
-        orders.AttackList.add(new Order(player, src, des, num_move, 0, 0));
+        orders.MoveUpList.add(new Order(temp_player, s1, " ", Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4)));
       }
     }
     return null;
@@ -384,7 +430,7 @@ public class ClientSk {
     if (s.length() != 1) {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
     }
-    if (s.charAt(0) != 'M' && s.charAt(0) != 'A' && s.charAt(0) != 'D') {
+    if (s.charAt(0) != 'M' && s.charAt(0) != 'A' && s.charAt(0) != 'D' && s.charAt(0) != 'U' && s.charAt(0) != 'C') {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
     }
   }
@@ -395,14 +441,14 @@ public class ClientSk {
    *@param orders is the player's orders
    *@throws IOException
    */
-  public String collect_one_order(Orders orders) throws IOException {
+  public String collect_one_order(Orders orders, ArrayList<Boolean> if_up, Player temp_player) throws IOException {
     out.println("You are the " + color + " player, what would you like to do?");
     out.print("(M)ove\n(A)ttack\n(U)pgrade total tech level\n(C)hange unit level\n(D)one\nPlease enter the first capital letter\n");
     out.println("Attention: please do one or none U and some M, A, C, then ends with Done.");
-    String action = null;
+    String action;
     while (true) {
       try {
-        action = new String(inputReader.readLine());
+        action = inputReader.readLine();
         check_action(action);
         break;
       } catch (IllegalArgumentException e) {
@@ -415,13 +461,24 @@ public class ClientSk {
         break;
       }
       else {
-
         do {
-          if (action.equals("M")) {
-
-            res = parse_check_add(action, orders, players);
-          } else {
-            res = parse_check_add(action, orders, players);
+          if (!action.equals("U")) {
+            res = parse_check_add(action, orders, players, temp_player);
+          }
+          else {
+            if (!if_up.get(0)) {
+              if (temp_player.getTechLevel() < 6) {
+                temp_player.upgradeTechLevel();
+                if_up.set(0, true);
+                orders.MoveUpList.add(new Order(player, " ", " ", 0, 0, 0));
+                out.println("Upgrade total tech level success! Now is " + player.getTechLevel());
+              }
+              else {
+                out.println("You have reached top total tech level!");
+              }
+            } else{
+              res = "You can only update total level once in one turn!";
+            }
           }
           if (res != null) {
             out.println(res);
@@ -464,8 +521,11 @@ public class ClientSk {
   public void collect_orders_and_send() throws IOException {
     Orders orders = new Orders();
     String temp = new String();
+    ArrayList<Boolean> if_up = new ArrayList<>();
+    if_up.add(false);
+    Player temp_player = this.player.deep_copy();
     do {
-      temp = collect_one_order(orders);
+      temp = collect_one_order(orders, if_up, temp_player);
     } while (!temp.equals("D"));
     send_orders(orders);
   }

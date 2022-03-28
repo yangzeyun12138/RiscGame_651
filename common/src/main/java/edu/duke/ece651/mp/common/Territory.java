@@ -18,7 +18,10 @@ public interface Territory {
   public int countUnit();
   public void setBasicUnit(int numUnit);
   public boolean loseUnit();
-  public boolean loseUnit(int numUnit);
+  public boolean loseUnits(int numUnit);
   public void changeColor(String Color);
   public int getSize();
+  public boolean loseUnit(int level);
+  public boolean loseUnits(int numUnit, int level);
+  public int countLevel(int level);
 }

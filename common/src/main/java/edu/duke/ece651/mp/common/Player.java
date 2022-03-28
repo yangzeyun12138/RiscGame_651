@@ -23,7 +23,7 @@ public class Player implements java.io.Serializable{
      */
 
     public String toString() {
-        String res = new String(color + " player:\n");
+        String res = new String(color + " player       Total tech level: " + this.getTechLevel() + "\n");
         res += "-----------\n";
         for (Territory t: player_terri_set) {
             String unit_info = Integer.toString(t.countUnit());
@@ -109,5 +109,14 @@ public class Player implements java.io.Serializable{
       throw new IllegalArgumentException("Cannot add negative food!");
     }
     this.food += add;
+  }
+
+  public Territory getTerritory(String name) {
+      for (Territory t : player_terri_set) {
+          if (t.getName().equals(name)){
+              return t;
+          }
+      }
+      return null;
   }
 }

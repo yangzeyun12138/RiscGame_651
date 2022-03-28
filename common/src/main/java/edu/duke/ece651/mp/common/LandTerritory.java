@@ -115,7 +115,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
    *@return: a boolean that shows the Unit is successfully deleted.
    */
   @Override
-  public boolean loseUnit(int numUnit){
+  public boolean loseUnits(int numUnit){
     for(int i = 0; i < numUnit; i++){
       boolean thislose = this.loseUnit();
       if(!thislose){
@@ -171,6 +171,46 @@ public class LandTerritory implements Territory, java.io.Serializable {
   @Override
   public int  getSize(){
     return this.size;
+  }
+
+
+
+  @Override
+  public boolean loseUnit(int level) {
+    Unit toRemove = null;
+    if(this.countLevel(level) > 0){
+      for (Unit u : units) {
+        if(u.getLevel() == level) {
+          toRemove = u;
+          break;
+        }
+      }
+      units.remove(toRemove);
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public boolean loseUnits(int numUnit, int level){
+    for(int i = 0; i < numUnit; i++){
+      boolean thislose = this.loseUnit(level);
+      if(!thislose){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  public int countLevel(int level) {
+    int res = 0;
+    for (Unit unit : units) {
+      if (unit.getLevel() == level) {
+        res++;
+      }
+    }
+    return res;
   }
 
 }
