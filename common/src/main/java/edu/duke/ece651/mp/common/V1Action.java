@@ -309,4 +309,14 @@ public class V1Action implements AbstractActionFactory {
     return null;
   }
 
+  @Override
+  public void Move(Player player, String src, String dest, int numUnit, int level){
+    
+  }
+
+  @Override
+  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players, int level){
+    return null;
+  }
+
 }

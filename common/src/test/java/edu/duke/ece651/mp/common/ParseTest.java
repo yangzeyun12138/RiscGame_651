@@ -17,8 +17,8 @@ public class ParseTest {
     String filename = "Territory3.txt";
     Parse parse = new Parse();
     ArrayList<String> lines = parse.readfile(filename);
-    assertEquals(lines.get(0), "Gondor:Mordor, Oz");
-    assertEquals(lines.get(8), "Roshar:Elantris, Hogwarts, Scadrial");
+    assertEquals(lines.get(0), "4:Gondor:Mordor, Oz");
+    assertEquals(lines.get(8), "4:Roshar:Elantris, Hogwarts, Scadrial");
   }
 
   @Test
@@ -28,7 +28,7 @@ public class ParseTest {
     Parse parse = new Parse();
     ArrayList<String> lines = parse.readfile(filename);
     HashSet<Territory> pt1 = parse.parseTerritory(lines, 3);
-    Territory t1 = new LandTerritory("Narnia", color);
+    Territory t1 = new LandTerritory("Narnia", color, 2);
     boolean b1 = false;
 
     for (Territory t : pt1){
