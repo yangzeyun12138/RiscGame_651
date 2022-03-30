@@ -24,25 +24,48 @@ public class MoveCostRuleChecker extends MoveChecker{
   public int findMinPath(Player player, String src, String dest){
     HashSet<String> t_set = new HashSet<String>();
     for(Territory curr_t : player.player_terri_set){
-      t_set.add(curr_t.getName());
-      int min_size = minTotalSize(curr_t, dest,t_set);
-      return min_size;
+      if(curr_t.getName().equals(src)){
+        t_set.add(curr_t.getName());
+        int min_size = minTotalSize(curr_t, dest,t_set);
+        return min_size;
+          //- curr_t.getSize();
+      }
     }
-    return 0;
+    return -1;
   }
 
   public int minTotalSize(Territory curr_t, String dest, HashSet<String> t_set){
-    if(curr_t.getName().equals(dest)){
-      return curr_t.getSize();
+    System.out.print("curr_t name: "+ curr_t.getName() + ":");
+    for(String t : t_set){
+      System.out.print(t + ", ");
     }
+    System.out.print("\n");
+    
+    if(curr_t.getName().equals(dest)){
+      return 0;
+    }
+    String color = curr_t.getColor();
+    HashSet<String> new_t_set = new HashSet<String>();
+    for(String t: t_set){
+      new_t_set.add(t);
+    }
+   
     ArrayList<Integer> sizeList = new ArrayList<Integer>();
+    int counter = 0;
     for(Territory neigh : curr_t.getNeigh()){
-      if(!t_set.contains(neigh.getName())){
-        t_set.add(neigh.getName());
-        sizeList.add(neigh.getSize() + minTotalSize(neigh, dest, t_set));
+      if(neigh.getColor().equals(color) && !new_t_set.contains(neigh.getName())){
+        counter++;
+        new_t_set.add(neigh.getName());
+        sizeList.add(neigh.getSize() + minTotalSize(neigh, dest, new_t_set));
+        
       }
     }
-    return getMin(sizeList);
+    if(counter == 0 && curr_t.getNeigh().size() > 0){
+      return 300000;
+    }else{
+      return getMin(sizeList);
+    }
+    
   }
 
   public int getMin(ArrayList<Integer> arr_list){
