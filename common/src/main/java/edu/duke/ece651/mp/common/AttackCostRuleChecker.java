@@ -1,7 +1,7 @@
 package edu.duke.ece651.mp.common;
 
 import java.util.*;
-public class FactionRuleChecker extends AttackChecker {
+public class AttackCostRuleChecker extends AttackChecker {
   @Override
   /**
    *checkMyRule(): This function is to check whether the source territory and the destination territory are the same faction.
@@ -12,15 +12,13 @@ public class FactionRuleChecker extends AttackChecker {
    *@return return the error string, and return null if there is no error. 
 */
   protected String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players, int level){
-    for(Territory curr_t : player.player_terri_set){
-      if(curr_t.getName().equals(dest)){
-        return new String(player.color + " player. Invalid Attack: The destination territory and the source territory are in the same faction!\n");
-      }
-    }
+    if(player.getFood() < numUnit){
+      return new String(player.color + " player. Invalid Attack: The cost of the attack is higher than the food of the player!\n");
+    } 
     return null;
   }
 
-  public FactionRuleChecker(AttackChecker next){
+  public AttackCostRuleChecker(AttackChecker next){
     super(next);
   }
 }

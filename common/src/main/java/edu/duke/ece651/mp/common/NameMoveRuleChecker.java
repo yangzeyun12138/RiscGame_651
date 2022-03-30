@@ -13,7 +13,7 @@ public class NameMoveRuleChecker extends MoveChecker{
      @return: String if there is Violation of rule, null if there is none
    */
   @Override
-  protected String checkMyRule(Player player,String src,String dest,int numUnit){
+  protected String checkMyRule(Player player,String src,String dest,int numUnit, int level){
     boolean src_check = false;
     boolean dest_check = false;
     for(Territory t : player.player_terri_set){

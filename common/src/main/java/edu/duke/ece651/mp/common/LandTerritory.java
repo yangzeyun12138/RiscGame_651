@@ -145,11 +145,16 @@ public class LandTerritory implements Territory, java.io.Serializable {
   }
 
   @Override
+  /**
+   * sort from minimum to maximum according to unit level
+   */
   public void sortUnit(){
-    for(int i = 0; i < units.size() - 1; i++){
-      for(int j = i + 1; j < units.size(); j++){
-        if(units.get(i).getLevel() > units.get(j).getLevel()){
-          switchUnit(units, i, j);
+    if(units.size() > 0){
+      for(int i = 0; i < units.size() - 1; i++){
+        for(int j = i + 1; j < units.size(); j++){
+          if(units.get(i).getLevel() > units.get(j).getLevel()){
+            switchUnit(units, i, j);
+          }
         }
       }
     }
@@ -247,6 +252,10 @@ public class LandTerritory implements Territory, java.io.Serializable {
       this.loseLevelUnit(level);
     }
     return true;
+  }
+
+  public Unit getUnitsFromIndex(int index){
+    return units.get(index);
   }
 
 }

@@ -5,12 +5,12 @@ import java.util.Random;
 import java.io.*;
 public class V2Action implements AbstractActionFactory {
   @Override
-  public String checkForMove(Player player, String src, String dest, int numUnit){
+  public String checkForMove(Player player, String src, String dest, int numUnit, int level){
     MoveChecker CostCheck = new MoveCostRuleChecker(null);
     MoveChecker UnitCheck = new UnitRuleChecker(CostCheck);
     MoveChecker PathCheck = new PathRuleChecker(UnitCheck);
     MoveChecker NameCheck = new NameMoveRuleChecker(PathCheck);
-    String result = NameCheck.checkMovement(player, src, dest, numUnit);
+    String result = NameCheck.checkMovement(player, src, dest, numUnit, level);
     return result;
   }  
    /**
@@ -22,7 +22,7 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public void Move(Player player, String src, String dest, int numUnit, int level){
-    String result = checkForMove(player, src, dest, numUnit);
+    String result = checkForMove(player, src, dest, numUnit, level);
     
     if(result == null){
       // find src territory and dest territory
@@ -123,11 +123,13 @@ public class V2Action implements AbstractActionFactory {
    * @param numUnit is the number of Unit that join the attack.
    * @return returns null if there is no error. returns string argument when there is an error.
    */
-  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players){
-    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(null);
+  @Override
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players, int level){
+    AttackChecker AttackCostCheck = new AttackCostRuleChecker(null);
+    AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(AttackCostCheck);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
     AttackChecker NameCheck = new NameAttackRuleChecker(FactionCheck);
-    String result = NameCheck.checkAttack(attacker, src, dest, numUnit, players);
+    String result = NameCheck.checkAttack(attacker, src, dest, numUnit, players, level);
     return result;
   }
 
@@ -142,25 +144,26 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
 
-  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players, int level){
-
-    String checkResult = checkForAttack(attacker, src, dest, numUnit, players);
-    if (checkResult != null){
-      throw new IllegalArgumentException(checkResult);
-     }
-    
+  public Player Attack (Player attacker, Player defender, String src, String dest,ArrayList<Unit> attackUnits, ArrayList<Player> players){    
     //Territory attackerTerri = findTerritory(attacker, src);
     Territory defenderTerri = findTerritory(defender, dest);
     // Attacker lose units that is attacking
     //attackerTerri.loseUnit(numUnit);
 
     // Attacker win Defender
+    int numUnit = attackUnits.size();
+    // Sort the Units from minimum to maximum
+    this.sortUnit(attackUnits);
+    defenderTerri.sortUnit();
     boolean unitRemain = (numUnit > 0) && (defenderTerri.countUnit() > 0);
     while(unitRemain){
-      if(rollDice()){
-        defenderTerri.loseUnit();
+      // If attacker wins:
+      int atk_last_index = attackUnits.size() - 1;
+      if(rollDice2(attackUnits.get(atk_last_index), defenderTerri.getUnitsFromIndex(0))){
+        defenderTerri.loseUnit(); // lose unit which has index 0!
       } else {
-        numUnit -= 1;
+        attackUnits.remove(atk_last_index);
+        numUnit = attackUnits.size();
       }
       unitRemain = (numUnit > 0) && (defenderTerri.countUnit() > 0);
     }
@@ -168,7 +171,7 @@ public class V2Action implements AbstractActionFactory {
       //Attack win!
       defender.player_terri_set.remove(defenderTerri);
       defenderTerri.changeColor(attacker.getColor());
-      defenderTerri.setBasicUnit(numUnit);
+      this.putAttackUnits(defenderTerri, attackUnits);
       attacker.player_terri_set.add(defenderTerri);
       changeAllColor(players, defenderTerri.getName(), attacker.getColor());
       return attacker;
@@ -177,6 +180,34 @@ public class V2Action implements AbstractActionFactory {
     }
     
   }
+
+  public void putAttackUnits(Territory defenTerritory, ArrayList<Unit> units){
+    for(Unit u : units){
+      defenTerritory.addUnit(u);
+    }
+  }
+
+  /**
+   * sort from minimum to maximum according to unit level
+   */
+  public void sortUnit(ArrayList<Unit> units){
+    if(units.size() != 0){
+      for(int i = 0; i < units.size() - 1; i++){
+        for(int j = i + 1; j < units.size(); j++){
+          if(units.get(i).getLevel() > units.get(j).getLevel()){
+            switchUnit(units, i, j);
+          }
+        }
+      }
+    }
+  }
+
+  public void switchUnit(ArrayList<Unit> unit_arr, int a, int b){
+    Unit A_copy = unit_arr.get(a);
+    unit_arr.set(a, unit_arr.get(b));
+    unit_arr.set(b, A_copy);
+  }
+
 
   /**
    * changeAllColor() would help to change whole the color of the Territory that is gotten by the attacker from all players.
@@ -214,6 +245,27 @@ public class V2Action implements AbstractActionFactory {
     
     int Dice1 = rand1.nextInt(max - min + 1) + min;
     int Dice2 = rand2.nextInt(max - min + 1) + min;
+    if (Dice1 > Dice2){
+      // Attacker wins this round!
+      return true;
+    } else{
+      // Defender wins this round
+      return false;
+    }
+  }
+
+  public boolean rollDice2(Unit atkUnit, Unit defUnit){
+    int min = 1;
+    int max = 20;
+    long time_seed = System.currentTimeMillis();
+    int seed1 = 100;
+    int seed2 = seed1+1;
+    Random rand1 = new Random(seed1);
+    Random rand2 = new Random(seed2);
+    
+    
+    int Dice1 = rand1.nextInt(max - min + 1) + min + atkUnit.getBonus();
+    int Dice2 = rand2.nextInt(max - min + 1) + min + defUnit.getBonus();
     if (Dice1 > Dice2){
       // Attacker wins this round!
       return true;

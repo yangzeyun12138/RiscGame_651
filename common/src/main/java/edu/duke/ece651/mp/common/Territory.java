@@ -26,4 +26,5 @@ public interface Territory {
   public int getSize();
   public boolean loseLevelUnit(int level);
   public boolean loseUnit(int numUnit, int level);
+  public Unit getUnitsFromIndex(int index);
 }

@@ -7,17 +7,17 @@ public abstract class AttackChecker {
     this.next = next;
   }
   
-  protected abstract String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players);
+  protected abstract String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players, int level);
 
-  public String checkAttack(Player player, String src, String dest, int numUnit, ArrayList<Player> players){
+  public String checkAttack(Player player, String src, String dest, int numUnit, ArrayList<Player> players,int level){
     //if we fail our own rule: stop the attack which is not legal
-    String res = checkMyRule(player, src, dest, numUnit, players);
+    String res = checkMyRule(player, src, dest, numUnit, players,level);
     if (res != null){
       return res;
     }
     //otherwise, ask the rest of the chain of rules
     if (next != null){
-      return next.checkAttack(player, src, dest, numUnit, players);
+      return next.checkAttack(player, src, dest, numUnit, players,level);
     }
     //if there are no more rules, then the attack is legal
     return null;

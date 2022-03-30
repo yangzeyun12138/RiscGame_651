@@ -13,11 +13,11 @@ public class UnitRuleChecker extends MoveChecker{
      @return: String if there is Violation of rule, null if there is none
    */
   @Override
-  protected String checkMyRule(Player player,String src,String dest,int numUnit){
+  protected String checkMyRule(Player player,String src,String dest,int numUnit, int level){
     System.out.println("in unit rule check");
     for (Territory t: player.player_terri_set){
       if (t.getName().equals(src)){
-        if (t.countUnit() < numUnit){
+        if (t.countLevelUnit(level) < numUnit){
           return new String(player.color + " player. The movement is Invalid: the number of unit within the territory is less than the number you want to move!\n");
         }
         if(numUnit < 0){

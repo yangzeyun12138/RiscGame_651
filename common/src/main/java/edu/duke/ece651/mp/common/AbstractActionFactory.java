@@ -12,14 +12,14 @@ public interface AbstractActionFactory {
   public void Move(Player player, String src, String dest, int numUnit);
   public void Move(Player player, String src, String dest, int numUnit, int level);
   public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players);
-  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players, int level);
+  public Player Attack (Player attacker, Player defender, String src, String dest, ArrayList<Unit> attackUnits, ArrayList<Player> players);
   /**
    * Done function is the final command that the player would use, and it will help player to add 1 unit to all of his/her territories.
    *@param player is the current user.
    */
   public void Done(ArrayList<Player> players);
-  public String checkForMove(Player player, String src, String dest, int numUnit);
-  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players);
+  public String checkForMove(Player player, String src, String dest, int numUnit, int level);
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players, int level);
 
   public Player getPlayer(String dest, ArrayList<Player> players);
   public HashMap<String, ArrayList<Order>> arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players);

@@ -12,7 +12,7 @@ public class MoveCostRuleChecker extends MoveChecker{
      @return: String if there is Violation of rule, null if there is none
    */
   @Override
-  protected String checkMyRule(Player player,String src,String dest,int numUnit){
+  protected String checkMyRule(Player player,String src,String dest,int numUnit, int level){
     System.out.println("in unit rule check");
     int min_path = findMinPath(player, src, dest);
     if(min_path * numUnit > player.getFood()){
@@ -35,12 +35,6 @@ public class MoveCostRuleChecker extends MoveChecker{
   }
 
   public int minTotalSize(Territory curr_t, String dest, HashSet<String> t_set){
-    System.out.print("curr_t name: "+ curr_t.getName() + ":");
-    for(String t : t_set){
-      System.out.print(t + ", ");
-    }
-    System.out.print("\n");
-    
     if(curr_t.getName().equals(dest)){
       return 0;
     }
