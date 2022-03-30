@@ -13,6 +13,14 @@ public class BasicUnit implements Unit, java.io.Serializable {
     this.cost = 0;
   };
 
+  public BasicUnit(int level){
+    LevelInfo info = new LevelInfo();
+    this.level = level;
+    this.bonus = info.getBonus(level);
+    this.cost = info.getCost(level);
+  };
+
+
   @Override
   public void UpgradeBasicUnit(int newLevel){
     LevelInfo Info = new LevelInfo();

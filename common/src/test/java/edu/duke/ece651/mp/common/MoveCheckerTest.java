@@ -134,4 +134,56 @@ public class MoveCheckerTest {
     assertEquals("Red player. The movement is Invalid: the number of unit within the territory is less than the number you want to move!\n", result); 
 
   }
+
+  @Test
+  public void test_move_cost_checker(){
+    HashSet<Territory> test_territory = new HashSet<>();
+    LandTerritory A = new LandTerritory("A", "Red", 1);
+    LandTerritory B = new LandTerritory("B", "Red", 30);
+    LandTerritory C = new LandTerritory("C", "Red", 10);
+    LandTerritory D = new LandTerritory("D", "Red", 100);
+    LandTerritory E = new LandTerritory("E", "Red", 1000);
+    LandTerritory F = new LandTerritory("F", "Green", 4);
+    A.addNeigh(B);
+    A.addNeigh(C);
+    A.addNeigh(F);
+    B.addNeigh(A);
+    B.addNeigh(D);
+    C.addNeigh(A);
+    C.addNeigh(D);
+    D.addNeigh(B);
+    D.addNeigh(C);
+    D.addNeigh(E);
+    E.addNeigh(D);
+    F.addNeigh(A);
+    A.setBasicUnit(3);
+    B.setBasicUnit(4);
+    C.setBasicUnit(5);
+    D.setBasicUnit(3);
+    E.setBasicUnit(4);
+    F.setBasicUnit(5);
+    test_territory.add(A);
+    test_territory.add(B);
+    test_territory.add(C);
+    test_territory.add(D);
+    test_territory.add(E);
+    Player player = new Player("Red", test_territory);
+    String src = "A";
+    String dest = "E";
+    int numUnit = 1;
+    MoveCostRuleChecker CostCheck = new MoveCostRuleChecker(null);
+    //String result = CostCheck.checkMovement(player, src, dest, numUnit);o
+    int min_cost = CostCheck.findMinPath(player, src, dest);
+    assertEquals(1110 ,min_cost);
+
+    src = "B";
+    dest = "D";
+    min_cost = CostCheck.findMinPath(player, src, dest);
+    assertEquals(100, min_cost);
+
+    src = "A";
+    dest = "D";
+    min_cost = CostCheck.findMinPath(player, src, dest);
+    assertEquals(110, min_cost);
+  }
 }

@@ -13,8 +13,8 @@ public class V2ActionTest {
   public void test_move() {
     HashSet<Territory> test_territory = new HashSet<>();
     LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
-    LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
     LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
+    LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt2.addNeigh(lt3);
@@ -30,8 +30,10 @@ public class V2ActionTest {
     String dest = "Hogwarts";
     int numUnit = 3;
     V2Action action = new V2Action();
-    int level = 1;
+    int level = 0;
     action.Move(player, src, dest, numUnit, level);
+    assertEquals(125, player.getFood());
+    
     for(Territory t : player.player_terri_set){
       if(t.getName().equals("Gondor")){
         assertEquals(0, t.countUnit());
@@ -330,6 +332,49 @@ public class V2ActionTest {
     players.get(0).player_terri_set.clear();
     assertEquals("Green",Action.checkWin(players));
   }
+
+  @Test
+  public void test_checkMoveCost(){
+    HashSet<Territory> test_territory = new HashSet<>();
+    LandTerritory A = new LandTerritory("A", "Red", 1);
+    LandTerritory B = new LandTerritory("B", "Red", 30);
+    LandTerritory C = new LandTerritory("C", "Red", 10);
+    LandTerritory D = new LandTerritory("D", "Red", 100);
+    LandTerritory E = new LandTerritory("E", "Red", 1000);
+    LandTerritory F = new LandTerritory("F", "Green", 4);
+    A.addNeigh(B);
+    A.addNeigh(C);
+    A.addNeigh(F);
+    B.addNeigh(A);
+    B.addNeigh(D);
+    C.addNeigh(A);
+    C.addNeigh(D);
+    D.addNeigh(B);
+    D.addNeigh(C);
+    D.addNeigh(E);
+    E.addNeigh(D);
+    F.addNeigh(A);
+    A.setBasicUnit(3);
+    B.setBasicUnit(4);
+    C.setBasicUnit(5);
+    D.setBasicUnit(3);
+    E.setBasicUnit(4);
+    F.setBasicUnit(5);
+    test_territory.add(A);
+    test_territory.add(B);
+    test_territory.add(C);
+    test_territory.add(D);
+    test_territory.add(E);
+    Player player = new Player("Red", test_territory);
+    String src = "A";
+    String dest = "E";
+    int numUnit = 1;
+    player.costFood(139);
+    MoveChecker CostCheck = new MoveCostRuleChecker(null);
+    String result = CostCheck.checkMovement(player, src, dest, numUnit);
+    assertEquals("Red player. The movement is Invalid: the cost for the minimum path is higher than the number of the food!\n",result);
+  }
+
   
 }
 

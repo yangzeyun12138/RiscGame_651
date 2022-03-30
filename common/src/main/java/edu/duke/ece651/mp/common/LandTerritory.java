@@ -222,4 +222,31 @@ public class LandTerritory implements Territory, java.io.Serializable {
     return this.size;
   }
 
+  @Override
+  public boolean loseLevelUnit(int level){
+    if(this.countLevelUnit(level) < 1){
+      return false;
+    }
+    int counter = 0;
+    for(Unit u : units){
+      if(u.getLevel() == level){
+        break;
+      }
+      counter++;
+    }
+    units.remove(counter);
+    return true;
+  }
+  
+  @Override
+  public boolean loseUnit(int numUnit, int level){
+    if(this.countLevelUnit(level) < numUnit){
+      return false;
+    }
+    for(int i = 0; i < numUnit; i++){
+      this.loseLevelUnit(level);
+    }
+    return true;
+  }
+
 }
