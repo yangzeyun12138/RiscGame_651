@@ -5,11 +5,11 @@ import java.util.Random;
 import java.io.*;
 public class V1Action implements AbstractActionFactory {
   @Override
-  public String checkForMove(Player player, String src, String dest, int numUnit){
+  public String checkForMove(Player player, String src, String dest, int numUnit, int level){
     MoveChecker UnitCheck = new UnitRuleChecker(null);
     MoveChecker PathCheck = new PathRuleChecker(UnitCheck);
     MoveChecker NameCheck = new NameMoveRuleChecker(PathCheck);
-    String result = NameCheck.checkMovement(player, src, dest, numUnit);
+    String result = NameCheck.checkMovement(player, src, dest, numUnit, 0);
     return result;
   }  
    /**
@@ -21,7 +21,7 @@ public class V1Action implements AbstractActionFactory {
    */
   @Override
   public void Move(Player player, String src, String dest, int numUnit){
-    String result = checkForMove(player, src, dest, numUnit);
+    String result = checkForMove(player, src, dest, numUnit, 0);
     if(result == null){
       // find src territory and dest territory
       for(Territory curr_t: player.player_terri_set){
@@ -46,11 +46,12 @@ public class V1Action implements AbstractActionFactory {
    * @param numUnit is the number of Unit that join the attack.
    * @return returns null if there is no error. returns string argument when there is an error.
    */
-  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players){
+  @Override
+  public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players, int level){
     AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(null);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
     AttackChecker NameCheck = new NameAttackRuleChecker(FactionCheck);
-    String result = NameCheck.checkAttack(attacker, src, dest, numUnit, players);
+    String result = NameCheck.checkAttack(attacker, src, dest, numUnit, players, level);
     return result;
   }
 
@@ -315,7 +316,7 @@ public class V1Action implements AbstractActionFactory {
   }
 
   @Override
-  public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players, int level){
+  public Player Attack (Player attacker, Player defender, String src, String dest, ArrayList<Unit> attackList, ArrayList<Player> players){
     return null;
   }
 

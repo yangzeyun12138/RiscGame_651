@@ -132,6 +132,60 @@ public class LandTerritory implements Territory, java.io.Serializable {
   public int countUnit(){
     return this.units.size();
   }
+
+  @Override
+  public int countLevelUnit(int level){
+    int count = 0;
+    for(Unit curr_unit : units){
+      if(curr_unit.getLevel() == level){
+        count++;
+      }
+    }
+    return count;
+  }
+
+  @Override
+  /**
+   * sort from minimum to maximum according to unit level
+   */
+  public void sortUnit(){
+    if(units.size() > 0){
+      for(int i = 0; i < units.size() - 1; i++){
+        for(int j = i + 1; j < units.size(); j++){
+          if(units.get(i).getLevel() > units.get(j).getLevel()){
+            switchUnit(units, i, j);
+          }
+        }
+      }
+    }
+  }
+
+  public void switchUnit(ArrayList<Unit> unit_arr, int a, int b){
+    Unit A_copy = unit_arr.get(a);
+    unit_arr.set(a, unit_arr.get(b));
+    unit_arr.set(b, A_copy);
+  }
+
+  public int getLevelFromPosition(int position){
+    return units.get(position).getLevel();
+  }
+
+  @Override
+  public boolean upgradeUnit(int numUnit, int level, int newLevel){
+    if(this.countLevelUnit(level) < numUnit){
+      return false;
+    }
+    for(int i = 0; i < numUnit; i++){
+      for(Unit u : units){
+        if(u.getLevel() == level){
+          u.UpgradeBasicUnit(newLevel);
+          break;
+        }
+      }
+    }
+    return true;
+  }
+  
   /**
    *setUnit: Initially Setting of number of Units within this Territory, Only used in placement Phase
    *@param: int number of Units want to be set with
@@ -174,6 +228,9 @@ public class LandTerritory implements Territory, java.io.Serializable {
   }
 
 
+  
+
+
 
   @Override
   public boolean loseUnit(int level) {
@@ -198,9 +255,14 @@ public class LandTerritory implements Territory, java.io.Serializable {
       if(!thislose){
         return false;
       }
+
     }
     return true;
   }
+
+
+  public Unit getUnitsFromIndex(int index){
+    return units.get(index);
 
   @Override
   public int countLevel(int level) {
@@ -211,6 +273,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
       }
     }
     return res;
+
   }
 
 }

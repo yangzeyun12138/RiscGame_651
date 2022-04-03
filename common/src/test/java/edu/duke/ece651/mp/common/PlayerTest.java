@@ -66,7 +66,7 @@ class PlayerTest {
     test_territory.add(lt1);
     Player p = new Player("Red", test_territory);
     assertEquals(1, p.getTechLevel());
-    assertEquals(90, p.getFood());
+    assertEquals(140, p.getFood());
     p.upgradeTechLevel();
     assertEquals(2, p.getTechLevel());
     assertThrows(IllegalArgumentException.class, ()->p.costFood(-1000));

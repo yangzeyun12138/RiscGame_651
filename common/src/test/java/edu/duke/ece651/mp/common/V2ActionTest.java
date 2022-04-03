@@ -13,8 +13,8 @@ public class V2ActionTest {
   public void test_move() {
     HashSet<Territory> test_territory = new HashSet<>();
     LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
-    LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
     LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
+    LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt2.addNeigh(lt3);
@@ -30,8 +30,10 @@ public class V2ActionTest {
     String dest = "Hogwarts";
     int numUnit = 3;
     V2Action action = new V2Action();
-    int level = 1;
+    int level = 0;
     action.Move(player, src, dest, numUnit, level);
+    assertEquals(125, player.getFood());
+    
     for(Territory t : player.player_terri_set){
       if(t.getName().equals("Gondor")){
         assertEquals(0, t.countUnit());
@@ -57,6 +59,14 @@ public class V2ActionTest {
     assertTrue(action.rollDice());
   }
 
+  @Test
+  public void test_rolldice2(){
+    V2Action action = new V2Action();
+    Unit u1 = new BasicUnit();
+    Unit u2 = new BasicUnit();
+    assertTrue(action.rollDice2(u1, u2));
+  }
+  
   @Test
   public void test_Attack(){
     HashSet<Territory> test_territory1 = new HashSet<>();
@@ -90,15 +100,81 @@ public class V2ActionTest {
     players.add(attacker);
     players.add(defender);
     int level = 1;
-    action.Attack(attacker, defender, "Mordor", "Scadrial", 1, players, level);
+    ArrayList<Unit> units = new ArrayList<Unit>();
+    action.sortUnit(units);
+    Unit u1 = new BasicUnit();
+    Unit u2 = new BasicUnit(1);
+    Unit u3 = new BasicUnit();
+    units.add(u1);
+    units.add(u2);
+    units.add(u3);
+    
+    action.Attack(attacker, defender, "Mordor", "Scadrial", units, players);
     Territory taken = action.findTerritory(attacker, "Scadrial");
     Territory left = action.findTerritory(defender, "Elantris");
     assertEquals(taken.getColor(), "Red");
-    assertEquals(taken.countUnit(), 1);
+    assertEquals(taken.countUnit(), 3);
     for(Territory neigh : left.getNeigh()){
       assertEquals("Red", neigh.getColor());
     }
-    assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1, players, level));
+    //assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", units, players));
+  }
+
+  @Test
+  public void test_attack_rules(){
+   HashSet<Territory> test_territory1 = new HashSet<>();
+    HashSet<Territory> test_territory2 = new HashSet<>();
+    LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
+    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue", 2);
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue", 3);
+
+    lt2.addNeigh(lt3);
+    lt2.addNeigh(lt4);
+    lt3.addNeigh(lt2);
+    lt3.addNeigh(lt4);
+    lt4.addNeigh(lt2);
+    lt4.addNeigh(lt3);
+    lt4.addNeigh(lt5);
+    lt5.addNeigh(lt4);
+    lt2.setBasicUnit(4);
+    lt3.setBasicUnit(5);
+    lt4.setBasicUnit(5);    
+    lt5.setBasicUnit(6);
+    test_territory1.add(lt2);
+    test_territory1.add(lt3);
+    test_territory2.add(lt4);
+    test_territory2.add(lt5);
+
+    Player attacker = new Player("Red", test_territory1);
+    Player defender = new Player("Blue", test_territory2);
+    V2Action action = new V2Action();
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(attacker);
+    players.add(defender);
+    int level = 1;
+    ArrayList<Unit> units = new ArrayList<Unit>();
+    action.sortUnit(units);
+    Unit u1 = new BasicUnit();
+    Unit u2 = new BasicUnit(1);
+    Unit u3 = new BasicUnit();
+    units.add(u1);
+    units.add(u2);
+    units.add(u3);
+
+    action.checkForAttack(attacker, "Mordor", "Scadrial", units.size(), players, 0);
+    action.Attack(attacker, defender, "Mordor", "Scadrial", units, players);
+    attacker.costFood(139);
+    assertEquals("Red player. Invalid Attack: The cost of the attack is higher than the food of the player!\n", action.checkForAttack(attacker, "Scadrial", "Elantris", units.size(), players, 0));
+    
+    Territory taken = action.findTerritory(attacker, "Scadrial");
+    Territory left = action.findTerritory(defender, "Elantris");
+    assertEquals(taken.getColor(), "Red");
+    assertEquals(taken.countUnit(), 3);
+    for(Territory neigh : left.getNeigh()){
+      assertEquals("Red", neigh.getColor());
+    }
+    
   }
 
   @Test
@@ -342,6 +418,49 @@ public class V2ActionTest {
     players.get(0).player_terri_set.clear();
     assertEquals("Green",Action.checkWin(players));
   }
+
+  @Test
+  public void test_checkMoveCost(){
+    HashSet<Territory> test_territory = new HashSet<>();
+    LandTerritory A = new LandTerritory("A", "Red", 1);
+    LandTerritory B = new LandTerritory("B", "Red", 30);
+    LandTerritory C = new LandTerritory("C", "Red", 10);
+    LandTerritory D = new LandTerritory("D", "Red", 100);
+    LandTerritory E = new LandTerritory("E", "Red", 1000);
+    LandTerritory F = new LandTerritory("F", "Green", 4);
+    A.addNeigh(B);
+    A.addNeigh(C);
+    A.addNeigh(F);
+    B.addNeigh(A);
+    B.addNeigh(D);
+    C.addNeigh(A);
+    C.addNeigh(D);
+    D.addNeigh(B);
+    D.addNeigh(C);
+    D.addNeigh(E);
+    E.addNeigh(D);
+    F.addNeigh(A);
+    A.setBasicUnit(3);
+    B.setBasicUnit(4);
+    C.setBasicUnit(5);
+    D.setBasicUnit(3);
+    E.setBasicUnit(4);
+    F.setBasicUnit(5);
+    test_territory.add(A);
+    test_territory.add(B);
+    test_territory.add(C);
+    test_territory.add(D);
+    test_territory.add(E);
+    Player player = new Player("Red", test_territory);
+    String src = "A";
+    String dest = "E";
+    int numUnit = 1;
+    player.costFood(139);
+    MoveChecker CostCheck = new MoveCostRuleChecker(null);
+    String result = CostCheck.checkMovement(player, src, dest, numUnit, 0);
+    assertEquals("Red player. The movement is Invalid: the cost for the minimum path is higher than the number of the food!\n",result);
+  }
+
   
 }
 

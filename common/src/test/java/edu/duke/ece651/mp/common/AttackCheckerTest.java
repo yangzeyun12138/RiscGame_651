@@ -38,19 +38,19 @@ public class AttackCheckerTest {
     ArrayList<Player> players = new ArrayList<Player>();
     players.add(player);
     
-    assertEquals("Red player. The Attack is Invalid: The name of the source territory or the destination territory is invalid\n", Name.checkAttack(player, "DDD", dest, numUnit, players));
+    assertEquals("Red player. The Attack is Invalid: The name of the source territory or the destination territory is invalid\n", Name.checkAttack(player, "DDD", dest, numUnit, players, 0));
     
-    String result = Faction.checkAttack(player, src, dest, numUnit,players);
+    String result = Faction.checkAttack(player, src, dest, numUnit,players, 0);
     assertNull(result);
 
     numUnit = 4;
     dest = "Hogwarts";
-    result = Faction.checkAttack(player, src, dest, numUnit,players);
+    result = Faction.checkAttack(player, src, dest, numUnit,players, 0);
     assertEquals("Red player. Invalid Attack: The destination territory and the source territory are in the same faction!\n", result); 
 
     src = "Hogwarts";
     dest = "Oz";
-    result = Faction.checkAttack(player, src, dest, numUnit,players);
+    result = Faction.checkAttack(player, src, dest, numUnit,players, 0);
     assertEquals("Red player. Invalid Attack: The destination territory is not adjacent to the source territory!\n", result);
    }
 

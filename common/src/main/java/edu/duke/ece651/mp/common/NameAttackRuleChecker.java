@@ -11,7 +11,7 @@ public class NameAttackRuleChecker extends AttackChecker {
    *@param numUnit is the number of unit that player wants to do the attack.
    *@return return the error string, and return null if there is no error. 
    */
-  protected String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players){
+  protected String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players, int level){
     boolean src_check = false;
     boolean dest_check = false;
     for(Territory t : player.player_terri_set){

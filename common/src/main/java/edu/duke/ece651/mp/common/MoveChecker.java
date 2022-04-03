@@ -7,17 +7,17 @@ public abstract class MoveChecker{
     this.next = next;
   }
 
-  protected abstract String checkMyRule(Player player, String src, String dest, int numUnit);
+  protected abstract String checkMyRule(Player player, String src, String dest, int numUnit, int level);
 
-  public String checkMovement(Player player, String src, String dest, int numUnit){
+  public String checkMovement(Player player, String src, String dest, int numUnit, int level){
     //if we fail our own rule: stop the movement is not legal
-    String res = checkMyRule(player, src, dest, numUnit);
+    String res = checkMyRule(player, src, dest, numUnit, level);
     if (res != null){
       return res;
     }
     //otherwise, ask the rest of the chain of rules
     if (next != null){
-      return next.checkMovement(player, src, dest, numUnit);
+      return next.checkMovement(player, src, dest, numUnit, level);
     }
     //if there are no more rules, then the movement is legal
     return null;

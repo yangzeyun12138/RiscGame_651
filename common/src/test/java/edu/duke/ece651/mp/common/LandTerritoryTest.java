@@ -14,6 +14,7 @@ public class LandTerritoryTest {
     LandTerritory land = new LandTerritory(test, color, 1);
     assertEquals(land.getName(), test);
     assertEquals(land.neighbors.size(), 0);
+    assertEquals(1, land.getSize());
   }
 
   @Test
@@ -66,6 +67,37 @@ public class LandTerritoryTest {
     LandTerritory lt1 = new LandTerritory("territory1", "Red", 1);
     lt1.changeColor("Blue");
     assertEquals("Blue", lt1.color);
+  }
+
+  @Test
+  public void test_sort(){
+    Unit u1 = new BasicUnit();
+    Unit u2 = new BasicUnit();
+    Unit u3 = new BasicUnit();
+    u1.UpgradeBasicUnit(4);
+    u2.UpgradeBasicUnit(2);
+    u3.UpgradeBasicUnit(3);
+    LandTerritory lt1 = new LandTerritory("territory1", "Red", 1);
+    lt1.addUnit(u1);
+    lt1.addUnit(u2);
+    lt1.addUnit(u3);
+    assertEquals(1, lt1.countLevelUnit(4));
+    assertEquals(0, lt1.countLevelUnit(5));
+    lt1.sortUnit();
+    assertEquals(2, lt1.getLevelFromPosition(0));
+    assertEquals(4, lt1.getLevelFromPosition(2));
+  }
+
+  @Test
+  public void test_upgrade(){
+    LandTerritory lt1 = new LandTerritory("territory1", "Red", 1);
+    Unit u1 = new BasicUnit();
+    Unit u2 = new BasicUnit();
+    lt1.addUnit(u1);
+    lt1.addUnit(u2);
+    assertFalse(lt1.upgradeUnit(3,0,3));
+    lt1.upgradeUnit(2, 0, 3);
+    assertEquals(3, lt1.getLevelFromPosition(0));
   }
 
 }
