@@ -26,7 +26,7 @@ public class V1Action implements AbstractActionFactory {
       // find src territory and dest territory
       for(Territory curr_t: player.player_terri_set){
         if(curr_t.getName().equals(src)){
-          curr_t.loseUnit(numUnit);
+          curr_t.loseUnits(numUnit);
         }
         if(curr_t.getName().equals(dest)){
           curr_t.addBasicUnit(numUnit);
@@ -67,12 +67,6 @@ public class V1Action implements AbstractActionFactory {
   @Override
 
   public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players){
-
-    String checkResult = checkForAttack(attacker, src, dest, numUnit, players, 0);
-    if (checkResult != null){
-      throw new IllegalArgumentException(checkResult);
-     }
-    
     //Territory attackerTerri = findTerritory(attacker, src);
     Territory defenderTerri = findTerritory(defender, dest);
     // Attacker lose units that is attacking
@@ -237,7 +231,13 @@ public class V1Action implements AbstractActionFactory {
     for (int i = 0; i < ordersList.size(); i++) {
       for (Order o : ordersList.get(i).AttackList) {
         Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
-        boolean res = attackerTerri.loseUnit(o.getNumUnit());
+
+        String result = checkForAttack(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), players);
+        if (result != null) {
+          throw new IllegalArgumentException(result);
+        }
+
+        boolean res = attackerTerri.loseUnits(o.getNumUnit());
         if (res == false) {
           throw new IllegalArgumentException(players.get(i).color + " player has invalid attack orders. The numUnits is insufficient.\n");
         }
@@ -249,7 +249,7 @@ public class V1Action implements AbstractActionFactory {
   public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players) {
     ArrayList<Order> res = new ArrayList<Order>();
     for (Player p : players) {
-      Order temp = new Order(p, " ", " ", 0);
+      Order temp = new Order(p, " ", " ", 0, 0, 0);
       for (Order o : attackList) {
         if (p.color.equals(o.getPlayer().color)) {
           if (temp.getSrc().equals(" ")) {

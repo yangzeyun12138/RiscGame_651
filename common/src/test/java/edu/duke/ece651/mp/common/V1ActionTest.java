@@ -137,10 +137,10 @@ public class V1ActionTest {
     ArrayList<Player> players = makePlayer2();
     Player player1 = players.get(0);
     Player player2 = players.get(1);
-    Order order1 = new Order(player1, "Gondor", "Oz", 1);
-    Order order2 = new Order(player1, "Hogwarts", "Oz", 1);
-    Order order3 = new Order(player2, "Oz", "Gondor", 1);
-    Order order4 = new Order(player2, "Oz", "Hogwarts", 1);
+    Order order1 = new Order(player1, "Gondor", "Oz", 1, 0, 0);
+    Order order2 = new Order(player1, "Hogwarts", "Oz", 1, 0, 0);
+    Order order3 = new Order(player2, "Oz", "Gondor", 1, 0, 0);
+    Order order4 = new Order(player2, "Oz", "Hogwarts", 1, 0, 0);
     Orders orders1 = new Orders();
     Orders orders2 = new Orders();
     orders1.AttackList.add(order1);
@@ -248,14 +248,17 @@ public class V1ActionTest {
     test_territory2.add(lt5);
     Player p2 = new Player("Blue", test_territory2);
 
+    lt1.addNeigh(lt4);
+    lt4.addNeigh(lt1);
+    lt2.addNeigh(lt5);
+    lt5.addNeigh(lt2);
+
     players.add(p1);
     players.add(p2);
-
-
     Orders os1 = new Orders();
     Orders os2 = new Orders();
-    Order oA1 = new Order(p1, "Gondor", "Elantris", 1);
-    Order oA2 = new Order(p2, "Scadrial", "Mordor",1);
+    Order oA1 = new Order(p1, "Gondor", "Elantris", 1, 0, 0);
+    Order oA2 = new Order(p2, "Scadrial", "Mordor",1, 0, 0);
     os1.AttackList.add(oA1);
     os2.AttackList.add(oA2);
     Orders.add(os1);
@@ -299,10 +302,10 @@ public class V1ActionTest {
     players.add(p1);
     players.add(p2);
     ArrayList<Order> oList = new ArrayList<Order>();
-    Order o1 = new Order(players.get(0), "Mordor", "Elantris", 1);
-    Order o2 = new Order(players.get(1), "Scadrial", "Elantris", 1);
-    Order o3 = new Order(players.get(0), "Gondor", "Elantris", 2);
-    Order o4 = new Order(players.get(1), "Gondor", "Elantris", 1);
+    Order o1 = new Order(players.get(0), "Mordor", "Elantris", 1, 0, 0);
+    Order o2 = new Order(players.get(1), "Scadrial", "Elantris", 1, 0, 0);
+    Order o3 = new Order(players.get(0), "Gondor", "Elantris", 2, 0, 0);
+    Order o4 = new Order(players.get(1), "Gondor", "Elantris", 1, 0, 0);
     oList.add(o1);
     oList.add(o2);
     oList.add(o3);

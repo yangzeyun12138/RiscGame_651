@@ -12,7 +12,7 @@ public class OrderTest {
     int numUnit = 3;
     Player player = makePlayer();
     
-    Order order = new Order(player, src, dest, numUnit);
+    Order order = new Order(player, src, dest, numUnit, 0, 0);
     assertEquals("Gondor", order.getSrc());
     assertEquals("Oz", order.getDest());
     assertEquals(3, order.getNumUnit());

@@ -3,10 +3,11 @@
  */
 package edu.duke.ece651.mp.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
+import org.checkerframework.checker.units.qual.A;
+
+import java.io.*;
+import java.net.Socket;
+import java.util.ArrayList;
 
 public class Client {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -15,7 +16,15 @@ public class Client {
         String hostName = input.readLine();
         System.out.println("Please enter the server port number");
         String port = input.readLine();
-        ClientSk clientSk = new ClientSk(hostName, port, input, System.out);
-        clientSk.game_begin();
+
+        ArrayList<ClientSk> ClientSkList = new ArrayList<>();
+        new_game(ClientSkList, hostName, port, input, System.out);
+    }
+
+    public static void new_game(ArrayList<ClientSk> ClientSkList, String hostName, String port,
+                         BufferedReader input, PrintStream out) throws IOException, ClassNotFoundException {
+        ClientSk clientSk = new ClientSk(hostName, port, input, out);
+        ClientSkList.add(clientSk);
+        ClientSkList.get(ClientSkList.size() - 1).game_begin();
     }
 }

@@ -2,6 +2,7 @@ package edu.duke.ece651.mp.client;
 import com.google.common.annotations.VisibleForTesting;
 import edu.duke.ece651.mp.common.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +39,81 @@ public class ClientSk {
   }
 
 
+  public boolean check_username(String toCheck) {
+    for (int i = 0; i < toCheck.length(); i++) {
+      if (!Character.isLetterOrDigit(toCheck.charAt(i))){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public void do_register() throws IOException, ClassNotFoundException {
+    String ans1 = null;
+    String ans2 = null;
+    ans1 = read_string("register? Please enter y or n");
+    if (ans1.equals("y")) {
+      send_string("Need register");
+      while (true) {
+        ans1 = read_string("Please enter username: (username can only consist of numbers or letters)");
+        if (!check_username(ans1)) {
+          out.println("Username can only consist of numbers or letters! Please enter again");
+          continue;
+        }
+        send_string(ans1);
+        ans1 = accept_string();
+        if (!ans1.equals("Username valid")) {
+          out.println(ans1);
+          continue;
+        }
+        break;
+      }
+      while (true) {
+        ans1 = read_string("Please enter password");
+        ans2 = read_string("Please enter password again");
+        if (!ans1.equals(ans2)) {
+          continue;
+        }
+        send_string(ans1);
+        out.println("register success");
+        break;
+      }
+    }
+    else{
+      send_string("No need register");
+    }
+  }
+
+  public void do_login() throws IOException, ClassNotFoundException {
+    String ans1 = null;
+    while (true) {
+      ans1 = read_string("Please enter username: ");
+      send_string(ans1);
+      ans1 = accept_string();
+      if (!ans1.equals("Username valid")) {
+        out.println(ans1);
+        continue;
+      }
+      break;
+    }
+    while (true) {
+      ans1 = read_string("Please enter password:");
+      send_string(ans1);
+      ans1 = accept_string();
+      if (!ans1.equals("Password valid")) {
+        out.println(ans1);
+        continue;
+      }
+      out.println("login success");
+      break;
+    }
+  }
+
+  public void choose_room() throws IOException {
+    String ans = read_string("Please enter number of players");
+    send_string(ans);
+  }
+
   /**
    * Read a map object from the socket and display it
    *
@@ -46,16 +122,34 @@ public class ClientSk {
    * @throws ClassNotFoundException
    */
   public void game_begin() throws IOException, ClassNotFoundException {
-    String map_show1 = new String(accept_map());
-    out.print(map_show1);
-    accept_color();
-    accept_units();
-    set_player();
-    init_unit();
-    send_player();
-    String map_show2 = new String(accept_map());
-    out.print(map_show2);
-    do_turns();
+    Thread th = new Thread() {
+      @Override()
+      public void run() {
+        try {
+          String ans1 = null;
+          String ans2 = null;
+          //register
+          do_register();
+          //login
+          do_login();
+          //choose room
+          choose_room();
+          //game begin
+          String map_show1 = new String(accept_map());
+          out.print(map_show1);
+          accept_color();
+          accept_units();
+          set_player();
+          init_unit();
+          send_player();
+          String map_show2 = new String(accept_map());
+          out.print(map_show2);
+          do_turns();
+        } catch (Exception e) {
+        }
+      }
+    };
+    th.start();
   }
   
   /**
@@ -193,18 +287,38 @@ public class ClientSk {
     }
   }
 
+  public void send_string(String toSend) {
+    ObjectOutputStream oos = null;
+    try {
+      oos = new ObjectOutputStream(socket.getOutputStream());
+      oos.writeObject(toSend);
+      oos.flush();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
   /**
    *Read the player's input 
    *@return  player's input string
    *@param prompt is the input that the player enter
    *@throws IOException
    */  
-  public String read_string(String promt) throws IOException {
-    out.print(promt);
+  public String read_string(String prompt) throws IOException {
+    out.println(prompt);
     String s = inputReader.readLine();
     return s;
   }
-  
+
+  public boolean check_num(String toCheck) {
+    for (int i = 0; i < toCheck.length(); i++) {
+      if (!Character.isDigit(toCheck.charAt(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+
   /**
    *Parse the players input(orders) and check the player's input format, if 
    *the format is correct, the action will add to orders list  
@@ -214,53 +328,89 @@ public class ClientSk {
    *@param players is the list of the all player
    *@throws IOException
    */  
-  public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException {
-    String order = read_string("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-            "numUnitsToDestination\n");
-    String src = new String();
-    String des = new String();
+  public String parse_check_add(String action, Orders orders, ArrayList<Player> players, Player temp_player) throws IOException {
+    String hint = null;
+    if (action.equals("C")) {
+      hint = "Please enter your order as following format\nterritoryName numToUp currLevel afterLevel";
+    } else {
+      hint = "Please enter your order as following format\nsourceTerritoryName destinationTerritoryName "  +
+            "numUnitsToDestination unitLevel";
+    }
+    String order = read_string(hint);
     int index1 = order.indexOf(" ");
     if (index1 == -1) {
-      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination\n");
+      return new String(hint);
     }
-    src = order.substring(0, index1);
     int index2 = order.indexOf(" ", index1 + 1);
     if (index2 == -1) {
-      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination\n");
+      return new String(hint);
     }
     int index3 = order.indexOf(" ", index2 + 1);
-    if (index3 != -1) {
-      return new String("Please enter your order as following format\nsourceTerritoryName destinationTerritoryName " +
-              "numUnitsToDestination\n");
+    if (index3 == -1) {
+      return new String(hint);
     }
-    des = order.substring(index1 + 1, index2);
-    String numMove = order.substring(index2 + 1);
-    for (int i = 0; i < numMove.length(); i++) {
-      if (!Character.isDigit(numMove.charAt(i))) {
-        return new String("Please enter a valid integer!");
+    int index4 = order.indexOf(" ", index3 + 1);
+    if (index4 != -1) {
+      return new String(hint);
+    }
+    String s1 = order.substring(0, index1);
+    String s2 = order.substring(index1 + 1, index2);
+    String s3 = order.substring(index2 + 1, index3);
+    String s4 = order.substring(index3 + 1);
+
+    if (action.equals("C")) {
+      //s1: territoryName, s2: numToUp, s3:currLevel, s4:afterLevel
+      if(check_num(s2)) {
+        return "Please enter a valid integer as numToUp!";
+      }
+      if(check_num(s3)) {
+        return "Please enter a valid integer as currLevel!";
+      }
+      if(check_num(s4)) {
+        return "Please enter a valid integer as afterLevel!";
+      }
+    } else {
+      //s1:sourceTerritoryName destinationTerritoryName numUnitsToDestination unitLevel
+      if(check_num(s3)) {
+        return "Please enter a valid integer as numUnitsToDestination!";
+      }
+      if(check_num(s4)) {
+        return "Please enter a valid integer as unitLevel!";
       }
     }
-    int num_move = Integer.parseInt(numMove);
+
     if (action.equals("M")) {
-      String temp = Action.checkForMove(player, src, des, num_move);
+      String temp = Action.checkForMove(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
       if (temp != null) {
         return temp;
       }
       else {
+        Action.Move(temp_player, s1, s2, s3, s4);
         //new a order class, add it to orders moveList
-        orders.MoveList.add(new Order(player, src, des, num_move));
+        orders.MoveUpList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
+      }
+    }
+    else if (action.equals("A")) {
+      String temp = Action.checkForAttack(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), players);
+      if (temp != null) {
+        return temp;
+      }
+      else {
+        temp_player.getTerritory(s1).loseUnits(Integer.parseInt(s3), Integer.parseInt(s4));
+        //new a order class, add it to orders attackList
+        orders.AttackList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
     }
     else {
-      String temp = Action.checkForAttack(player, src, des, num_move, players);
+      //Change
+      String temp = Action.checkForUpgrade();
       if (temp != null) {
         return temp;
       }
       else {
+        Action.Upgrade();
         //new a order class, add it to orders attackList
-        orders.AttackList.add(new Order(player, src, des, num_move));
+        orders.MoveUpList.add(new Order(temp_player, s1, " ", Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4)));
       }
     }
     return null;
@@ -275,7 +425,7 @@ public class ClientSk {
     if (s.length() != 1) {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
     }
-    if (s.charAt(0) != 'M' && s.charAt(0) != 'A' && s.charAt(0) != 'D') {
+    if (s.charAt(0) != 'M' && s.charAt(0) != 'A' && s.charAt(0) != 'D' && s.charAt(0) != 'U' && s.charAt(0) != 'C') {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
     }
   }
@@ -286,14 +436,14 @@ public class ClientSk {
    *@param orders is the player's orders
    *@throws IOException
    */
-  public String collect_one_order(Orders orders) throws IOException {
+  public String collect_one_order(Orders orders, ArrayList<Boolean> if_up, Player temp_player) throws IOException {
     out.println("You are the " + color + " player, what would you like to do?");
-    out.print("(M)ove\n(A)ttack\n(D)one\nPlease enter the first capital letter\n");
-    out.println("Attention: please do some Move or Attack, then ends with Done.");
-    String action = null;
+    out.print("(M)ove\n(A)ttack\n(U)pgrade total tech level\n(C)hange unit level\n(D)one\nPlease enter the first capital letter\n");
+    out.println("Attention: please do one or none U and some M, A, C, then ends with Done.");
+    String action;
     while (true) {
       try {
-        action = new String(inputReader.readLine());
+        action = inputReader.readLine();
         check_action(action);
         break;
       } catch (IllegalArgumentException e) {
@@ -306,13 +456,24 @@ public class ClientSk {
         break;
       }
       else {
-
         do {
-          if (action.equals("M")) {
-
-            res = parse_check_add(action, orders, players);
-          } else {
-            res = parse_check_add(action, orders, players);
+          if (!action.equals("U")) {
+            res = parse_check_add(action, orders, players, temp_player);
+          }
+          else {
+            if (!if_up.get(0)) {
+              if (temp_player.getTechLevel() < 6) {
+                temp_player.upgradeTechLevel();
+                if_up.set(0, true);
+                orders.MoveUpList.add(new Order(player, " ", " ", 0, 0, 0));
+                out.println("Upgrade total tech level success! Now is " + player.getTechLevel());
+              }
+              else {
+                out.println("You have reached top total tech level!");
+              }
+            } else{
+              res = "You can only update total level once in one turn!";
+            }
           }
           if (res != null) {
             out.println(res);
@@ -355,8 +516,11 @@ public class ClientSk {
   public void collect_orders_and_send() throws IOException {
     Orders orders = new Orders();
     String temp = new String();
+    ArrayList<Boolean> if_up = new ArrayList<>();
+    if_up.add(false);
+    Player temp_player = this.player.deep_copy();
     do {
-      temp = collect_one_order(orders);
+      temp = collect_one_order(orders, if_up, temp_player);
     } while (!temp.equals("D"));
     send_orders(orders);
   }

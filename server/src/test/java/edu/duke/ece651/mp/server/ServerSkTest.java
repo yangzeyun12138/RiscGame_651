@@ -6,6 +6,7 @@ import edu.duke.ece651.mp.common.*;
 import edu.duke.ece651.mp.client.*;
 
 import javax.print.attribute.standard.Severity;
+import javax.swing.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.BufferedReader;
@@ -55,9 +56,11 @@ class ServerSkTest {
         try {
           ArrayList<GameMap> maps = new ArrayList<>();
           Server server = new Server();
-          GameMap gm = server.create_one_map("Territory3.txt", 3);
+          Parse parse =new Parse();
+          GameMap gm = server.create_one_map("Territory3.txt", 3, parse);
           maps.add(gm);
-          ServerSk serverSk = new ServerSk(maps, 9999);
+          ArrayList<String> lines = parse.readfile("userInfo.txt");
+          ServerSk serverSk = new ServerSk(maps, 9999, lines);
           serverSk.build_server();
         } catch (Exception e) {
         }
@@ -292,9 +295,11 @@ class ServerSkTest {
         try {
           ArrayList<GameMap> maps = new ArrayList<>();
           Server server = new Server();
-          GameMap gm = server.create_one_map("Territory3.txt", 3);
+          Parse parse = new Parse();
+          GameMap gm = server.create_one_map("Territory3.txt", 3, parse);
           maps.add(gm);
-          ServerSk serverSk = new ServerSk(maps, 9998);
+          ArrayList<String> lines = parse.readfile("userInfo.txt");
+          ServerSk serverSk = new ServerSk(maps, 9998, lines);
           serverSk.build_server();
         } catch (Exception e) {
         }

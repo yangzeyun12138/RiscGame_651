@@ -24,7 +24,7 @@ public class LevelInfo {
     BonusMap.put(6,15);
     CostMap.put(0,0);
     CostMap.put(1,3);
-    CostMap.put(2,11);
+    CostMap.put(2, 11);
     CostMap.put(3,30);
     CostMap.put(4,55);
     CostMap.put(5,90);
