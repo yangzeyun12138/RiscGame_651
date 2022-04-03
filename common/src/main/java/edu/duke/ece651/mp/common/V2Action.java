@@ -28,7 +28,7 @@ public class V2Action implements AbstractActionFactory {
       // find src territory and dest territory
       for(Territory curr_t: player.player_terri_set){
         if(curr_t.getName().equals(src)){
-          curr_t.loseUnits(numUnit);
+          curr_t.loseUnits(numUnit, level);
         }
       }
 
@@ -47,7 +47,7 @@ public class V2Action implements AbstractActionFactory {
   }
 
   public void loseUnitHelper(Territory curr_t, int numUnit, int level){
-    boolean result = curr_t.loseUnit(numUnit, level);
+    boolean result = curr_t.loseUnits(numUnit, level);
   }
 
   public void addUnitHelper(Territory curr_t, int numUnit, int level){
@@ -71,12 +71,6 @@ public class V2Action implements AbstractActionFactory {
   }
 
   public int minTotalSize(Territory curr_t, String dest, HashSet<String> t_set){
-    System.out.print("curr_t name: "+ curr_t.getName() + ":");
-    for(String t : t_set){
-      System.out.print(t + ", ");
-    }
-    System.out.print("\n");
-    
     if(curr_t.getName().equals(dest)){
       return 0;
     }
@@ -260,8 +254,8 @@ public class V2Action implements AbstractActionFactory {
     long time_seed = System.currentTimeMillis();
     int seed1 = 100;
     int seed2 = seed1+1;
-    Random rand1 = new Random(seed1);
-    Random rand2 = new Random(seed2);
+    Random rand1 = new Random();
+    Random rand2 = new Random();
     
     
     int Dice1 = rand1.nextInt(max - min + 1) + min + atkUnit.getBonus();
@@ -300,6 +294,7 @@ public class V2Action implements AbstractActionFactory {
     for (Player p : players) {
       for (Territory t : p.player_terri_set) {
         t.addBasicUnit(1);
+        p.addFood(t.getSize() * 10);
       }
     }
   }
@@ -365,6 +360,12 @@ public class V2Action implements AbstractActionFactory {
     for (int i = 0; i < ordersList.size(); i++) {
       for (Order o : ordersList.get(i).AttackList) {
         Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
+
+        String result = checkForAttack(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), players, o.currLevel);
+        if (result != null) {
+          throw new IllegalArgumentException(result);
+        }
+
         boolean res = attackerTerri.loseUnits(o.getNumUnit(), o.currLevel);
         if (res == false) {
           throw new IllegalArgumentException(players.get(i).color + " player has invalid attack orders. " +
@@ -453,5 +454,34 @@ public class V2Action implements AbstractActionFactory {
   public Player Attack (Player attacker, Player defender, String src, String dest, int numUnit, ArrayList<Player> players){
     return null;
   }
+
+  @Override
+  public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
+    UpgradeChecker tech = new TechRuleChecker(null);
+    UpgradeChecker level = new LevelRuleChecker(tech);
+    UpgradeChecker downgrade = new NoDowngradeRuleChecker(level);
+    UpgradeChecker cost = new UpgradeCostRuleChecker(downgrade);
+    UpgradeChecker name = new  NameUpgradeRuleChecker(cost);
+
+    String res =null;
+    res = name.checkUpgrade(player, src, numUnit, curr_level, new_level);
+    return res;
+  }
+
+  public int computeCost(int numUnit, int curr_level, int new_level) {
+    LevelInfo info = new LevelInfo();
+    return numUnit * (info.getCost(new_level) - info.getCost(curr_level));
+  }
+
+  @Override
+  public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
+    for(Territory curr_t: player.player_terri_set){
+      if(curr_t.getName().equals(src)){
+        curr_t.upgradeUnit(numUnit, curr_level, new_level);
+      }
+    }
+    player.costFood(computeCost(numUnit, curr_level, new_level));
+  }
+
 
 }

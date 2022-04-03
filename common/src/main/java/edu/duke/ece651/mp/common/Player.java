@@ -23,11 +23,11 @@ public class Player implements java.io.Serializable{
      */
 
     public String toString() {
-        String res = new String(color + " player       Total tech level: " + this.getTechLevel() + "\n");
+        String res = new String(color + " player       Total tech level: " + this.getTechLevel() + "       " +
+                "Resources: " + this.food + "\n");
         res += "-----------\n";
         for (Territory t: player_terri_set) {
-            String unit_info = Integer.toString(t.countUnit());
-            res += "  " + unit_info + " units in " + t.getName() + " (next to: ";
+            res += "Units in " + t.getName() + " (next to: ";
             Iterator<Territory> it = t.getNeigh().iterator();
             while(true) {
                 res += it.next().getName();
@@ -39,10 +39,13 @@ public class Player implements java.io.Serializable{
                     break;
                 }
             }
+            res += t.toString();
         }
         res += "\n";
         return res;
     }
+
+
 
   /**
    *getColor(), the the color of the player

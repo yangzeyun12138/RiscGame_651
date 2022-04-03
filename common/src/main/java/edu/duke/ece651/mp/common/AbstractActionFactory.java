@@ -29,4 +29,6 @@ public interface AbstractActionFactory {
   public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players);
   public int getIndexFromPlayers(ArrayList<Player> players, String color);
   public String checkWin(ArrayList<Player> players);
+  public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level);
+  public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level);
 }

@@ -34,7 +34,7 @@ public class ClientSk {
     this.map = null;
     this.inputReader = inputSource;
     this.out = outSource;
-    this.Action = new V1Action();
+    this.Action = new V2Action();
     this.players = new ArrayList<Player>();
   }
 
@@ -202,7 +202,7 @@ public class ClientSk {
   public void accept_units() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.num_units = (int) ois.readObject();
-    out.println("you have " + num_units + " units totally");
+    out.println("you have " + num_units + " level 0 units totally");
     out.println("Please place your units on each territory");
   }
 
@@ -318,6 +318,12 @@ public class ClientSk {
     return true;
   }
 
+  public boolean check_num_level(String toCheck) {
+    if (Integer.parseInt(toCheck) < 0 || Integer.parseInt(toCheck) > 6) {
+      return false;
+    }
+    return true;
+  }
 
   /**
    *Parse the players input(orders) and check the player's input format, if 
@@ -360,21 +366,35 @@ public class ClientSk {
 
     if (action.equals("C")) {
       //s1: territoryName, s2: numToUp, s3:currLevel, s4:afterLevel
-      if(check_num(s2)) {
+      if(!check_num(s2)) {
         return "Please enter a valid integer as numToUp!";
       }
       if(check_num(s3)) {
+        if (!check_num_level(s3)) {
+          return "Unit level should within 0 - 6";
+        }
+      } else {
         return "Please enter a valid integer as currLevel!";
       }
       if(check_num(s4)) {
+        if (!check_num_level(s4)) {
+          return "Unit level should within 0 - 6";
+        }
+
+      } else {
         return "Please enter a valid integer as afterLevel!";
       }
     } else {
       //s1:sourceTerritoryName destinationTerritoryName numUnitsToDestination unitLevel
-      if(check_num(s3)) {
+      if(!check_num(s3)) {
         return "Please enter a valid integer as numUnitsToDestination!";
       }
       if(check_num(s4)) {
+        if (!check_num_level(s4)) {
+          return "Unit level should within 0 - 6";
+        }
+      }
+      else {
         return "Please enter a valid integer as unitLevel!";
       }
     }
@@ -385,30 +405,34 @@ public class ClientSk {
         return temp;
       }
       else {
-        Action.Move(temp_player, s1, s2, s3, s4);
+        Action.Move(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
         //new a order class, add it to orders moveList
         orders.MoveUpList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
     }
     else if (action.equals("A")) {
-      String temp = Action.checkForAttack(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), players);
+      String temp = Action.checkForAttack(temp_player, s1, s2, Integer.parseInt(s3), players, Integer.parseInt(s4));
       if (temp != null) {
         return temp;
       }
       else {
-        temp_player.getTerritory(s1).loseUnits(Integer.parseInt(s3), Integer.parseInt(s4));
+        Boolean res = temp_player.getTerritory(s1).loseUnits(Integer.parseInt(s3), Integer.parseInt(s4));
+        if (res == false) {
+          return temp_player.color + " player has invalid attack orders. " +
+                  "The numUnits of level " + s4 + "is insufficient.\n";
+        }
         //new a order class, add it to orders attackList
         orders.AttackList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
     }
     else {
       //Change
-      String temp = Action.checkForUpgrade();
+      String temp = Action.checkForUpgrade(temp_player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
       if (temp != null) {
         return temp;
       }
       else {
-        Action.Upgrade();
+        Action.unitUpgrade(temp_player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
         //new a order class, add it to orders attackList
         orders.MoveUpList.add(new Order(temp_player, s1, " ", Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4)));
       }
@@ -463,16 +487,27 @@ public class ClientSk {
           else {
             if (!if_up.get(0)) {
               if (temp_player.getTechLevel() < 6) {
-                temp_player.upgradeTechLevel();
-                if_up.set(0, true);
-                orders.MoveUpList.add(new Order(player, " ", " ", 0, 0, 0));
-                out.println("Upgrade total tech level success! Now is " + player.getTechLevel());
+                try {
+                  temp_player.upgradeTechLevel();
+                  if_up.set(0, true);
+                  orders.MoveUpList.add(new Order(temp_player, " ", " ", 0, 0, 0));
+                  out.println("Upgrade total tech level success! Now is " + temp_player.getTechLevel());
+                } catch(IllegalArgumentException e) {
+                  out.print(e.getMessage());
+                }
               }
               else {
                 out.println("You have reached top total tech level!");
               }
             } else{
               res = "You can only update total level once in one turn!";
+              out.println(res);
+              String temp_action = collect_one_order(orders, if_up, temp_player);
+              if (!temp_action.equals("U")) {
+                return temp_action;
+              } else {
+                temp_action = collect_one_order(orders, if_up, temp_player);
+              }
             }
           }
           if (res != null) {

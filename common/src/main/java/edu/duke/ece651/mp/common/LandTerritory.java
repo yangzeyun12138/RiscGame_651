@@ -261,8 +261,9 @@ public class LandTerritory implements Territory, java.io.Serializable {
   }
 
 
-  public Unit getUnitsFromIndex(int index){
+  public Unit getUnitsFromIndex(int index) {
     return units.get(index);
+  }
 
   @Override
   public int countLevel(int level) {
@@ -276,4 +277,12 @@ public class LandTerritory implements Territory, java.io.Serializable {
 
   }
 
+  @Override
+  public String toString() {
+    String res = "";
+    for (int i = 0; i <= 6; i++) {
+      res += "-- Level " + i + " unit: " + this.countLevel(i) + "\n";
+    }
+    return  res;
+  }
 }

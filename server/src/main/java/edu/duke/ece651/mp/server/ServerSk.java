@@ -39,7 +39,7 @@ public class ServerSk {
   public ServerSk(ArrayList<GameMap> rooms, int port, ArrayList<String> lines) throws IOException {
     this.serverSocket = new ServerSocket(port);
     this.rooms = rooms;
-    this.Action = new V1Action();
+    this.Action = new V2Action();
     this.AttackMap_list = new ArrayList<>();
     this.socket_len_list = new ArrayList<>();
     for (int i = 0; i < rooms.size(); i++) {
@@ -406,13 +406,14 @@ public class ServerSk {
         }
         else if (o.getDest().equals(" ")){
           //change unit type
-          Action.checkForUpgrade();
-          Action.Upgrade();
+          Action.checkForUpgrade(players.get(i), o.getSrc(), o.getNumUnit(), o.currLevel, o.afterLevel);
+          Action.unitUpgrade(players.get(i), o.getSrc(), o.getNumUnit(), o.currLevel, o.afterLevel);
         }
         else {
           //move
-          Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
-          Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit());
+          Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), o.currLevel);
+
+          Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), o.currLevel);
         }
       }
     }
@@ -510,7 +511,9 @@ public class ServerSk {
         }
       }
     }
+
     Action.Done(players);
+
   }
 
   /**

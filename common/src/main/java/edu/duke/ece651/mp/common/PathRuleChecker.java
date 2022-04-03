@@ -14,7 +14,6 @@ public class PathRuleChecker extends MoveChecker{
    */
   @Override
   protected String checkMyRule(Player player,String src,String dest,int numUnit, int level){
-    System.out.println("in path rule check");
     ArrayList<Territory> SearchQueue = new ArrayList<Territory>();
     HashSet<String> visited = new HashSet<String>();
     String color = player.getColor();

@@ -13,7 +13,6 @@ public class MoveCostRuleChecker extends MoveChecker{
    */
   @Override
   protected String checkMyRule(Player player,String src,String dest,int numUnit, int level){
-    System.out.println("in unit rule check");
     int min_path = findMinPath(player, src, dest);
     if(min_path * numUnit > player.getFood()){
       return new String(player.color + " player. The movement is Invalid: the cost for the minimum path is higher than the number of the food!\n");

@@ -232,7 +232,7 @@ public class V1Action implements AbstractActionFactory {
       for (Order o : ordersList.get(i).AttackList) {
         Territory attackerTerri = findTerritory(players.get(i), o.getSrc());
 
-        String result = checkForAttack(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), players);
+        String result = checkForAttack(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), players, o.currLevel);
         if (result != null) {
           throw new IllegalArgumentException(result);
         }
@@ -320,4 +320,10 @@ public class V1Action implements AbstractActionFactory {
     return null;
   }
 
+  @Override
+  public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level){
+    return null;
+  }
+  @Override
+  public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {}
 }
