@@ -1,12 +1,15 @@
 package edu.duke.ece651.mp.client;
 import com.google.common.annotations.VisibleForTesting;
 import edu.duke.ece651.mp.common.*;
+import javafx.util.Pair;
 
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Each ClientSk per player, the communication hub between a player and the server
@@ -23,6 +26,13 @@ public class ClientSk {
   private AbstractActionFactory Action;
   private ArrayList<Player> players;
 
+  private LinkedBlockingDeque<Pair<String, String>> user_password;
+  private LoginController loginController;
+
+  public void setUserPasswordQueue(LinkedBlockingDeque<Pair<String, String>> user_password){
+    this.user_password = user_password;
+  }
+
   /**
    * connect to the local host on 9999 port
    * map and toDisplay need to wait for info from server to initialize
@@ -36,6 +46,8 @@ public class ClientSk {
     this.out = outSource;
     this.Action = new V2Action();
     this.players = new ArrayList<Player>();
+    this.loginController = new LoginController();
+    loginController.bind_client(this);
   }
 
 
@@ -84,27 +96,29 @@ public class ClientSk {
     }
   }
 
-  public void do_login() throws IOException, ClassNotFoundException {
-    String ans1 = null;
+  public void do_login() throws IOException, ClassNotFoundException, InterruptedException {
+    System.out.println("before take");
+    Pair<String, String> ans1 = user_password.take();
+    System.out.println("after take");
+    String res = null;
     while (true) {
-      ans1 = read_string("Please enter username: ");
-      send_string(ans1);
-      ans1 = accept_string();
-      if (!ans1.equals("Username valid")) {
-        out.println(ans1);
+      send_string(ans1.getKey());
+      res = accept_string();
+      if (!res.equals("Username valid")) {
+        loginController.getInvalid_label().setText(res);
         continue;
       }
       break;
     }
     while (true) {
-      ans1 = read_string("Please enter password:");
-      send_string(ans1);
-      ans1 = accept_string();
-      if (!ans1.equals("Password valid")) {
-        out.println(ans1);
+      send_string(ans1.getValue());
+      res = accept_string();
+      if (!res.equals("Password valid")) {
+        loginController.getInvalid_label().setText(res);
         continue;
       }
-      out.println("login success");
+      //TODO: switch to another scene
+      loginController.getInvalid_label().setText(res);
       break;
     }
   }
@@ -128,11 +142,8 @@ public class ClientSk {
         try {
           String ans1 = null;
           String ans2 = null;
-          //register
-          do_register();
-          //login
+          //do_register();
           do_login();
-          //choose room
           choose_room();
           //game begin
           String map_show1 = new String(accept_map());

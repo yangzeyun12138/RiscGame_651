@@ -3,26 +3,47 @@
  */
 package edu.duke.ece651.mp.client;
 
-import org.checkerframework.checker.units.qual.A;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 
-public class Client {
+public class Client extends Application {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Please enter the server host name");
-        String hostName = input.readLine();
-        System.out.println("Please enter the server port number");
-        String port = input.readLine();
+        Application.launch();
+    }
 
+    @Override
+    public void start(Stage stage) throws Exception {
+        URL fxmlResource = getClass().getResource("/ui/Login.fxml");
+        System.out.println(fxmlResource);
+        FXMLLoader loader = new FXMLLoader(fxmlResource);
+        VBox vbox = loader.load();
+        Scene scene = new Scene(vbox, 640, 480);
+        stage.setScene(scene);
+        stage.show();
+        game_start();
+    }
+
+    public void game_start() throws IOException, ClassNotFoundException {
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+
+        //System.out.println("Please enter the server host name");
+        //String hostName = input.readLine();
+        //System.out.println("Please enter the server port number");
+        //String port = input.readLine();
         ArrayList<ClientSk> ClientSkList = new ArrayList<>();
-        new_game(ClientSkList, hostName, port, input, System.out);
+        new_game(ClientSkList, "0.0.0.0", "9999", input, System.out);
     }
 
     public static void new_game(ArrayList<ClientSk> ClientSkList, String hostName, String port,
-                         BufferedReader input, PrintStream out) throws IOException, ClassNotFoundException {
+                                BufferedReader input, PrintStream out) throws IOException, ClassNotFoundException {
         ClientSk clientSk = new ClientSk(hostName, port, input, out);
         ClientSkList.add(clientSk);
         ClientSkList.get(ClientSkList.size() - 1).game_begin();

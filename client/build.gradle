@@ -4,6 +4,7 @@
 
 plugins {
     id 'edu.duke.ece651.mp.java-application-conventions'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 dependencies {
@@ -13,6 +14,11 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-launcher:1.6.2'
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:30.1.1-jre'
+
+    testImplementation "org.mockito:mockito-core:2.+"
+    testImplementation "org.testfx:testfx-core:4.0.16-alpha"
+    testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
 
 }
 
@@ -34,4 +40,9 @@ clover{
     compiler {
         additionalArgs = "-g:lines,source,vars"
     }
+}
+
+javafx {
+    version = "17.0.1"
+    modules = [ 'javafx.controls', 'javafx.fxml']
 }
