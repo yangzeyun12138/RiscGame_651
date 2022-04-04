@@ -10,6 +10,7 @@ public class PathRuleChecker extends MoveChecker{
      @param: src, the name of the source territory;
      @param: dest, the name of the destination territory;
      @param: numUnit, the number of units the player want to move
+     @param: level, the level of the units
      @return: String if there is Violation of rule, null if there is none
    */
   @Override

@@ -14,11 +14,12 @@ public class V2Action implements AbstractActionFactory {
     return result;
   }  
    /**
-   *Move function is to help the player to move the units from source territory to the destination territory.
+   *Move function is to help the player to move the units at given level from source territory to the destination territory.
    *@param player build the attack!
    *@param src is the name of the source territory
    *@param dest is the name of the dest territory
-   *@param numUnit is the number of unit that player wants to do the attack.
+   *@param numUnit is the number of unit that player wants to do the movement.
+   *@param level is the level of unit selected
    */
   @Override
   public void Move(Player player, String src, String dest, int numUnit, int level){
@@ -45,18 +46,33 @@ public class V2Action implements AbstractActionFactory {
       throw new IllegalArgumentException(result);
     } 
   }
-
+  /**
+     loseUnitHelper: a helper function that can help to lose unit within a territory given number and level
+     @param: curr_t: the territory chosen
+     @param: number of unit
+     @param: level of unit
+   */
   public void loseUnitHelper(Territory curr_t, int numUnit, int level){
     boolean result = curr_t.loseUnits(numUnit, level);
   }
-
+  /**
+     addUnitHelper: a helper function that can help to add unit within a territory given number and level
+     @param: curr_t: the territory chosen
+     @param: number of unit
+     @param: level of unit
+   */
   public void addUnitHelper(Territory curr_t, int numUnit, int level){
     for(int i = 0; i < numUnit; i++){
       Unit u = new BasicUnit(level);
       curr_t.addUnit(u);
     }
   }
-
+  /**
+     findMinPath: find the minimum path from the source territory to destination territory and return the minimum total size
+     @param: player does the movement
+     @param: source territory
+     @param: destination territory
+   */
   public int findMinPath(Player player, String src, String dest){
     HashSet<String> t_set = new HashSet<String>();
     for(Territory curr_t : player.player_terri_set){
@@ -69,7 +85,13 @@ public class V2Action implements AbstractActionFactory {
     }
     return -1;
   }
-
+  /**
+     minTotalSize(): find the minumum total size using recursive DFS
+     @param: current territory
+     @param: name of the destination territory
+     @param: the hashset of names of visited territory
+     @return: the minimum total size from current territory
+   */
   public int minTotalSize(Territory curr_t, String dest, HashSet<String> t_set){
     if(curr_t.getName().equals(dest)){
       return 0;
@@ -97,7 +119,11 @@ public class V2Action implements AbstractActionFactory {
     }
     
   }
-
+  /**
+   * getMin(): get the minimum integer within the arraylist of integer
+   *@param: the arraylist of integer
+   *@return the minimum number within the arraylist
+   */
   public int getMin(ArrayList<Integer> arr_list){
     int min = Integer.MAX_VALUE;
     for(int a : arr_list){
@@ -115,6 +141,7 @@ public class V2Action implements AbstractActionFactory {
    * @param src is the name of the source territory
    * @param dest is the name of the destination territory
    * @param numUnit is the number of Unit that join the attack.
+   * @param level is the unit level
    * @return returns null if there is no error. returns string argument when there is an error.
    */
   @Override
@@ -133,7 +160,7 @@ public class V2Action implements AbstractActionFactory {
    * @param defender is the Player who is attacked by others
    * @param src is the name of the source territory
    * @param dest is the name of the destination territory
-   * @param numUnit is the number of Unit that join the attack.
+   * @param attackUnits is the arraylist that is doing the attack
    * @param players is the ArrayList<Player> of all players.
    */
   @Override
@@ -183,6 +210,7 @@ public class V2Action implements AbstractActionFactory {
 
   /**
    * sort from minimum to maximum according to unit level
+   * @param: the arraylist of unit
    */
   public void sortUnit(ArrayList<Unit> units){
     if(units.size() != 0){
@@ -196,6 +224,12 @@ public class V2Action implements AbstractActionFactory {
     }
   }
 
+  /**
+     switchUnit: switch the element at two positions within the arraylist of unit
+     @param: arraylist of unit
+     @param: a the index of the first element want to be switched
+     @param: b the index of the second  element want to be switched
+   */
   public void switchUnit(ArrayList<Unit> unit_arr, int a, int b){
     Unit A_copy = unit_arr.get(a);
     unit_arr.set(a, unit_arr.get(b));
@@ -247,7 +281,14 @@ public class V2Action implements AbstractActionFactory {
       return false;
     }
   }
-
+    /**
+   * rollDice2() would help the user to determine the winner of a round of attack
+   * @note You can change the seed1 and seed2.
+   * @note You can get actual random seed by using long time_seed.
+   * @param: atkUnit the unit that is doing the attack
+   * @param: defUnit the unit that is doing the defense
+   * @return: the successfulness of attacker Unit, True if the atkUnit wins
+*/
   public boolean rollDice2(Unit atkUnit, Unit defUnit){
     int min = 1;
     int max = 20;
@@ -286,6 +327,7 @@ public class V2Action implements AbstractActionFactory {
 
   /**
    * Done function is the final command that the player would use, and it will help player to add 1 unit to all of his/her territories.
+   * Add food to each player according to the size of the territory that the player has
    *@param players is all the players
    */
 
@@ -318,6 +360,13 @@ public class V2Action implements AbstractActionFactory {
     return null;
   }
 
+  /**
+   *arrangeAttackOrder: arrange the orders according to the destinations and players
+   *@param: arraylist of Orders 
+   *@param: arraylist of Players
+   *@param: a new attackmap that stores HashMap<String, ArrayList<Order>>
+   *@param: attackMap
+   */
   @Override
   public HashMap<String, ArrayList<Order>> arrangeAttackOrder(ArrayList<Orders> ordersList, ArrayList<Player> players){
     HashMap<String, ArrayList<Order>> AttackMap = new HashMap<String, ArrayList<Order>>();
@@ -337,7 +386,11 @@ public class V2Action implements AbstractActionFactory {
     return AttackMap;
   }
 
-  
+  /**
+     updatePlayer: update the player info according to the player's color and order
+     @param: order send by player
+     @param: arraylist of players
+   */
   public void updatePlayer(Order order, ArrayList<Player> players){
     for(Player new_player : players){
        if(order.getPlayer().getColor().equals(new_player.getColor())){
@@ -345,6 +398,12 @@ public class V2Action implements AbstractActionFactory {
        }
     }
   }
+
+  /**
+   *getRandomIdx: generate a list of random indexs according to the size of the arraylist
+   *@param: size of an arraylist
+   *@return: arraylist of random indexs
+   */
   @Override
   public ArrayList<Integer> getRandomIdx(int sz) {
     ArrayList<Integer> numlist = new ArrayList<Integer>();
@@ -355,6 +414,12 @@ public class V2Action implements AbstractActionFactory {
     Collections.shuffle(numlist, new Random());
     return numlist;
   }
+  /**
+   *loseAttackUnit: subtract units from the territory according to the orders
+   *@param: orderList is the arraylist of orders
+   *@param: players is the arraylist of player
+   *@throws exceptions prompted by rule chechers and check invalid operations
+   */
   @Override
   public void loseAttackUnit(ArrayList<Orders> ordersList, ArrayList<Player> players) {
     for (int i = 0; i < ordersList.size(); i++) {
@@ -374,7 +439,12 @@ public class V2Action implements AbstractActionFactory {
       }
     }
   }
-
+  /**
+   *refineAttack: combines the attack units which has the same destinations and the same player
+   *@param: arraylist of order
+   *@param: arraylist of players
+   *@return: arraylist of order that combines the units and players
+   */
   @Override
   public ArrayList<Order> refineAttack(ArrayList<Order> attackList, ArrayList<Player> players) {
     ArrayList<Order> res = new ArrayList<Order>();
@@ -455,6 +525,15 @@ public class V2Action implements AbstractActionFactory {
     return null;
   }
 
+  /**
+   *checkForUpgrade: check all of the upgrade rule checkers in chain
+   *@param: player: the player is doing the upgrade
+   *@param: src: the name of the source territory
+   *@param: numUnit: the number of unit is upgrading
+   *@param: curr_level: the level of units that needs upgrade
+   *@param: new_level: the level of units that needs upgrade to
+   *@return: the string that tells what has went wrong, null if nothing is wrong
+   */
   @Override
   public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
     UpgradeChecker tech = new TechRuleChecker(null);
@@ -467,12 +546,24 @@ public class V2Action implements AbstractActionFactory {
     res = name.checkUpgrade(player, src, numUnit, curr_level, new_level);
     return res;
   }
-
+  /**
+   *computeCost: compute the cost for upgrade from current level to the new level
+   *@param: numUnit: the number of Units 
+   *@param: curr_level: the current level of units
+   *@param: new_level: the new level of units
+   */
   public int computeCost(int numUnit, int curr_level, int new_level) {
     LevelInfo info = new LevelInfo();
     return numUnit * (info.getCost(new_level) - info.getCost(curr_level));
   }
-
+  /**
+   *unitUpgrade: do the upgrade of unit
+   *@param: player: the player is doing the upgrade
+   *@param: src: the name of the source territory
+   *@param: numUnit: the number of unit is upgrading
+   *@param: curr_level: the level of units that needs upgrade
+   *@param: new_level: the level of units that needs upgrade to
+   */
   @Override
   public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
     for(Territory curr_t: player.player_terri_set){
