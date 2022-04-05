@@ -2,6 +2,7 @@ package edu.duke.ece651.mp.client;
 import edu.duke.ece651.mp.common.*;
 import javafx.application.Platform;
 import javafx.util.Pair;
+import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
 import java.io.*;
@@ -30,12 +31,23 @@ public class ClientSk {
   public LinkedBlockingQueue<Triplet<String,String,String>> user_pwd1_pwd2;
   public RegisterController registerController;
 
+  public LinkedBlockingQueue<Pair<String, String>> initQueue;
+  public LinkedBlockingQueue<String> actionQueue;
+  public LinkedBlockingQueue<Quartet<String, String, String, String>> moveQueue;
+  public LinkedBlockingQueue<Quartet<String, String, String, String>> attackQueue;
+  public LinkedBlockingQueue<Quartet<String, String, String, String>> changeQueue;
+  public Map3Controller map3Controller;
+
   public void setLoginController(LoginController loginController){
     this.loginController = loginController;
   }
 
   public void setRegisterController(RegisterController registerController) {
     this.registerController = registerController;
+  }
+
+  public void setMap3Controller(Map3Controller map3Controller) {
+    this.map3Controller = map3Controller;
   }
 
   /**
@@ -54,6 +66,11 @@ public class ClientSk {
     this.players = new ArrayList<Player>();
     this.user_password = new LinkedBlockingQueue<>();
     this.user_pwd1_pwd2 = new LinkedBlockingQueue<>();
+    this.initQueue = new LinkedBlockingQueue<>();
+    this.actionQueue = new LinkedBlockingQueue<>();
+    this.moveQueue = new LinkedBlockingQueue<>();
+    this.attackQueue = new LinkedBlockingQueue<>();
+    this.changeQueue  = new LinkedBlockingQueue<>();
   }
 
 
@@ -174,11 +191,19 @@ public class ClientSk {
         temp_pair = user_password.take();
         continue;
       }
-      //TODO: switch to map scene
+
+      Platform.runLater(() -> {
+        try {
+          loginController.switchToMap3();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      });
       break;
     }
   }
 
+  //TODO: choose room
   public void choose_room() throws IOException {
     String ans = read_string("Please enter number of players");
     send_string(ans);
@@ -196,19 +221,33 @@ public class ClientSk {
       try {
         if (Client.ClientSkList.size() == 1) {
           while (Client.ClientSkList.get(0).registerController == null) {
-            System.out.println(" ");
+            System.out.print("");
           }
         }
+        System.out.println("");
         System.out.println("after loop");
         do_register();
+        if (Client.ClientSkList.size() == 1) {
+          while (Client.ClientSkList.get(0).loginController == null) {
+            System.out.print("");
+          }
+        }
+        System.out.println("");
         do_login();
-        choose_room();
+        //choose_room();
+
         //game begin
         String map_show1 = new String(accept_map());
-        out.print(map_show1);
         accept_color();
         accept_units();
         set_player();
+
+        System.out.println("after set player");
+        while(true) {
+          if (Client.ClientSkList.size() != 1) {
+            break;
+          }
+        }
         init_unit();
         send_player();
         String map_show2 = new String(accept_map());
@@ -260,6 +299,7 @@ public class ClientSk {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.color = (String) ois.readObject();
     out.print("You are " + color + " player, ");
+    Platform.runLater(() -> map3Controller.getColor().setText(color));
   }
 
 
@@ -275,6 +315,11 @@ public class ClientSk {
     this.num_units = (int) ois.readObject();
     out.println("you have " + num_units + " level 0 units totally");
     out.println("Please place your units on each territory");
+    Platform.runLater(()->{
+      map3Controller.getLeftBottomBoard().setWrapText(true);
+      map3Controller.getLeftBottomBoard().setText("you have " + num_units + " level 0 units totally. " +
+              "Please place your units on each territory\n");
+    });
   }
 
   

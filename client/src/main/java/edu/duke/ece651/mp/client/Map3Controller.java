@@ -9,8 +9,37 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
+import org.javatuples.Quartet;
+
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Map3Controller {
+    //set init units
+    @FXML
+    private Text territory1;
+    @FXML
+    private Text territory2;
+    @FXML
+    private Text territory3;
+    @FXML
+    private TextField first_textfield;
+    @FXML
+    private TextField second_textfield;
+    @FXML
+    private Text third_text;
+    @FXML
+    private Button set_unit_button;
+
+    //player color, total tech level, food
+    @FXML
+    private Text player_text;
+    @FXML
+    private Text player_text1;
+    @FXML
+    private Text player_text2;
+
+
 
     @FXML
     private Button add_room_button;
@@ -36,8 +65,6 @@ public class Map3Controller {
     @FXML
     private Button elantris_button;
 
-    @FXML
-    private TextField first_textfield;
 
     @FXML
     private Button gondor_button;
@@ -66,17 +93,8 @@ public class Map3Controller {
     @FXML
     private Button oz_button;
 
-    @FXML
-    private Text player_text;
 
-    @FXML
-    private Text player_text1;
 
-    @FXML
-    private Text player_text2;
-
-    @FXML
-    private Text player_text321;
 
     @FXML
     private Button roshar_button;
@@ -84,11 +102,6 @@ public class Map3Controller {
     @FXML
     private Button scadrial_button;
 
-    @FXML
-    private TextField second_textfield;
-
-    @FXML
-    private Button set_unit_button;
 
     @FXML
     private Button submit_button;
@@ -99,14 +112,6 @@ public class Map3Controller {
     @FXML
     private Rectangle tech_text;
 
-    @FXML
-    private Text territory1;
-
-    @FXML
-    private Text territory2;
-
-    @FXML
-    private Text territory3;
 
     @FXML
     private SplitMenuButton territory_name_menu_button;
@@ -138,9 +143,32 @@ public class Map3Controller {
     @FXML
     private Button upgrade_tech_button;
 
-    @FXML
-    void ChooseTerritory(MouseEvent event) {
 
+    private LinkedBlockingQueue<Pair<String, String>> initQueue;
+    private LinkedBlockingQueue<String> actionQueue;
+    private LinkedBlockingQueue<Quartet<String, String, String, String>> moveQueue;
+    private LinkedBlockingQueue<Quartet<String, String, String, String>> attackQueue;
+    private LinkedBlockingQueue<Quartet<String, String, String, String>> changeQueue;
+    private ClientSk clientSk;
+
+    public Map3Controller() {
+        this.initQueue = new LinkedBlockingQueue<>();
+        this.actionQueue = new LinkedBlockingQueue<>();
+        this.moveQueue = new LinkedBlockingQueue<>();
+        this.attackQueue = new LinkedBlockingQueue<>();
+        this.changeQueue  = new LinkedBlockingQueue<>();
+        bind_client();
+    }
+
+
+    void bind_client() {
+        this.clientSk = Client.ClientSkList.get(Client.ClientSkList.size() - 1);
+        this.initQueue = clientSk.initQueue;
+        this.actionQueue = clientSk.actionQueue;
+        this.moveQueue = clientSk.moveQueue;
+        this.attackQueue = clientSk.attackQueue;
+        this.changeQueue  = clientSk.changeQueue;
+        clientSk.setMap3Controller(this);
     }
 
     @FXML
@@ -149,9 +177,22 @@ public class Map3Controller {
     }
 
     @FXML
+    void ChooseTerritory(MouseEvent event) {
+
+    }
+
+
+    @FXML
     void showRoom(MouseEvent event) {
 
     }
 
+    public Text getColor() {
+        return player_text;
+    }
+
+    public TextArea getLeftBottomBoard(){
+        return system_textarea;
+    }
 }
 

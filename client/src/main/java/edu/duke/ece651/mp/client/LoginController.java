@@ -2,6 +2,8 @@ package edu.duke.ece651.mp.client;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 
@@ -10,8 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import javax.management.monitor.MonitorSettingException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -35,6 +40,7 @@ public class LoginController  {
 
     public LinkedBlockingQueue<Pair<String, String>> linkedBlockingQueue;
     private ClientSk clientSk;
+    private MouseEvent me;
 
     @FXML
     void sendInformation(MouseEvent event) {
@@ -52,6 +58,7 @@ public class LoginController  {
         System.out.println("In controller, I am controller "+ System.identityHashCode(this));
         System.out.println("deque size: " + linkedBlockingQueue.size());
         System.out.println("In controller empty? " + linkedBlockingQueue.isEmpty());
+        me = event;
     }
 
     public LoginController() {
@@ -74,5 +81,12 @@ public class LoginController  {
         return Invalid_label;
     }
 
+
+    public void switchToMap3() throws IOException {
+        Scene scene = Client.get_scene("Map3.fxml");
+        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

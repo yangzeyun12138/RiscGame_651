@@ -98,7 +98,7 @@ fx:controller="edu.duke.ece651.mp.client.Map3Controller">
             <children>
                 <ImageView fitHeight="760.0" fitWidth="1005.0">
                     <image>
-                        <Image url="370214.jpg" />
+                        <Image url="@370214.jpg" />
                     </image>
                 </ImageView>
                 <Button fx:id="roshar_button" layoutX="397.0" layoutY="585.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="109.0" text="Roshar" visible="false" />
@@ -230,7 +230,7 @@ fx:controller="edu.duke.ece651.mp.client.Map3Controller">
                 <Text fx:id="territory3" layoutX="875.0" layoutY="555.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
                 <TextField fx:id="first_textfield" layoutX="908.0" layoutY="475.0" prefHeight="24.0" prefWidth="65.0" />
                 <TextField fx:id="second_textfield" layoutX="910.0" layoutY="510.0" prefHeight="24.0" prefWidth="65.0" />
-                <Text fx:id="player_text321" layoutX="920.0" layoutY="555.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
+                <Text fx:id="third_text" layoutX="920.0" layoutY="555.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
                 <Text layoutX="908.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Prompt" />
                 <Button fx:id="set_unit_button" layoutX="912.0" layoutY="571.0" mnemonicParsing="false" onMouseClicked="#initialize_units" text="Set" />
                 <AnchorPane layoutX="14.0" layoutY="637.0" prefHeight="114.0" prefWidth="388.0">

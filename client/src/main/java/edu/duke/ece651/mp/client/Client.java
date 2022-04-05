@@ -33,6 +33,7 @@ public class Client extends Application {
     public void start(Stage stage) throws Exception {
         game_start();
         stage.setScene(get_scene("Register.fxml"));
+        stage.setResizable(true);
         stage.show();
     }
 
@@ -61,23 +62,30 @@ public class Client extends Application {
     }
 
     public static Scene get_scene(String fileName) throws IOException {
-        URL fxmlResource1 = Client.class.getResource("/ui/Login.fxml");
-        FXMLLoader loader1 = new FXMLLoader(fxmlResource1);
-        VBox vbox1 = loader1.load();
-        Scene scene1 = new Scene(vbox1, 640, 480);
-
-
-        URL fxmlResource2 = Client.class.getResource("/ui/Register.fxml");
-        FXMLLoader loader2 = new FXMLLoader(fxmlResource2);
-        VBox vbox2 = loader2.load();
-        Scene scene2 = new Scene(vbox2, 640, 480);
-
         if (fileName.equals("Login.fxml")){
-            return scene1;
+            return createScene("Login.fxml");
         } else if (fileName.equals("Register.fxml")) {
-            return scene2;
-        } else {
-            return null;
+            return createScene("Register.fxml");
+        } else if (fileName.equals("Map2.fxml")) {
+            return createScene("Map2.fxml");
+        } else if (fileName.equals("Map3.fxml")) {
+            return createScene("Map3.fxml");
         }
+        else if (fileName.equals("Map4.fxml")) {
+            return createScene("Map4.fxml");
+        }
+        else if (fileName.equals("Map5.fxml")) {
+            return createScene("Map5.fxml");
+        } else {
+            return  null;
+        }
+    }
+
+    public static Scene createScene(String fileName) throws IOException {
+        URL fxmlResource = Client.class.getResource("/ui/" + fileName);
+        FXMLLoader loader = new FXMLLoader(fxmlResource);
+        VBox vbox = loader.load();
+        Scene scene = new Scene(vbox, 1920, 1080);
+        return scene;
     }
 }
