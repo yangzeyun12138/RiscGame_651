@@ -17,7 +17,7 @@ import java.io.StringReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
-
+/*
 class ServerSkTest {
 
   public ClientSk build_client1() throws IOException, ClassNotFoundException {
@@ -486,3 +486,4 @@ class ServerSkTest {
 
 
 }
+*/

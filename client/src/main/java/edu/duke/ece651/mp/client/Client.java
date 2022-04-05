@@ -3,6 +3,7 @@
  */
 package edu.duke.ece651.mp.client;
 
+import com.sun.javafx.tk.TKSceneListener;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,25 +11,29 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.awt.desktop.AppForegroundListener;
 import java.io.*;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+
 
 public class Client extends Application {
+
+    public static ArrayList<ClientSk> ClientSkList;
+
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        ClientSkList = new ArrayList<>();
         Application.launch();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        URL fxmlResource = getClass().getResource("/ui/Login.fxml");
-        System.out.println(fxmlResource);
-        FXMLLoader loader = new FXMLLoader(fxmlResource);
-        VBox vbox = loader.load();
-        Scene scene = new Scene(vbox, 640, 480);
-        stage.setScene(scene);
-        stage.show();
         game_start();
+        stage.setScene(get_scene("Register.fxml"));
+        stage.show();
     }
 
     public void game_start() throws IOException, ClassNotFoundException {
@@ -38,14 +43,41 @@ public class Client extends Application {
         //String hostName = input.readLine();
         //System.out.println("Please enter the server port number");
         //String port = input.readLine();
-        ArrayList<ClientSk> ClientSkList = new ArrayList<>();
-        new_game(ClientSkList, "0.0.0.0", "9999", input, System.out);
+        ClientSk clientSk = new ClientSk("0.0.0.0", "9999", input, System.out);
+        ClientSkList.add(clientSk);
+        new_game("0.0.0.0", "9999", input, System.out);
     }
 
-    public static void new_game(ArrayList<ClientSk> ClientSkList, String hostName, String port,
+    public static void new_game(String hostName, String port,
                                 BufferedReader input, PrintStream out) throws IOException, ClassNotFoundException {
-        ClientSk clientSk = new ClientSk(hostName, port, input, out);
-        ClientSkList.add(clientSk);
-        ClientSkList.get(ClientSkList.size() - 1).game_begin();
+        if (ClientSkList.size() != 1) {
+            ClientSk clientSk = new ClientSk(hostName, port, input, out);
+            ClientSkList.add(clientSk);
+            ClientSkList.get(ClientSkList.size() - 1).game_begin();
+        }
+        else {
+            ClientSkList.get(0).game_begin();
+        }
+    }
+
+    public static Scene get_scene(String fileName) throws IOException {
+        URL fxmlResource1 = Client.class.getResource("/ui/Login.fxml");
+        FXMLLoader loader1 = new FXMLLoader(fxmlResource1);
+        VBox vbox1 = loader1.load();
+        Scene scene1 = new Scene(vbox1, 640, 480);
+
+
+        URL fxmlResource2 = Client.class.getResource("/ui/Register.fxml");
+        FXMLLoader loader2 = new FXMLLoader(fxmlResource2);
+        VBox vbox2 = loader2.load();
+        Scene scene2 = new Scene(vbox2, 640, 480);
+
+        if (fileName.equals("Login.fxml")){
+            return scene1;
+        } else if (fileName.equals("Register.fxml")) {
+            return scene2;
+        } else {
+            return null;
+        }
     }
 }

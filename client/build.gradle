@@ -19,6 +19,7 @@ dependencies {
     testImplementation "org.testfx:testfx-core:4.0.16-alpha"
     testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
+    implementation group: 'org.javatuples', name: 'javatuples', version: '1.2'
 
 }
 

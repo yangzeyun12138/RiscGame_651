@@ -28,6 +28,7 @@
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.7.2" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.platform:junit-platform-commons:1.7.2" level="project" />
     <orderEntry type="library" name="Gradle: org.opentest4j:opentest4j:1.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.javatuples:javatuples:1.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.openjfx:javafx-fxml:mac:17.0.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.openjfx:javafx-controls:17.0.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.openjfx:javafx-controls:mac:17.0.1" level="project" />

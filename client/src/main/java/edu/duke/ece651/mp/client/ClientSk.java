@@ -1,15 +1,13 @@
 package edu.duke.ece651.mp.client;
-import com.google.common.annotations.VisibleForTesting;
 import edu.duke.ece651.mp.common.*;
+import javafx.application.Platform;
 import javafx.util.Pair;
+import org.javatuples.Triplet;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Each ClientSk per player, the communication hub between a player and the server
@@ -26,11 +24,18 @@ public class ClientSk {
   private AbstractActionFactory Action;
   private ArrayList<Player> players;
 
-  private LinkedBlockingDeque<Pair<String, String>> user_password;
-  private LoginController loginController;
+  public LinkedBlockingQueue<Pair<String, String>> user_password;
+  public LoginController loginController;
 
-  public void setUserPasswordQueue(LinkedBlockingDeque<Pair<String, String>> user_password){
-    this.user_password = user_password;
+  public LinkedBlockingQueue<Triplet<String,String,String>> user_pwd1_pwd2;
+  public RegisterController registerController;
+
+  public void setLoginController(LoginController loginController){
+    this.loginController = loginController;
+  }
+
+  public void setRegisterController(RegisterController registerController) {
+    this.registerController = registerController;
   }
 
   /**
@@ -39,15 +44,16 @@ public class ClientSk {
    *
    * @throws IOException
    */
-  public ClientSk(String Hostname, String port, BufferedReader inputSource, PrintStream outSource) throws IOException {
+  public ClientSk(String Hostname, String port, BufferedReader inputSource, PrintStream outSource)
+          throws IOException {
     socket = new Socket(Hostname, Integer.parseInt(port));
     this.map = null;
     this.inputReader = inputSource;
     this.out = outSource;
     this.Action = new V2Action();
     this.players = new ArrayList<Player>();
-    this.loginController = new LoginController();
-    loginController.bind_client(this);
+    this.user_password = new LinkedBlockingQueue<>();
+    this.user_pwd1_pwd2 = new LinkedBlockingQueue<>();
   }
 
 
@@ -60,65 +66,115 @@ public class ClientSk {
     return true;
   }
 
-  public void do_register() throws IOException, ClassNotFoundException {
-    String ans1 = null;
-    String ans2 = null;
-    ans1 = read_string("register? Please enter y or n");
-    if (ans1.equals("y")) {
-      send_string("Need register");
-      while (true) {
-        ans1 = read_string("Please enter username: (username can only consist of numbers or letters)");
-        if (!check_username(ans1)) {
-          out.println("Username can only consist of numbers or letters! Please enter again");
-          continue;
-        }
-        send_string(ans1);
-        ans1 = accept_string();
-        if (!ans1.equals("Username valid")) {
-          out.println(ans1);
-          continue;
-        }
-        break;
+  public <E> void canBeTaken(LinkedBlockingQueue<E> lbq) {
+    while (true) {
+      if (lbq.size() != 0) {
+        return;
       }
-      while (true) {
-        ans1 = read_string("Please enter password");
-        ans2 = read_string("Please enter password again");
-        if (!ans1.equals(ans2)) {
-          continue;
-        }
-        send_string(ans1);
-        out.println("register success");
-        break;
-      }
-    }
-    else{
-      send_string("No need register");
     }
   }
 
+  public void do_register() throws IOException, ClassNotFoundException, InterruptedException {
+    send_string("Need register");
+    String temp = null;
+    System.out.println("in do register");
+    Triplet<String, String, String> temp_tuple = null;
+
+      while (true) {
+        canBeTaken(user_pwd1_pwd2);
+        System.out.println("lbq size: " + user_pwd1_pwd2.size());
+        temp_tuple = user_pwd1_pwd2.take();
+        String username = temp_tuple.getValue0();
+        System.out.println("username : " + username);
+        if (!check_username(username)) {
+          Platform.runLater(() -> {
+            registerController.getInvalid_label().setText("Username can only consist of numbers or letters! Please enter again");
+            registerController.clearall();
+          });
+          continue;
+        }
+        send_string(username);
+        temp = accept_string();
+        if (!temp.equals("Username valid")) {
+          String finalTemp = temp;
+          Platform.runLater(() -> {
+            registerController.getInvalid_label().setText(finalTemp);
+            registerController.clearall();
+          });
+          continue;
+        }
+        break;
+      }
+      while (true) {
+        String pwd1 = null;
+        String pwd2 = null;
+        pwd1 = temp_tuple.getValue1();
+        pwd2 = temp_tuple.getValue2();
+        System.out.println("flag = true");
+        System.out.println("pwd1 : " + pwd1);
+        System.out.println("pwd2 : " + pwd2);
+
+        if (!pwd1.equals(pwd2)) {
+          Platform.runLater(() -> {
+            registerController.getInvalid_label().setText("Two passwords you enter are not the same");
+            registerController.clearField();
+          });
+          canBeTaken(user_pwd1_pwd2);
+          temp_tuple = user_pwd1_pwd2.take();
+          continue;
+        }
+        send_string(pwd1);
+        Platform.runLater(() -> {
+          try {
+            registerController.switchToLogin();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        });
+        break;
+      }
+
+  }
+
   public void do_login() throws IOException, ClassNotFoundException, InterruptedException {
+    System.out.println("In client : " + System.identityHashCode(this));
     System.out.println("before take");
-    Pair<String, String> ans1 = user_password.take();
+    System.out.println("In cleint, I am client queue " + user_password + " " + System.identityHashCode(user_password));
+    System.out.println("In cleint, I am controller queue " + loginController.linkedBlockingQueue + " " +
+            System.identityHashCode(loginController.linkedBlockingQueue));
+    System.out.println("In client, I am controller " + System.identityHashCode(loginController));
+
     System.out.println("after take");
+
     String res = null;
+    Pair<String, String> temp_pair = null;
     while (true) {
-      send_string(ans1.getKey());
+      canBeTaken(user_password);
+      temp_pair = user_password.take();
+      send_string(temp_pair.getKey());
       res = accept_string();
       if (!res.equals("Username valid")) {
-        loginController.getInvalid_label().setText(res);
+        String finalRes = res;
+        Platform.runLater(()->{
+          loginController.getInvalid_label().setText(finalRes);
+        });
         continue;
       }
       break;
     }
     while (true) {
-      send_string(ans1.getValue());
+      send_string(temp_pair.getValue());
       res = accept_string();
       if (!res.equals("Password valid")) {
-        loginController.getInvalid_label().setText(res);
+        String finalRes = res;
+        Platform.runLater(()->{
+          loginController.getInvalid_label().setText(finalRes);
+        });
+        canBeTaken(user_password);
+        temp_pair = user_password.take();
         continue;
       }
-      //TODO: switch to another scene
-      loginController.getInvalid_label().setText(res);
+      //TODO: switch to map scene
       break;
     }
   }
@@ -136,31 +192,35 @@ public class ClientSk {
    * @throws ClassNotFoundException
    */
   public void game_begin() throws IOException, ClassNotFoundException {
-    Thread th = new Thread() {
-      @Override()
-      public void run() {
-        try {
-          String ans1 = null;
-          String ans2 = null;
-          //do_register();
-          do_login();
-          choose_room();
-          //game begin
-          String map_show1 = new String(accept_map());
-          out.print(map_show1);
-          accept_color();
-          accept_units();
-          set_player();
-          init_unit();
-          send_player();
-          String map_show2 = new String(accept_map());
-          out.print(map_show2);
-          do_turns();
-        } catch (Exception e) {
+    Thread th = new Thread(() -> {
+      try {
+        if (Client.ClientSkList.size() == 1) {
+          while (Client.ClientSkList.get(0).registerController == null) {
+            System.out.println(" ");
+          }
         }
+        System.out.println("after loop");
+        do_register();
+        do_login();
+        choose_room();
+        //game begin
+        String map_show1 = new String(accept_map());
+        out.print(map_show1);
+        accept_color();
+        accept_units();
+        set_player();
+        init_unit();
+        send_player();
+        String map_show2 = new String(accept_map());
+        out.print(map_show2);
+        do_turns();
+
+      } catch (Exception e) {
+        e.printStackTrace();
       }
-    };
+    });
     th.start();
+
   }
   
   /**
