@@ -5,11 +5,12 @@ import java.util.HashSet;
 public class UnitRuleChecker extends MoveChecker{
   /**
      the method returns the boolean that check whether the number unit of the player want to move from one src territory
-     is less than the existing number of units within the src territory
+     is less than the existing number of units within the src territory given the level of the unit
      @param: player, the player is making the move:
      @param: src, the name of the source territory;
      @param: dest, the name of the destination territory;
      @param: numUnit, the number of units the player want to move
+     @param: level: the number of Unit
      @return: String if there is Violation of rule, null if there is none
    */
   @Override

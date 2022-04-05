@@ -5,12 +5,13 @@ import java.util.*;
 
 public class NameUpgradeRuleChecker extends UpgradeChecker{
   /**
-     the method returns the String that check whether the src territory and dest territory exist a path
-     @param: player, the player is making the move:
-     @param: src, the name of the source territory;
-     @param: dest, the name of the destination territory;
-     @param: numUnit, the number of units the player want to move
-     @return: String if there is Violation of rule, null if there is none
+   *checkMyRule(): This function is to check whether the source territory exist in player
+   *@param player does the upgrade
+   *@param src is the name of the source territory
+   *@param numUnit is the number of unit that player wants to do the attack.
+   *@param level of the unit want to be upgraded
+   *@param newlevel of the unit want to be upgraded to
+   *@return return the error string, and return null if there is no error. 
    */
   @Override
   protected String checkMyRule(Player player,String src,int numUnit, int level, int newLevel){

@@ -14,8 +14,8 @@ public class Player implements java.io.Serializable{
     public Player(String color, HashSet<Territory> player_terri_set) {
         this.color = color;
         this.player_terri_set = player_terri_set;
-        this.tech_level = 1;
-        this.food = 140;
+        this.tech_level = 1; // set initial technology level to 1
+        this.food = 140;// set initial food to 140 
     }
 
     /**
@@ -87,11 +87,19 @@ public class Player implements java.io.Serializable{
     }
     return false;
   }
+  
+  /**
+   *getTechLevel():
+   *@return: the techonology level of the player
+   */
 
   public int getTechLevel(){
     return this.tech_level;
   }
-  //////////////////////////////////////////////
+  /**
+   *upgradeTechLevel
+   *upgrade the technology level by 1
+   */
   public void upgradeTechLevel(){
     LevelInfo info = new LevelInfo();
     int totalCost = (info.getTechCost(this.tech_level + 1) - info.getTechCost(this.tech_level));
@@ -101,25 +109,38 @@ public class Player implements java.io.Serializable{
     }
     this.food -= totalCost;
   }
-
+  /**
+   *getFood():
+   *@return: the remaining number of food of the player
+   */
   public int getFood(){
     return this.food;
   }
-
+  /**
+   *costFood(): reduce the food of player by expense
+   *@param: the number of food expense
+   */
   public void costFood(int expense){
     if(expense < 0){
       throw new IllegalArgumentException("Cannot reduce negative food!");
     }
     this.food -= expense;
   }
-
+  /**
+   *costFood(): increase the food of player by add on number
+   *@param: the number of food added on
+   */
   public void addFood(int add){
     if(add < 0){
       throw new IllegalArgumentException("Cannot add negative food!");
     }
     this.food += add;
   }
-
+  /**
+   *getTerritory():
+   *@param: the name of the territory
+   *@return: territory according to the name
+   */
   public Territory getTerritory(String name) {
       for (Territory t : player_terri_set) {
           if (t.getName().equals(name)){

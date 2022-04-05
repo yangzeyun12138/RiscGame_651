@@ -3,12 +3,12 @@ import java.util.*;
 
 public class MoveCostRuleChecker extends MoveChecker{
   /**
-     the method returns the boolean that check whether the number unit of the player want to move from one src territory
-     is less than the existing number of units within the src territory
+     the method returns the boolean that check whether the player has enough food to do the movement
      @param: player, the player is making the move:
      @param: src, the name of the source territory;
      @param: dest, the name of the destination territory;
      @param: numUnit, the number of units the player want to move
+     @param: level of the unit
      @return: String if there is Violation of rule, null if there is none
    */
   @Override
@@ -19,7 +19,13 @@ public class MoveCostRuleChecker extends MoveChecker{
     }
     return null;
   }
-
+  /**
+     findMinPath: return the minimum cost from src territory to the destination territory
+     @param: player who does the movement
+     @param: src is the name of the source territory
+     @param: dest is the name of the destination territory
+     @return: the number of minimum total size of territory in the path, -1 if something goes wrong
+   */
   public int findMinPath(Player player, String src, String dest){
     HashSet<String> t_set = new HashSet<String>();
     for(Territory curr_t : player.player_terri_set){
@@ -32,7 +38,7 @@ public class MoveCostRuleChecker extends MoveChecker{
     }
     return -1;
   }
-
+  //recursive function that uses dfs (useit or loseit) to find minimum total size
   public int minTotalSize(Territory curr_t, String dest, HashSet<String> t_set){
     if(curr_t.getName().equals(dest)){
       return 0;
