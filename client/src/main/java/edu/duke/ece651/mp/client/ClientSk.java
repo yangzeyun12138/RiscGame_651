@@ -342,9 +342,9 @@ public class ClientSk {
   }
 
   public void writeLeftBottomBoard(String content) {
-    leftBottomBoard += content;
+    leftBottomBoard = content + leftBottomBoard;
     Platform.runLater(()->{
-      map3Controller.getLeftBottomBoard().setWrapText(false);
+      map3Controller.getLeftBottomBoard().setWrapText(true);
       map3Controller.getLeftBottomBoard().setText(leftBottomBoard);
     });
   }
