@@ -40,7 +40,12 @@ public class ClientSk {
   public LinkedBlockingQueue<Quartet<String, String, String, String>> moveQueue;
   public LinkedBlockingQueue<Quartet<String, String, String, String>> attackQueue;
   public LinkedBlockingQueue<Quartet<String, String, String, String>> changeQueue;
+  public Quartet<Map3Controller, Map31Controller, Map32Controller, Map33Controller> map3ControllerList;
   public Map3Controller map3Controller;
+  public Map31Controller map31Controller;
+  public Map32Controller map32Controller;
+  public Map33Controller map33Controller;
+  public int signal;
 
   public void setLoginController(LoginController loginController){
     this.loginController = loginController;
@@ -52,7 +57,38 @@ public class ClientSk {
 
   public void setMap3Controller(Map3Controller map3Controller) {
     this.map3Controller = map3Controller;
+    this.map3ControllerList = new Quartet<>(map3Controller,null,null,null);
+    signal = 1;
+    System.out.println("$$$$$" +
+            "$$$$$$$in client setMap3");
+    System.out.println(map3ControllerList.getValue0());
   }
+
+  public void setMap31Controller(Map31Controller map31Controller) {
+    this.map31Controller = map31Controller;
+    this.map3ControllerList = new Quartet<>(null,map31Controller,null,null);
+    signal = 2;
+    System.out.println("$$$$$" +
+            "$$$$$$$in client setMap31");
+  }
+
+  public void setMap32Controller(Map32Controller map32Controller) {
+    this.map32Controller = map32Controller;
+    this.map3ControllerList = new Quartet<>(null,null,map32Controller,null);
+    signal = 3;
+    System.out.println("$$$$$" +
+            "$$$$$$$in client setMap32");
+    System.out.println(System.identityHashCode(map32Controller));
+  }
+
+  public void setMap33Controller(Map33Controller map33Controller) {
+    this.map33Controller = map33Controller;
+    this.map3ControllerList = new Quartet<>(null,null,null,map33Controller);
+     signal = 4;
+    System.out.println("$$$$$" +
+            "$$$$$$$in client setMap33");
+  }
+
 
   /**
    * connect to the local host on 9999 port
@@ -76,7 +112,11 @@ public class ClientSk {
     this.attackQueue = new LinkedBlockingQueue<>();
     this.changeQueue  = new LinkedBlockingQueue<>();
     this.leftBottomBoard = "";
+    this.map3ControllerList = new Quartet<>(null,null,null,null);
   }
+
+
+
 
 
   public boolean check_username(String toCheck) {
@@ -200,6 +240,20 @@ public class ClientSk {
       Platform.runLater(() -> {
         try {
           loginController.switchToMap3();
+          while (true) {
+            if (map3ControllerList.getValue0() != null) {
+              break;
+            } else if (map3ControllerList.getValue1() != null){
+              break;
+            } else if (map3ControllerList.getValue2() != null){
+              break;
+            } else if (map3ControllerList.getValue3() != null){
+              break;
+            } else {
+              //System.out.println("");
+            }
+          }
+          System.out.println("In login@@@@@@@@@@@@@@@@@@@@after switch to map");
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -225,29 +279,51 @@ public class ClientSk {
   public void game_begin() throws IOException, ClassNotFoundException {
     Thread th = new Thread(() -> {
       try {
-        if (Client.ClientSkList.size() == 1) {
-          while (Client.ClientSkList.get(0).registerController == null) {
-            System.out.print("");
-          }
-        }
-        System.out.println("");
-        System.out.println("after loop");
-        do_register();
-        if (Client.ClientSkList.size() == 1) {
-          while (Client.ClientSkList.get(0).loginController == null) {
-            System.out.print("");
-          }
-        }
-        System.out.println("");
-        do_login();
-        choose_room();
 
+        if (Client.ClientSkList.size() == 1) {
+          send_string("First");
+          if (Client.ClientSkList.size() == 1) {
+            while (Client.ClientSkList.get(0).registerController == null) {
+              System.out.print("");
+            }
+          }
+          System.out.println("");
+          System.out.println("after loop");
+          do_register();
+          if (Client.ClientSkList.size() == 1) {
+            while (Client.ClientSkList.get(0).loginController == null) {
+              System.out.print("");
+            }
+          }
+          System.out.println("");
+          do_login();
+        } else {
+          send_string("notFirst");
+        }
+
+        if(Client.ClientSkList.size() != 1) {
+          System.out.println("clientSklist.size() != 1 : before choose room");
+        }
+        choose_room();
         //game begin
+        if(Client.ClientSkList.size() != 1) {
+          System.out.println("clientSklist.size() != 1 : before accept map");
+        }
+
+        System.out.println("$$$$$$$$$$$");
+        System.out.println(map3ControllerList);
+        System.out.println("@@@@@@@@@@@");
+
+
         System.out.println("before accept map");
         String map_show1 = new String(accept_map());
         System.out.println("before accept color");
         accept_color();
+        if(Client.ClientSkList.size() != 1) {
+          System.out.println("clientSklist.size() != 1 : before accept units");
+        }
         System.out.println("before accpet units");
+
         accept_units();
         System.out.println("after accept units");
         set_player();
@@ -257,7 +333,15 @@ public class ClientSk {
         send_player();
         String map_show2 = new String(accept_map());
         set_player();
-        map3Controller.updateColor();
+        if (signal == 1) {
+          map3ControllerList.getValue0().updateColor();
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().updateColor();
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().updateColor();
+        } else {
+          map3ControllerList.getValue3().updateColor();
+        }
         out.print(map_show2);
         do_turns();
 
@@ -306,7 +390,21 @@ public class ClientSk {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.color = (String) ois.readObject();
     out.print("You are " + color + " player, ");
-    Platform.runLater(() -> map3Controller.getColor().setText(color));
+    Platform.runLater(()->{
+      if (signal == 1) {
+        map3ControllerList.getValue0().getColor().setText(color);
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().getColor().setText(color);
+      } else if(signal == 3) {
+        System.out.println("             " +
+                "&&&&&&&&&&&&&&&&" + Client.ClientSkList.size() +
+                "             " +
+                " &&&&&&&&&&&");
+        map3ControllerList.getValue2().getColor().setText(color);
+      } else {
+        map3ControllerList.getValue3().getColor().setText(color);
+      }
+    });
   }
 
 
@@ -344,8 +442,19 @@ public class ClientSk {
   public void writeLeftBottomBoard(String content) {
     leftBottomBoard = content + leftBottomBoard;
     Platform.runLater(()->{
-      map3Controller.getLeftBottomBoard().setWrapText(true);
-      map3Controller.getLeftBottomBoard().setText(leftBottomBoard);
+      if (signal == 1) {
+        map3ControllerList.getValue0().getLeftBottomBoard().setWrapText(true);
+        map3ControllerList.getValue0().getLeftBottomBoard().setText(leftBottomBoard);
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().getLeftBottomBoard().setWrapText(true);
+        map3ControllerList.getValue1().getLeftBottomBoard().setText(leftBottomBoard);
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().getLeftBottomBoard().setWrapText(true);
+        map3ControllerList.getValue2().getLeftBottomBoard().setText(leftBottomBoard);
+      } else {
+        map3ControllerList.getValue3().getLeftBottomBoard().setWrapText(true);
+        map3ControllerList.getValue3().getLeftBottomBoard().setText(leftBottomBoard);
+      }
     });
   }
    /**
@@ -360,27 +469,75 @@ public class ClientSk {
     for (Territory t : player.player_terri_set) {
       if (count == player.player_terri_set.size() - 1) {
         t.setBasicUnit(limit);
-        map3Controller.third_text.setText(String.valueOf(limit));
-        map3Controller.territory3.setText(t.getName());
-        writeLeftBottomBoard("Remaining " + limit + " units are placed in " + t.getName() + "\n");
-        out.println("before setVisible");
-        map3Controller.init_units_anchorpane.setVisible(false);
-        out.println("after setVisible");
-        map3Controller.init_units_anchorpane.setDisable(true);
+        if (signal == 1) {
+          map3ControllerList.getValue0().third_text.setText(String.valueOf(limit));
+          map3ControllerList.getValue0().territory3.setText(t.getName());
+          writeLeftBottomBoard("Remaining " + limit + " units are placed in " + t.getName() + "\n");
+          map3ControllerList.getValue0().init_units_anchorpane.setVisible(false);
+          map3ControllerList.getValue0().init_units_anchorpane.setDisable(true);
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().third_text.setText(String.valueOf(limit));
+          map3ControllerList.getValue1().territory3.setText(t.getName());
+          writeLeftBottomBoard("Remaining " + limit + " units are placed in " + t.getName() + "\n");
+          map3ControllerList.getValue1().init_units_anchorpane.setVisible(false);
+          map3ControllerList.getValue1().init_units_anchorpane.setDisable(true);
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().third_text.setText(String.valueOf(limit));
+          map3ControllerList.getValue2().territory3.setText(t.getName());
+          writeLeftBottomBoard("Remaining " + limit + " units are placed in " + t.getName() + "\n");
+          map3ControllerList.getValue2().init_units_anchorpane.setVisible(false);
+          map3ControllerList.getValue2().init_units_anchorpane.setDisable(true);
+        } else {
+          map3ControllerList.getValue3().third_text.setText(String.valueOf(limit));
+          map3ControllerList.getValue3().territory3.setText(t.getName());
+          writeLeftBottomBoard("Remaining " + limit + " units are placed in " + t.getName() + "\n");
+          map3ControllerList.getValue3().init_units_anchorpane.setVisible(false);
+          map3ControllerList.getValue3().init_units_anchorpane.setDisable(true);
+        }
         return;
       }
       writeLeftBottomBoard("How many units do you want to place in " + t.getName() + "?" +
               " Please enter a integer in the blank.\n");
       if (count == 0) {
         Platform.runLater(()->{
-          map3Controller.territory1.setText(t.getName());
+
+          if (signal == 1) {
+            map3ControllerList.getValue0().territory1.setText(t.getName());
+          } else if (signal == 2) {
+            map3ControllerList.getValue1().territory1.setText(t.getName());
+          } else if(signal == 3) {
+            map3ControllerList.getValue2().territory1.setText(t.getName());
+          } else {
+            map3ControllerList.getValue3().territory1.setText(t.getName());
+          }
+
+
+
         });
         canBeTaken(initQueue);
         res = initQueue.take();
       } else if (count == 1) {
-        map3Controller.territory2.setText(t.getName());
+
+        if (signal == 1) {
+          map3ControllerList.getValue0().territory2.setText(t.getName());
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().territory2.setText(t.getName());
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().territory2.setText(t.getName());
+        } else {
+          map3ControllerList.getValue3().territory2.setText(t.getName());
+        }
+
       } else {
-        map3Controller.territory3.setText(t.getName());
+        if (signal == 1) {
+          map3ControllerList.getValue0().territory3.setText(t.getName());
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().territory3.setText(t.getName());
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().territory3.setText(t.getName());
+        } else {
+          map3ControllerList.getValue3().territory3.setText(t.getName());
+        }
       }
       while (true) {
 
@@ -503,10 +660,30 @@ public class ClientSk {
     String s4 = null;
 
     if (action.equals("C")) {
-      if(map3Controller.TerriList.isEmpty()){
+      int temp_size = 0;
+      if (signal == 1) {
+        temp_size = map3ControllerList.getValue0().TerriList.size();
+      } else if (signal == 2) {
+        temp_size = map3ControllerList.getValue1().TerriList.size();
+      } else if(signal == 3) {
+        temp_size = map3ControllerList.getValue2().TerriList.size();
+      } else {
+        temp_size = map3ControllerList.getValue3().TerriList.size();
+      }
+      if(temp_size == 0){
         return "You should choose a territory to upgrade your units!\n";
       }
-      s1 = map3Controller.TerriList.get(0);
+
+      if (signal == 1) {
+        s1 = map3ControllerList.getValue0().TerriList.get(0);
+      } else if (signal == 2) {
+        s1 = map3ControllerList.getValue1().TerriList.get(0);
+      } else if(signal == 3) {
+        s1 = map3ControllerList.getValue2().TerriList.get(0);
+      } else {
+        s1 = map3ControllerList.getValue3().TerriList.get(0);
+      }
+
       s2 = ans.getValue3();
       s3 = ans.getValue0();
       s4 = ans.getValue1();
@@ -530,11 +707,38 @@ public class ClientSk {
         return "Please enter a valid integer as afterLevel!\n";
       }
     } else {
-      if (map3Controller.TerriList.size() < 2) {
+
+
+      int size = 0;
+      if (signal == 1) {
+        size = map3ControllerList.getValue0().TerriList.size();
+      } else if (signal == 2) {
+        size = map3ControllerList.getValue1().TerriList.size();
+      } else if(signal == 3) {
+        size = map3ControllerList.getValue2().TerriList.size();
+      } else {
+        size = map3ControllerList.getValue3().TerriList.size();
+      }
+
+
+      if (size < 2) {
         return "You should choose src territory and des territory for a move or attack order!\n";
       }
-      s1 = map3Controller.TerriList.get(0);
-      s2 = map3Controller.TerriList.get(1);
+
+      if (signal == 1) {
+        s1 = map3ControllerList.getValue0().TerriList.get(0);
+        s2 = map3ControllerList.getValue0().TerriList.get(1);
+      } else if (signal == 2) {
+        s1 = map3ControllerList.getValue1().TerriList.get(0);
+        s2 = map3ControllerList.getValue1().TerriList.get(1);
+      } else if(signal == 3) {
+        s1 = map3ControllerList.getValue2().TerriList.get(0);
+        s2 = map3ControllerList.getValue2().TerriList.get(1);
+      } else {
+        s1 = map3ControllerList.getValue3().TerriList.get(0);
+        s2 = map3ControllerList.getValue3().TerriList.get(1);
+      }
+
       s3 = ans.getValue3();
       s4 = ans.getValue2();
       //s1:sourceTerritoryName destinationTerritoryName numUnitsToDestination unitLevel
@@ -552,13 +756,26 @@ public class ClientSk {
     }
 
     if (action.equals("M")) {
+      System.out.println("sadsadasdasddasdasdasdasdsadsadasdsadasdasdasdasdasdasda");
       String temp = Action.checkForMove(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
+      System.out.println("#######Erro message is "+ temp);
       if (temp != null) {
         return temp;
       }
       else {
         Action.Move(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
-        map3Controller.tempUpdateInfo(temp_player);
+
+        if (signal == 1) {
+          map3ControllerList.getValue0().tempUpdateInfo(temp_player);
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().tempUpdateInfo(temp_player);
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().tempUpdateInfo(temp_player);
+        } else {
+          map3ControllerList.getValue3().tempUpdateInfo(temp_player);
+        }
+
+
         //new a order class, add it to orders moveList
         orders.MoveUpList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
@@ -574,7 +791,15 @@ public class ClientSk {
           return temp_player.color + " player has invalid attack orders. " +
                   "The numUnits of level " + s4 + "is insufficient.\n";
         }
-        map3Controller.tempUpdateInfo(temp_player);
+        if (signal == 1) {
+          map3ControllerList.getValue0().tempUpdateInfo(temp_player);
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().tempUpdateInfo(temp_player);
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().tempUpdateInfo(temp_player);
+        } else {
+          map3ControllerList.getValue3().tempUpdateInfo(temp_player);
+        }
         //new a order class, add it to orders attackList
         orders.AttackList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
@@ -587,7 +812,15 @@ public class ClientSk {
       }
       else {
         Action.unitUpgrade(temp_player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
-        map3Controller.tempUpdateInfo(temp_player);
+        if (signal == 1) {
+          map3ControllerList.getValue0().tempUpdateInfo(temp_player);
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().tempUpdateInfo(temp_player);
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().tempUpdateInfo(temp_player);
+        } else {
+          map3ControllerList.getValue3().tempUpdateInfo(temp_player);
+        }
         //new a order class, add it to orders attackList
         orders.MoveUpList.add(new Order(temp_player, s1, " ", Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4)));
       }
@@ -649,7 +882,17 @@ public class ClientSk {
                   temp_player.upgradeTechLevel();
                   if_up.set(0, true);
                   orders.MoveUpList.add(new Order(temp_player, " ", " ", 0, 0, 0));
-                  map3Controller.tempUpdateInfo1(temp_player);
+
+                  if (signal == 1) {
+                    map3ControllerList.getValue0().tempUpdateInfo1(temp_player);
+                  } else if (signal == 2) {
+                    map3ControllerList.getValue1().tempUpdateInfo1(temp_player);
+                  } else if(signal == 3) {
+                    map3ControllerList.getValue2().tempUpdateInfo1(temp_player);
+                  } else {
+                    map3ControllerList.getValue3().tempUpdateInfo1(temp_player);
+                  }
+
                 } catch(IllegalArgumentException e) {
                   out.print(e.getMessage());
                 }
@@ -725,12 +968,25 @@ public class ClientSk {
    *@throws IOException
    */  
   public String handle_lose() throws IOException {
+    System.out.println("I am " + player.color + " player!");
     out.println("You lose! Do you want to keep watching game going? Please enter y or n. y means yes, n means no.");
-    while(map3Controller.if_keep_watch == null) {
-      out.println("");
+    String if_keep_watch = null;
+    System.out.println("Signal is " + signal);
+    System.out.println("Map3ControlerList : " + map3ControllerList);
+    while(if_keep_watch == null) {
+      System.out.println("");
+      if (signal == 1) {
+        if_keep_watch = map3ControllerList.getValue0().if_keep_watch;
+      } else if (signal == 2) {
+        if_keep_watch = map3ControllerList.getValue1().if_keep_watch;
+      } else if(signal == 3) {
+        if_keep_watch = map3ControllerList.getValue2().if_keep_watch;
+      } else {
+        if_keep_watch = map3ControllerList.getValue3().if_keep_watch;
+      }
     }
     while (true) {
-      String s = map3Controller.if_keep_watch;
+      String s = if_keep_watch;
       try {
         if (s.length() != 1) {
           throw new IllegalArgumentException("You should enter y or n");
@@ -756,9 +1012,28 @@ public class ClientSk {
     String res = (String) ois_new.readObject();
     if (!res.equals("noBodyWin")) {
       out.println(res);
-      map3Controller.result_text.setDisable(false);
-      map3Controller.result_text.setVisible(true);
-      map3Controller.result_text.setText(res);
+      System.out.println("$$$$$$$$$$$$$\n" +
+              "$$$$$$$$$$$$$\n" +
+              "$$$$$$$$$$$$\n" +
+              "$$$$$$$$$$$\n");
+      if (signal == 1) {
+        map3ControllerList.getValue0().result_text.setDisable(false);
+        map3ControllerList.getValue0().result_text.setVisible(true);
+        map3ControllerList.getValue0().result_text.setText(res);
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().result_text.setDisable(false);
+        map3ControllerList.getValue1().result_text.setVisible(true);
+        map3ControllerList.getValue1().result_text.setText(res);
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().result_text.setDisable(false);
+        map3ControllerList.getValue2().result_text.setVisible(true);
+        map3ControllerList.getValue2().result_text.setText(res);
+      } else {
+        map3ControllerList.getValue3().result_text.setDisable(false);
+        map3ControllerList.getValue3().result_text.setVisible(true);
+        map3ControllerList.getValue3().result_text.setText(res);
+      }
+
       close_client();
       return true;
     }
@@ -777,10 +1052,26 @@ public class ClientSk {
       send_orders(new_orders);
       if_end_one_turn();
       String map_show = new String(accept_map());
+      System.out.println(
+              "&&&&&&&&&&&&&In do tunrs as watch"
+      );
       out.print(map_show);
       set_player();
-      map3Controller.updateColor();
-      map3Controller.updatePlayerInfo();
+
+      if (signal == 1) {
+        map3ControllerList.getValue0().updateColor();
+        map3ControllerList.getValue0().updatePlayerInfo();
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().updateColor();
+        map3ControllerList.getValue1().updatePlayerInfo();
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().updateColor();
+        map3ControllerList.getValue2().updatePlayerInfo();
+      } else {
+        map3ControllerList.getValue3().updateColor();
+        map3ControllerList.getValue3().updatePlayerInfo();
+      }
+
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String) ois.readObject();
       if (turn_end_helper()) {
@@ -821,8 +1112,21 @@ public class ClientSk {
       String map_show = new String(accept_map());
       out.print(map_show);
       set_player();
-      map3Controller.updateColor();
-      map3Controller.updatePlayerInfo();
+
+      if (signal == 1) {
+        map3ControllerList.getValue0().updateColor();
+        map3ControllerList.getValue0().updatePlayerInfo();
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().updateColor();
+        map3ControllerList.getValue1().updatePlayerInfo();
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().updateColor();
+        map3ControllerList.getValue2().updatePlayerInfo();
+      } else {
+        map3ControllerList.getValue3().updateColor();
+        map3ControllerList.getValue3().updatePlayerInfo();
+      }
+
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String)ois.readObject();
       if (res.equals("Lose")) {
@@ -831,18 +1135,31 @@ public class ClientSk {
           s = "y";
         }
         else {
-          map3Controller.end_game1();
+
+          if (signal == 1) {
+            map3ControllerList.getValue0().end_game1();
+          } else if (signal == 2) {
+            map3ControllerList.getValue1().end_game1();
+          } else if(signal == 3) {
+            map3ControllerList.getValue2().end_game1();
+          } else {
+            map3ControllerList.getValue3().end_game1();
+          }
+
           s = handle_lose();
+          System.out.println("after handle lose + +++++++++");
         }
         if (s.equals("y")) {
           //send_string("y");
           if (turn_end_helper()) {
             return;
           }
+          System.out.println("before do turn as watch + " + "if_watch = " + s);
           do_turns_as_watch();
           return;
         }
         else {
+
           //send_string("n");
           close_client();
           return;

@@ -1,14 +1,13 @@
 package edu.duke.ece651.mp.client;
 
-import com.google.errorprone.annotations.MustBeClosed;
 import edu.duke.ece651.mp.common.Player;
 import edu.duke.ece651.mp.common.Territory;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -16,12 +15,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.checkerframework.checker.units.qual.A;
 import org.javatuples.Quartet;
 
-import javafx.event.ActionEvent;
-
-import java.awt.event.TextEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,7 +25,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Map3Controller implements Initializable {
+public class Map31Controller implements Initializable {
 
     @FXML
     private Button add_room_button;
@@ -188,77 +183,7 @@ public class Map3Controller implements Initializable {
     @FXML
     private Text Scadrial_color;
 
-    @FXML
-    private Text roomNum;
 
-    @FXML
-    void addRoom(MouseEvent event) throws IOException, ClassNotFoundException {
-        //me = event;
-        addRoomCount++;
-        if (addRoomCount > 0 && addRoomCount < 4) {
-            MenuItem menuItem = change_room_menubutton.getItems().get(addRoomCount);
-            menuItem.setDisable(false);
-            menuItem.setVisible(true);
-            System.out.println(menuItem.getText() + " disable is " + menuItem.isDisable());
-        }
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("In map3controller before new game");
-        Client.new_game("0.0.0.0", "9999", input, System.out, false);
-        System.out.println("In map3controller after new game");
-    }
-
-    @FXML
-    void changeToRoom1(ActionEvent ae) {
-        Scene scene = null;
-        try {
-            scene = Client.get_scene("Map3.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void changeToRoom2(ActionEvent ae) {
-        System.out.println("In changeToRoom2");
-        Scene scene = null;
-        try {
-            scene = Client.get_scene("Map31.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void changeToRoom3(ActionEvent ae) {
-        Scene scene = null;
-        try {
-            scene = Client.get_scene("Map32.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void changeToRoom4(ActionEvent ae) {
-        Scene scene = null;
-        try {
-            scene = Client.get_scene("Map33.fxml");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
 
     @FXML
     void attackClick(MouseEvent event) throws InterruptedException {
@@ -266,8 +191,6 @@ public class Map3Controller implements Initializable {
         TerriList.clear();
         this.actionQueue.put("A");
     }
-
-
 
     @FXML
     void changeRoom(MouseEvent event) {
@@ -440,8 +363,6 @@ public class Map3Controller implements Initializable {
     public void continueClick(MouseEvent event) {
         end_game2();
         if_keep_watch = "y";
-        System.out.println("after set if_keep_watch");
-        System.out.println("if_keep_watch = " + if_keep_watch);
     }
 
     @FXML
@@ -528,6 +449,10 @@ public class Map3Controller implements Initializable {
         showTerriInfo("Hogwarts");
     }
 
+
+    @FXML
+    private Text roomNum;
+
     private void showTerriInfo(String terriName) {
         ArrayList<Player> players = clientSk.players;
         Player temp = clientSk.Action.getPlayer(terriName, players);
@@ -553,14 +478,14 @@ public class Map3Controller implements Initializable {
     private LinkedBlockingQueue<Quartet<String, String, String, String>> moveQueue;
     private LinkedBlockingQueue<Quartet<String, String, String, String>> attackQueue;
     private LinkedBlockingQueue<Quartet<String, String, String, String>> changeQueue;
-    public ClientSk clientSk;
+    private ClientSk clientSk;
     public ArrayList<String> TerriList;
     public String if_keep_watch;
     public int addRoomCount;
-    private MouseEvent me;
 
 
-    public Map3Controller() {
+
+    public Map31Controller() {
         this.initQueue = new LinkedBlockingQueue<>();
         this.terriNameQueue = new LinkedBlockingQueue<>();
         this.actionQueue = new LinkedBlockingQueue<>();
@@ -570,6 +495,8 @@ public class Map3Controller implements Initializable {
         bind_client();
         this.TerriList = new ArrayList<>();
         this.addRoomCount = 0;
+        System.out.println("$$$$$$$$$" +
+                "$$$$$$$in map31 controller constructor");
     }
 
 
@@ -581,10 +508,9 @@ public class Map3Controller implements Initializable {
         this.moveQueue = clientSk.moveQueue;
         this.attackQueue = clientSk.attackQueue;
         this.changeQueue  = clientSk.changeQueue;
-        clientSk.setMap3Controller(this);
-        System.out.println("@@@@@@@@@@@after set map3Controller");
-        System.out.println("@@@@@@@@@@@clientSk map3Controller" + System.identityHashCode(clientSk.map3Controller));
-        System.out.println("@@@@@@@@@@@bind_client map3Controller" + System.identityHashCode(this));
+        clientSk.setMap31Controller(this);
+        System.out.println("$$$$$$$$$" +
+                "$$$$$$$in map31 bind client end");
     }
 
     @FXML
@@ -667,9 +593,80 @@ public class Map3Controller implements Initializable {
         }
     }
 
+    private MouseEvent me;
+
+    @FXML
+    void addRoom(MouseEvent event) throws IOException, ClassNotFoundException {
+        me = event;
+        addRoomCount++;
+        if (addRoomCount > 0 && addRoomCount < 3) {
+            MenuItem menuItem = change_room_menubutton.getItems().get(1 + addRoomCount);
+            menuItem.setDisable(false);
+            menuItem.setVisible(true);
+        }
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("In map3controller before new game");
+        Client.new_game("0.0.0.0", "9999", input, System.out, false);
+        System.out.println("In map3controller after new game");
+    }
+
+    @FXML
+    void changeToRoom1(ActionEvent ae) {
+
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Map3.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void changeToRoom2(ActionEvent ae) {
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Map31.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void changeToRoom3(ActionEvent ae) {
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Map32.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    void changeToRoom4(ActionEvent ae) {
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Map33.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.roomNum.setText("Room1");
+        this.roomNum.setText("Room2");
     }
 }
 
