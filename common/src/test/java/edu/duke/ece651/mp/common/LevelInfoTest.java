@@ -12,6 +12,7 @@ public class LevelInfoTest {
     assertThrows(IllegalArgumentException.class, ()->Info.getCost(7));
     assertEquals(8, Info.getBonus(4));
     assertEquals(90, Info.getCost(5));
+    assertThrows(IllegalArgumentException.class,()->Info.getTechCost(8));
   }
 
 }

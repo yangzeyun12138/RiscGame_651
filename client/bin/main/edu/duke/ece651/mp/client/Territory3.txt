@@ -1,9 +1,9 @@
-Gondor:Mordor, Oz
-Mordor:Gondor, Hogwarts, Oz, Scadrial
-Hogwarts:Mordor, Scadrial, Roshar
-Narnia:Elantris, Midkemia
-Midkemia:Elantris, Scadrial, Oz, Narnia
-Oz:Gondor, Mordor, Midkemia, Scadrial
-Elantris:Midkemia, Narnia, Roshar, Scadrial
-Scadrial:Elantris, Hogwarts, Mordor, Midkemia, Oz, Roshar
-Roshar:Elantris, Hogwarts, Scadrial
+4:Gondor:Mordor, Oz
+3:Mordor:Gondor, Hogwarts, Oz, Scadrial
+2:Hogwarts:Mordor, Scadrial, Roshar
+2:Narnia:Elantris, Midkemia
+3:Midkemia:Elantris, Scadrial, Oz, Narnia
+4:Oz:Gondor, Mordor, Midkemia, Scadrial
+3:Elantris:Midkemia, Narnia, Roshar, Scadrial
+2:Scadrial:Elantris, Hogwarts, Mordor, Midkemia, Oz, Roshar
+4:Roshar:Elantris, Hogwarts, Scadrial

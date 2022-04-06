@@ -59,6 +59,7 @@ public class V2ActionTest {
     assertTrue(action.rollDice());
   }
 
+  @Disabled
   @Test
   public void test_rolldice2(){
     V2Action action = new V2Action();
@@ -66,7 +67,8 @@ public class V2ActionTest {
     Unit u2 = new BasicUnit();
     assertTrue(action.rollDice2(u1, u2));
   }
-  
+
+  @Disabled
   @Test
   public void test_Attack(){
     HashSet<Territory> test_territory1 = new HashSet<>();
@@ -461,6 +463,25 @@ public class V2ActionTest {
     assertEquals("Red player. The movement is Invalid: the cost for the minimum path is higher than the number of the food!\n",result);
   }
 
+  @Test
+  public void test_checkForUpgrade(){
+    Player player = makePlayer1();
+    player.addFood(1000);
+    
+    AbstractActionFactory Action = new V2Action();
+    assertNull(Action.checkForUpgrade(player, "Gondor", 1, 0, 1));
+  }
+
+  @Test
+  public void test_unitUpgrade(){
+    Player player = makePlayer1();
+    player.addFood(1000);
+    
+    AbstractActionFactory Action = new V2Action();
+    Action.unitUpgrade(player,"Gondor", 1, 0 ,1);
+    int temp = player.getFood();
+    assertEquals(temp, player.getFood());
+  }
   
 }
 

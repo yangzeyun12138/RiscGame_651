@@ -31,6 +31,8 @@ public class BasicMapTest {
         assertTrue(bm.TerritorySet.contains(lt1));
         assertTrue(bm.colorList.contains("Red"));
         assertEquals(2,bm.get_num_players());
+        bm.init_num_units();
+        assertEquals(bm.get_num_units(),bm.get_num_units());
   }
   @Test
 
@@ -49,6 +51,7 @@ public class BasicMapTest {
         BasicMap bm2 = bm.deep_copy();
         bm2.mapName = "change";
         assertNotEquals(bm.mapName, bm2.mapName);
+        
   }
 
 
