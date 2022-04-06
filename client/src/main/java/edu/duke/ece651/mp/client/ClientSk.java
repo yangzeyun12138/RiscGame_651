@@ -726,8 +726,11 @@ public class ClientSk {
    */  
   public String handle_lose() throws IOException {
     out.println("You lose! Do you want to keep watching game going? Please enter y or n. y means yes, n means no.");
+    while(map3Controller.if_keep_watch == null) {
+      out.println("");
+    }
     while (true) {
-      String s = inputReader.readLine();
+      String s = map3Controller.if_keep_watch;
       try {
         if (s.length() != 1) {
           throw new IllegalArgumentException("You should enter y or n");
@@ -753,6 +756,9 @@ public class ClientSk {
     String res = (String) ois_new.readObject();
     if (!res.equals("noBodyWin")) {
       out.println(res);
+      map3Controller.result_text.setDisable(false);
+      map3Controller.result_text.setVisible(true);
+      map3Controller.result_text.setText(res);
       close_client();
       return true;
     }
@@ -821,10 +827,11 @@ public class ClientSk {
       String res = (String)ois.readObject();
       if (res.equals("Lose")) {
         if (is_last_loser()) {
-          out.println("You lose!");
+          writeLeftBottomBoard("You lose!\n");
           s = "y";
         }
         else {
+          map3Controller.end_game1();
           s = handle_lose();
         }
         if (s.equals("y")) {

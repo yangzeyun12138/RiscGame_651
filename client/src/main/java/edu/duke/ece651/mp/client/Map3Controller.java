@@ -334,6 +334,46 @@ public class Map3Controller {
     }
 
     @FXML
+    public Text result_text;
+
+    @FXML
+    public Button continue_button;
+
+    @FXML
+    public Button quit_button;
+
+    public void end_game1() {
+        result_text.setDisable(false);
+        continue_button.setDisable(false);
+        quit_button.setDisable(false);
+        result_text.setVisible(true);
+        continue_button.setVisible(true);
+        quit_button.setVisible(true);
+
+    }
+
+    public void end_game2() {
+        result_text.setVisible(false);
+        continue_button.setVisible(false);
+        quit_button.setVisible(false);
+        result_text.setDisable(true);
+        continue_button.setDisable(true);
+        quit_button.setDisable(true);
+    }
+
+    @FXML
+    public void continueClick(MouseEvent event) {
+        end_game2();
+        if_keep_watch = "y";
+    }
+
+    @FXML
+    public void quitClick(MouseEvent event) {
+        end_game2();
+        if_keep_watch = "n";
+    }
+
+    @FXML
     void submitClick(MouseEvent event) throws InterruptedException {
         moveQueue.clear();
         String s1 = from_level_menubutton.getText();
@@ -438,6 +478,7 @@ public class Map3Controller {
     private LinkedBlockingQueue<Quartet<String, String, String, String>> changeQueue;
     private ClientSk clientSk;
     public ArrayList<String> TerriList;
+    public String if_keep_watch;
 
 
 

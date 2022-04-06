@@ -232,6 +232,14 @@ fx:controller="edu.duke.ece651.mp.client.Map3Controller">
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Text>
+                <Text fx:id="result_text" disable="true" fill="#e9f80b" layoutX="194.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YOU HAVE LOST! CONTINUE WATCHING?" visible="false">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Text>
+                <Button fx:id="continue_button" disable="true" layoutX="197.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#continueClick" text="CONTINUE" visible="false" />
+                <Button fx:id="quit_button" disable="true" layoutX="304.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#quitClick" text="QUIT" visible="false" />
+
             </children>
         </AnchorPane>
     </children>
