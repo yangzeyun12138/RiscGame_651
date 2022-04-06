@@ -102,9 +102,6 @@ public class LandTerritory implements Territory, java.io.Serializable {
     for (int i = 0; i < numUnit; i++){
       Unit u = new BasicUnit();
       boolean thisadd = this.addUnit(u);
-      if (!thisadd){
-        return false;
-      }
     }
     return true;
   }

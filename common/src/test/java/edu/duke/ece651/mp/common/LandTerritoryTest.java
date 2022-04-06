@@ -59,7 +59,10 @@ public class LandTerritoryTest {
     lt2.setBasicUnit(5);
     assertTrue(lt2.loseUnit());
     assertTrue(lt2.addBasicUnit(5));
-    assertTrue(lt2.loseUnit(5));
+    assertTrue(lt2.loseUnits(5));
+    assertFalse(lt2.loseUnit(5));
+    assertFalse(lt2.loseUnits(100,100));
+    assertFalse(lt2.loseUnits(100));
   }
 
   @Test

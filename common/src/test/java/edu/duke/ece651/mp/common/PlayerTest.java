@@ -16,9 +16,10 @@ class PlayerTest {
         lt2.getNeigh().add(lt1);
         test_territory.add(lt1);
         Player p = new Player("Red", test_territory);
-        String test_string = new String("Red player:\n" +
-                "-----------\n" + "  0 units in Hogwalts (next to: Modor)\n\n");
-        assertEquals(test_string, p.toString());
+        /*String test_string = new String("Red player:\n" +
+          "-----------\n" + "  0 units in Hogwalts (next to: Modor)\n\n");*/
+        String test_string = new String("Red player       Total tech level: 1       Resources: 140");
+        assertEquals(test_string, p.toString().split("\n")[0]);
     }
   
   @Test
@@ -36,7 +37,7 @@ class PlayerTest {
   }
 
   @Test
-  public void test_deep_copy(){
+  public void test_deep_copy_getTerritory(){
     HashSet<Territory> test_territory = new HashSet<>();
     LandTerritory lt1 = new LandTerritory("Hogwalts", "Red", 2);
     LandTerritory lt2 = new LandTerritory("Modor", "Blue", 3);
@@ -53,6 +54,8 @@ class PlayerTest {
       }
     }
     
+    assertEquals(lt1.getName(), p.getTerritory("Hogwalts").getName());
+    assertNull(p.getTerritory("Oz"));
     assertNotEquals(p.color, new_p.color);
   }
 
@@ -75,7 +78,9 @@ class PlayerTest {
     assertThrows(IllegalArgumentException.class, ()->p.addFood(-1000));
     p.addFood(5);
     assertEquals(65, p.getFood());
-    
+
+    p.costFood(1000);
+    assertThrows(IllegalArgumentException.class, ()->p.upgradeTechLevel());
     
   }
   

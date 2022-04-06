@@ -24,11 +24,12 @@ class MapDisplayTest {
         BasicMap bm = new BasicMap(testname, test_color, test_territory);
         BasicMapDisplay bmd = new BasicMapDisplay(bm);
         bm.assign_all();
-        String test_string = new String("Red player:\n" +
+        /*String test_string = new String("Red player:\n" +
                 "-----------\n" + "  0 units in Hogwalts (next to: Modor)\n\n");
         test_string += "Blue player:\n" +
-                "-----------\n" + "  0 units in Modor (next to: Hogwalts)\n\n";
-        assertEquals(test_string, bmd.display());
+        "-----------\n" + "  0 units in Modor (next to: Hogwalts)\n\n";*/
+        String test_string = new String("Red player       Total tech level: 1       Resources: 140");
+          assertEquals(test_string, bmd.display().split("\n")[0]);
     }
 
     @Test
