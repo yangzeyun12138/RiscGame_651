@@ -61,15 +61,15 @@ fx:controller="edu.duke.ece651.mp.client.Map3Controller">
                         <Image url="@370214.jpg" />
                     </image>
                 </ImageView>
-                <Button fx:id="roshar_button" layoutX="384.0" layoutY="534.0" mnemonicParsing="false" onMouseClicked="#rosharClick" prefHeight="106.0" prefWidth="144.0" text="Roshar" opacity="0.0" />
-                <Button fx:id="midkemia_button" layoutX="438.0" layoutY="102.0" mnemonicParsing="false" onMouseClicked="#midkemiaClick" prefHeight="96.0" prefWidth="119.0" text="Midkemia" opacity="0.0" />
-                <Button fx:id="elantris_button" layoutX="197.0" layoutY="393.0" mnemonicParsing="false" onMouseClicked="#elantrisClick" prefHeight="115.0" prefWidth="131.0" text="Elantris" opacity="0.0" />
-                <Button fx:id="scadrial_button" layoutX="458.0" layoutY="405.0" mnemonicParsing="false" onMouseClicked="#scadrialClick" prefHeight="106.0" prefWidth="131.0" text="Scadrial" opacity="0.0" />
-                <Button fx:id="mordor_button" layoutX="655.0" layoutY="325.0" mnemonicParsing="false" onMouseClicked="#mordorClick" prefHeight="106.0" prefWidth="144.0" text="Mordor" opacity="0.0" />
-                <Button fx:id="hogwarts_button" layoutX="720.0" layoutY="529.0" mnemonicParsing="false" onMouseClicked="#hogwartsClick" prefHeight="106.0" prefWidth="131.0" text="Hogwarts" opacity="0.0" />
-                <Button fx:id="gondor_button" layoutX="752.0" layoutY="138.0" mnemonicParsing="false" onMouseClicked="#gondorClick" prefHeight="96.0" prefWidth="128.0" text="Gondor" opacity="0.0" />
-                <Button fx:id="narnia_button" layoutX="218.0" layoutY="179.0" mnemonicParsing="false" onMouseClicked="#narniaClick" prefHeight="115.0" prefWidth="128.0" text="Narnia" opacity="0.0" />
-                <Button fx:id="oz_button" layoutX="570.0" layoutY="214.0" mnemonicParsing="false" onMouseClicked="#ozClick" prefHeight="106.0" prefWidth="103.0" text="Oz" opacity="0.0" />
+                <Button fx:id="roshar_button" layoutX="384.0" layoutY="534.0" mnemonicParsing="false" onMousePressed="#rosharClick" onMouseReleased="#rosharRelease" prefHeight="106.0" prefWidth="144.0" text="Roshar" opacity="0.0" />
+                <Button fx:id="midkemia_button" layoutX="438.0" layoutY="102.0" mnemonicParsing="false" onMousePressed="#midkemiaClick" onMouseReleased="#midkemiaRelease" prefHeight="96.0" prefWidth="119.0" text="Midkemia" opacity="0.0" />
+                <Button fx:id="elantris_button" layoutX="197.0" layoutY="393.0" mnemonicParsing="false" onMousePressed="#elantrisClick" onMouseReleased="#elantrisRelease" prefHeight="115.0" prefWidth="131.0" text="Elantris" opacity="0.0" />
+                <Button fx:id="scadrial_button" layoutX="458.0" layoutY="405.0" mnemonicParsing="false" onMousePressed="#scadrialClick" onMouseReleased="#scadrialRelease" prefHeight="106.0" prefWidth="131.0" text="Scadrial" opacity="0.0" />
+                <Button fx:id="mordor_button" layoutX="655.0" layoutY="325.0" mnemonicParsing="false" onMousePressed="#mordorClick" onMouseReleased="#mordorRelease" prefHeight="106.0" prefWidth="144.0" text="Mordor" opacity="0.0" />
+                <Button fx:id="hogwarts_button" layoutX="720.0" layoutY="529.0" mnemonicParsing="false" onMousePressed="#hogwartsClick" onMouseReleased="#hogwartsRelease" prefHeight="106.0" prefWidth="131.0" text="Hogwarts" opacity="0.0" />
+                <Button fx:id="gondor_button" layoutX="752.0" layoutY="138.0" mnemonicParsing="false" onMousePressed="#gondorClick" onMouseReleased="#gondorRelease" prefHeight="96.0" prefWidth="128.0" text="Gondor" opacity="0.0" />
+                <Button fx:id="narnia_button" layoutX="218.0" layoutY="179.0" mnemonicParsing="false" onMousePressed="#narniaClick" onMouseReleased="#narniaRelease" prefHeight="115.0" prefWidth="128.0" text="Narnia" opacity="0.0" />
+                <Button fx:id="oz_button" layoutX="570.0" layoutY="214.0" mnemonicParsing="false" onMousePressed="#ozClick" onMouseReleased="#ozRelease" prefHeight="106.0" prefWidth="103.0" text="Oz" opacity="0.0" />
                 <Pane layoutX="14.0" layoutY="114.0" prefHeight="157.0" prefWidth="147.0">
                     <children>
                         <Rectangle fx:id="tech_text" arcHeight="5.0" arcWidth="5.0" fill="#548060" height="158.0" stroke="BLACK" strokeType="INSIDE" width="147.0" />

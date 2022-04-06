@@ -1,5 +1,6 @@
 package edu.duke.ece651.mp.client;
 
+import com.google.errorprone.annotations.MustBeClosed;
 import edu.duke.ece651.mp.common.Player;
 import edu.duke.ece651.mp.common.Territory;
 import javafx.fxml.FXML;
@@ -221,7 +222,13 @@ public class Map3Controller {
 
     @FXML
     void elantrisClick(MouseEvent event) {
+        elantris_button.setOpacity(0.1);
         TerriList.add("Elantris");
+    }
+
+    @FXML
+    void elantrisRelease(MouseEvent event) {
+        elantris_button.setOpacity(0.0);
     }
 
     @FXML
@@ -231,23 +238,47 @@ public class Map3Controller {
 
     @FXML
     void gondorClick(MouseEvent event) {
+        gondor_button.setOpacity(0.1);
         TerriList.add("Gondor");
     }
 
     @FXML
+    void gondorRelease(MouseEvent event) {
+        gondor_button.setOpacity(0.0);
+    }
+
+    @FXML
     void hogwartsClick(MouseEvent event) {
+        hogwarts_button.setOpacity(0.1);
         TerriList.add("Hogwarts");
+    }
+
+    @FXML
+    void hogwartsRelease(MouseEvent event) {
+        hogwarts_button.setOpacity(0.0);
     }
 
 
     @FXML
     void midkemiaClick(MouseEvent event) {
+        midkemia_button.setOpacity(0.1);
         TerriList.add("Midkemia");
     }
 
     @FXML
+    void midkemiaRelease(MouseEvent event) {
+        midkemia_button.setOpacity(0.0);
+    }
+
+    @FXML
     void mordorClick(MouseEvent event) {
+        mordor_button.setOpacity(0.1);
         TerriList.add("Mordor");
+    }
+
+    @FXML
+    void mordorRelease(MouseEvent event) {
+        mordor_button.setOpacity(0.0);
     }
 
     @FXML
@@ -259,23 +290,47 @@ public class Map3Controller {
 
     @FXML
     void narniaClick(MouseEvent event) {
+        narnia_button.setOpacity(0.1);
         TerriList.add("Narnia");
     }
 
     @FXML
+    void narniaRelease(MouseEvent event) {
+        narnia_button.setOpacity(0.0);
+    }
+
+    @FXML
     void ozClick(MouseEvent event) {
-        System.out.println("@@@@@@@@@@@@@@@");
+        oz_button.setOpacity(0.1);
         TerriList.add("Oz");
     }
 
     @FXML
+    void ozRelease(MouseEvent mouseEvent) {
+        oz_button.setOpacity(0.0);
+    }
+
+    @FXML
     void rosharClick(MouseEvent event) {
+        roshar_button.setOpacity(0.1);
         TerriList.add("Roshar");
     }
 
     @FXML
+    void rosharRelease(MouseEvent event){
+        roshar_button.setOpacity(0.0);
+    }
+
+    @FXML
     void scadrialClick(MouseEvent event) {
+        scadrial_button.setOpacity(0.1);
         TerriList.add("Scadrial");
+
+    }
+
+    @FXML
+    void scadrialRelease(MouseEvent event) {
+        scadrial_button.setOpacity(0.0);
     }
 
     @FXML
