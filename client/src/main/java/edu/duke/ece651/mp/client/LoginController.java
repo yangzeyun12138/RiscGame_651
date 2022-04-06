@@ -82,11 +82,14 @@ public class LoginController  {
     }
 
 
+
     public void switchToMap3() throws IOException {
         Scene scene = Client.get_scene("Map3.fxml");
         Stage stage = (Stage)((Node)me.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
+
+
 
 }

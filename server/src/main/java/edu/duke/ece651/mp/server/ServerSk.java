@@ -118,7 +118,7 @@ public class ServerSk {
         //error handle, same player cannot enter one room more than once
         handle_register(temp_socket);
         handle_login(temp_socket);
-        //choose_room(temp_socket);
+        choose_room(temp_socket);
       } catch (Exception ex) {
         //ex.printStackTrace();
       }

@@ -85,7 +85,7 @@ public class Client extends Application {
         URL fxmlResource = Client.class.getResource("/ui/" + fileName);
         FXMLLoader loader = new FXMLLoader(fxmlResource);
         VBox vbox = loader.load();
-        Scene scene = new Scene(vbox, 1920, 1080);
+        Scene scene = new Scene(vbox, 1000, 760);
         return scene;
     }
 }

@@ -31,4 +31,5 @@ public interface AbstractActionFactory {
   public String checkWin(ArrayList<Player> players);
   public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level);
   public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level);
+  public Territory findTerritory(Player player, String name);
 }

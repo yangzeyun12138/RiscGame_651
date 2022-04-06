@@ -20,10 +20,13 @@ public class ClientSk {
   private String color;
   private int num_units;
   public Player player;
+  public Player temp_player;
   final BufferedReader inputReader;
   final PrintStream out;
-  private AbstractActionFactory Action;
-  private ArrayList<Player> players;
+  public AbstractActionFactory Action;
+  public ArrayList<Player> players;
+
+  private String leftBottomBoard;
 
   public LinkedBlockingQueue<Pair<String, String>> user_password;
   public LoginController loginController;
@@ -32,6 +35,7 @@ public class ClientSk {
   public RegisterController registerController;
 
   public LinkedBlockingQueue<Pair<String, String>> initQueue;
+  public LinkedBlockingQueue<String> terriNameQueue;
   public LinkedBlockingQueue<String> actionQueue;
   public LinkedBlockingQueue<Quartet<String, String, String, String>> moveQueue;
   public LinkedBlockingQueue<Quartet<String, String, String, String>> attackQueue;
@@ -71,6 +75,7 @@ public class ClientSk {
     this.moveQueue = new LinkedBlockingQueue<>();
     this.attackQueue = new LinkedBlockingQueue<>();
     this.changeQueue  = new LinkedBlockingQueue<>();
+    this.leftBottomBoard = "";
   }
 
 
@@ -206,7 +211,8 @@ public class ClientSk {
   //TODO: choose room
   public void choose_room() throws IOException {
     String ans = read_string("Please enter number of players");
-    send_string(ans);
+    //for test
+    send_string("3");
   }
 
   /**
@@ -234,23 +240,24 @@ public class ClientSk {
         }
         System.out.println("");
         do_login();
-        //choose_room();
+        choose_room();
 
         //game begin
+        System.out.println("before accept map");
         String map_show1 = new String(accept_map());
+        System.out.println("before accept color");
         accept_color();
+        System.out.println("before accpet units");
         accept_units();
+        System.out.println("after accept units");
         set_player();
-
         System.out.println("after set player");
-        while(true) {
-          if (Client.ClientSkList.size() != 1) {
-            break;
-          }
-        }
         init_unit();
+        System.out.println(this.player.toString());
         send_player();
         String map_show2 = new String(accept_map());
+        set_player();
+        map3Controller.updateColor();
         out.print(map_show2);
         do_turns();
 
@@ -313,13 +320,10 @@ public class ClientSk {
   public void accept_units() throws IOException, ClassNotFoundException {
     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
     this.num_units = (int) ois.readObject();
-    out.println("you have " + num_units + " level 0 units totally");
+    out.println("You have " + num_units + " level 0 units totally");
     out.println("Please place your units on each territory");
-    Platform.runLater(()->{
-      map3Controller.getLeftBottomBoard().setWrapText(true);
-      map3Controller.getLeftBottomBoard().setText("you have " + num_units + " level 0 units totally. " +
-              "Please place your units on each territory\n");
-    });
+    writeLeftBottomBoard("You have " + num_units + " level 0 units totally. " +
+              "Please place your units on each territory by using the right bottom board.\n");
   }
 
   
@@ -336,34 +340,71 @@ public class ClientSk {
     }
     this.players = map.get_player_list();
   }
+
+  public void writeLeftBottomBoard(String content) {
+    leftBottomBoard += content;
+    Platform.runLater(()->{
+      map3Controller.getLeftBottomBoard().setWrapText(false);
+      map3Controller.getLeftBottomBoard().setText(leftBottomBoard);
+    });
+  }
    /**
 
    *Prompt the player to input the unit and then init the unit for each playe   *r's Territory
    *@return void
    */  
-  public void init_unit() {
+  public void init_unit() throws InterruptedException {
     int limit = num_units;
     int count = 0;
+    Pair<String, String> res = null;
     for (Territory t : player.player_terri_set) {
       if (count == player.player_terri_set.size() - 1) {
         t.setBasicUnit(limit);
-        out.println("Remaining " + limit + " units are placed in " + t.getName());
+        map3Controller.third_text.setText(String.valueOf(limit));
+        map3Controller.territory3.setText(t.getName());
+        writeLeftBottomBoard("Remaining " + limit + " units are placed in " + t.getName() + "\n");
+        out.println("before setVisible");
+        map3Controller.init_units_anchorpane.setVisible(false);
+        out.println("after setVisible");
+        map3Controller.init_units_anchorpane.setDisable(true);
         return;
       }
-      out.println("How many units do you want to place in " + t.getName() + "?");
-      out.print("Please enter a integer: ");
+      writeLeftBottomBoard("How many units do you want to place in " + t.getName() + "?" +
+              " Please enter a integer in the blank.\n");
+      if (count == 0) {
+        Platform.runLater(()->{
+          map3Controller.territory1.setText(t.getName());
+        });
+        canBeTaken(initQueue);
+        res = initQueue.take();
+      } else if (count == 1) {
+        map3Controller.territory2.setText(t.getName());
+      } else {
+        map3Controller.territory3.setText(t.getName());
+      }
       while (true) {
+
         try {
-          int temp = try_readLine(limit);
+          int temp = 0;
+          if (count == 0) {
+            temp = try_readLine(limit, res.getKey());
+          } else {
+            temp = try_readLine(limit, res.getValue());
+          }
           limit -= temp;
           t.setBasicUnit(temp);
           break;
         } catch (IllegalArgumentException | IOException e) {
           out.println(e.getMessage());
+          writeLeftBottomBoard(e.getMessage() + "\n");
+          canBeTaken(initQueue);
+          res = initQueue.take();
         }
       }
       count++;
     }
+
+
   }
 
   /**
@@ -371,14 +412,14 @@ public class ClientSk {
    *@return the number that the player enter
    *@param limit is the number of player that can put maximum unit 
    */
-  public int try_readLine(int limit) throws IOException {
-    String s = inputReader.readLine();
-    for (int i = 0; i < s.length(); i++) {
-      if (!Character.isDigit(s.charAt(i))) {
+  public int try_readLine(int limit, String num) throws IOException, InterruptedException {
+
+    for (int i = 0; i < num.length(); i++) {
+      if (!Character.isDigit(num.charAt(i))) {
         throw new IllegalArgumentException("Please enter a valid integer!");
       }
     }
-    int in = Integer.parseInt(s);
+    int in = Integer.parseInt(num);
     if (in >= 0 && in <= limit) {
       return in;
     } else {
@@ -450,68 +491,63 @@ public class ClientSk {
    *@param players is the list of the all player
    *@throws IOException
    */  
-  public String parse_check_add(String action, Orders orders, ArrayList<Player> players, Player temp_player) throws IOException {
-    String hint = null;
-    if (action.equals("C")) {
-      hint = "Please enter your order as following format\nterritoryName numToUp currLevel afterLevel";
-    } else {
-      hint = "Please enter your order as following format\nsourceTerritoryName destinationTerritoryName "  +
-            "numUnitsToDestination unitLevel";
-    }
-    String order = read_string(hint);
-    int index1 = order.indexOf(" ");
-    if (index1 == -1) {
-      return new String(hint);
-    }
-    int index2 = order.indexOf(" ", index1 + 1);
-    if (index2 == -1) {
-      return new String(hint);
-    }
-    int index3 = order.indexOf(" ", index2 + 1);
-    if (index3 == -1) {
-      return new String(hint);
-    }
-    int index4 = order.indexOf(" ", index3 + 1);
-    if (index4 != -1) {
-      return new String(hint);
-    }
-    String s1 = order.substring(0, index1);
-    String s2 = order.substring(index1 + 1, index2);
-    String s3 = order.substring(index2 + 1, index3);
-    String s4 = order.substring(index3 + 1);
+  public String parse_check_add(String action, Orders orders, ArrayList<Player> players, Player temp_player) throws IOException, InterruptedException {
+
+    writeLeftBottomBoard("Now is " + action + "\n");
+    canBeTaken(moveQueue);
+    Quartet<String, String, String, String> ans = moveQueue.take();
+
+    String s1 = null;
+    String s2 = null;
+    String s3 = null;
+    String s4 = null;
 
     if (action.equals("C")) {
+      if(map3Controller.TerriList.isEmpty()){
+        return "You should choose a territory to upgrade your units!\n";
+      }
+      s1 = map3Controller.TerriList.get(0);
+      s2 = ans.getValue3();
+      s3 = ans.getValue0();
+      s4 = ans.getValue1();
       //s1: territoryName, s2: numToUp, s3:currLevel, s4:afterLevel
       if(!check_num(s2)) {
-        return "Please enter a valid integer as numToUp!";
+        return "Please enter a valid integer as numToUp!\n";
       }
       if(check_num(s3)) {
         if (!check_num_level(s3)) {
-          return "Unit level should within 0 - 6";
+          return "Unit level should within 0 - 6\n";
         }
       } else {
-        return "Please enter a valid integer as currLevel!";
+        return "Please enter a valid integer as currLevel!\n";
       }
       if(check_num(s4)) {
         if (!check_num_level(s4)) {
-          return "Unit level should within 0 - 6";
+          return "Unit level should within 0 - 6\n";
         }
 
       } else {
-        return "Please enter a valid integer as afterLevel!";
+        return "Please enter a valid integer as afterLevel!\n";
       }
     } else {
+      if (map3Controller.TerriList.size() < 2) {
+        return "You should choose src territory and des territory for a move or attack order!\n";
+      }
+      s1 = map3Controller.TerriList.get(0);
+      s2 = map3Controller.TerriList.get(1);
+      s3 = ans.getValue3();
+      s4 = ans.getValue2();
       //s1:sourceTerritoryName destinationTerritoryName numUnitsToDestination unitLevel
       if(!check_num(s3)) {
-        return "Please enter a valid integer as numUnitsToDestination!";
+        return "Please enter a valid integer as numUnitsToDestination!\n";
       }
       if(check_num(s4)) {
         if (!check_num_level(s4)) {
-          return "Unit level should within 0 - 6";
+          return "Unit level should within 0 - 6\n";
         }
       }
       else {
-        return "Please enter a valid integer as unitLevel!";
+        return "Please enter a valid integer as unitLevel!\n";
       }
     }
 
@@ -522,6 +558,7 @@ public class ClientSk {
       }
       else {
         Action.Move(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
+        map3Controller.tempUpdateInfo(temp_player);
         //new a order class, add it to orders moveList
         orders.MoveUpList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
@@ -537,6 +574,7 @@ public class ClientSk {
           return temp_player.color + " player has invalid attack orders. " +
                   "The numUnits of level " + s4 + "is insufficient.\n";
         }
+        map3Controller.tempUpdateInfo(temp_player);
         //new a order class, add it to orders attackList
         orders.AttackList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
@@ -549,6 +587,7 @@ public class ClientSk {
       }
       else {
         Action.unitUpgrade(temp_player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
+        map3Controller.tempUpdateInfo(temp_player);
         //new a order class, add it to orders attackList
         orders.MoveUpList.add(new Order(temp_player, s1, " ", Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4)));
       }
@@ -576,18 +615,21 @@ public class ClientSk {
    *@param orders is the player's orders
    *@throws IOException
    */
-  public String collect_one_order(Orders orders, ArrayList<Boolean> if_up, Player temp_player) throws IOException {
-    out.println("You are the " + color + " player, what would you like to do?");
-    out.print("(M)ove\n(A)ttack\n(U)pgrade total tech level\n(C)hange unit level\n(D)one\nPlease enter the first capital letter\n");
-    out.println("Attention: please do one or none U and some M, A, C, then ends with Done.");
+  public String collect_one_order(Orders orders, ArrayList<Boolean> if_up, Player temp_player) throws IOException, InterruptedException {
+    //out.println("You are the " + color + " player, what would you like to do?");
+    //out.print("(M)ove\n(A)ttack\n(U)pgrade total tech level\n(C)hange unit level\n(D)one\nPlease enter the first capital letter\n");
+    writeLeftBottomBoard("Attention: please do one or none U and some M, A, C, then ends with Done.\n");
     String action;
     while (true) {
       try {
-        action = inputReader.readLine();
+        canBeTaken(actionQueue);
+        action = actionQueue.take();
         check_action(action);
         break;
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
     }
     while (true) {
@@ -607,17 +649,17 @@ public class ClientSk {
                   temp_player.upgradeTechLevel();
                   if_up.set(0, true);
                   orders.MoveUpList.add(new Order(temp_player, " ", " ", 0, 0, 0));
-                  out.println("Upgrade total tech level success! Now is " + temp_player.getTechLevel());
+                  map3Controller.tempUpdateInfo1(temp_player);
                 } catch(IllegalArgumentException e) {
                   out.print(e.getMessage());
                 }
               }
               else {
-                out.println("You have reached top total tech level!");
+                writeLeftBottomBoard("You have reached top total tech level!\n");
               }
             } else{
-              res = "You can only update total level once in one turn!";
-              out.println(res);
+              res = "You can only update total level once in one turn!\n";
+              writeLeftBottomBoard(res);
               String temp_action = collect_one_order(orders, if_up, temp_player);
               if (!temp_action.equals("U")) {
                 return temp_action;
@@ -627,7 +669,7 @@ public class ClientSk {
             }
           }
           if (res != null) {
-            out.println(res);
+            writeLeftBottomBoard(res);
           }
         } while (res != null);
         break;
@@ -643,7 +685,7 @@ public class ClientSk {
    *@return void
    *@thorws IOException, ClassNotFoundException
    */  
-  public void if_end_one_turn() throws IOException, ClassNotFoundException {
+  public void if_end_one_turn() throws IOException, ClassNotFoundException, InterruptedException {
     String res = null;
     while(true) {
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
@@ -664,14 +706,15 @@ public class ClientSk {
    *@return void  
    *@throws IOException
    */
-  public void collect_orders_and_send() throws IOException {
+  public void collect_orders_and_send() throws IOException, InterruptedException {
     Orders orders = new Orders();
     String temp = new String();
     ArrayList<Boolean> if_up = new ArrayList<>();
     if_up.add(false);
-    Player temp_player = this.player.deep_copy();
+    this.temp_player = this.player.deep_copy();
     do {
       temp = collect_one_order(orders, if_up, temp_player);
+      System.out.println("temp action is " + temp);
     } while (!temp.equals("D"));
     send_orders(orders);
   }
@@ -722,7 +765,7 @@ public class ClientSk {
    *@return void
    *@throws IOException, ClassNotFoundException
 */
-  public void do_turns_as_watch() throws IOException, ClassNotFoundException {
+  public void do_turns_as_watch() throws IOException, ClassNotFoundException, InterruptedException {
     while (true) {
       Orders new_orders = new Orders();
       send_orders(new_orders);
@@ -730,6 +773,8 @@ public class ClientSk {
       String map_show = new String(accept_map());
       out.print(map_show);
       set_player();
+      map3Controller.updateColor();
+      map3Controller.updatePlayerInfo();
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String) ois.readObject();
       if (turn_end_helper()) {
@@ -762,7 +807,7 @@ public class ClientSk {
    *@return void
    *@throws IOException, ClassNotFoundException
    */
-  public void do_turns() throws IOException, ClassNotFoundException {
+  public void do_turns() throws IOException, ClassNotFoundException, InterruptedException {
     String s = null;
     while (true) {
       collect_orders_and_send();
@@ -770,6 +815,8 @@ public class ClientSk {
       String map_show = new String(accept_map());
       out.print(map_show);
       set_player();
+      map3Controller.updateColor();
+      map3Controller.updatePlayerInfo();
       ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
       String res = (String)ois.readObject();
       if (res.equals("Lose")) {
