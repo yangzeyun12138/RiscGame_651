@@ -39,14 +39,14 @@ public class Server {
 
     public ArrayList<GameMap> create_all_map(Parse parse, Server server) throws IOException {
         ArrayList<GameMap> maps = new ArrayList<>();
-        GameMap gm1 = server.create_one_map("Territory2.txt", 2, parse);
+        GameMap gm1 = server.create_one_map("Territory3.txt", 3, parse);
         maps.add(gm1);
         GameMap gm2 = server.create_one_map("Territory3.txt", 3, parse);
         maps.add(gm2);
-        //GameMap gm3 = server.create_one_map("Territory4.txt", 4, parse);
-        //maps.add(gm3);
-        //GameMap gm4 = server.create_one_map("Territory5.txt", 5, parse);
-        //maps.add(gm4);
+        GameMap gm3 = server.create_one_map("Territory3.txt", 3, parse);
+        maps.add(gm3);
+        GameMap gm4 = server.create_one_map("Territory3.txt", 3, parse);
+        maps.add(gm4);
         return maps;
     }
 }

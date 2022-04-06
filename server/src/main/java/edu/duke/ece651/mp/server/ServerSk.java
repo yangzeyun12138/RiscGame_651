@@ -85,17 +85,22 @@ public class ServerSk {
 
     while (true) {
       for (int i = 0; i < rooms.size(); i++) {
-        if (socket2D.get(i).size() == i + 2) {
+        if (socket2D.get(i).size() == 3) {
           if (flag.get(i).equals(false)) {
             process(rooms.get(i), socket2D.get(i));
+            System.out.println("start a game!");
             flag.set(i, true);
           }
         }
       }
+
+      /*
       if(checkEnd() && (flag.get(0).equals(true) || flag.get(1).equals(true) ||
       flag.get(2).equals(true) || flag.get(3).equals(true))){
         break;
       }
+
+       */
     }
 
   }
@@ -111,14 +116,26 @@ public class ServerSk {
     return true;
   }
 
+
+
+
   public void accept_client(){
     Thread th = new Thread(() -> {
       try {
         Socket temp_socket = serverSocket.accept();
+
+        String res = accept_string(temp_socket);
+
+        System.out.println("IP : " + temp_socket.getInetAddress());
+        System.out.println("Post : " + temp_socket.getPort());
         //error handle, same player cannot enter one room more than once
-        handle_register(temp_socket);
-        handle_login(temp_socket);
+        if (res.equals("First")) {
+          handle_register(temp_socket);
+          handle_login(temp_socket);
+        }
+
         choose_room(temp_socket);
+
       } catch (Exception ex) {
         //ex.printStackTrace();
       }
@@ -128,7 +145,13 @@ public class ServerSk {
 
   public void choose_room(Socket sk) throws IOException, ClassNotFoundException {
     String num_players = accept_string(sk);
-    socket2D.get(Integer.parseInt(num_players) - 2).add(sk);
+    //socket2D.get(Integer.parseInt(num_players) - 2).add(sk);
+    for (int i = 0; i < 4; i++) {
+      if (socket2D.get(i).size() < 3) {
+        socket2D.get(i).add(sk);
+        break;
+      }
+    }
   }
 
   public void send_string(String toSend, Socket socket) {
