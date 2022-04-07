@@ -194,6 +194,12 @@ public class Map32Controller implements Initializable {
     @FXML
     void changeRoom(MouseEvent event) {
         me = event;
+        for (int i = 0; i < Client.ClientSkList.size(); i++) {
+            System.out.println("In for loop : " + i);
+            MenuItem menuItem = change_room_menubutton.getItems().get(i);
+            menuItem.setDisable(false);
+            menuItem.setVisible(true);
+        }
     }
 
     @FXML
@@ -598,11 +604,8 @@ public class Map32Controller implements Initializable {
     @FXML
     void addRoom(MouseEvent event) throws IOException, ClassNotFoundException {
         me = event;
-        addRoomCount++;
-        if (addRoomCount > 0 && addRoomCount < 2) {
-            MenuItem menuItem = change_room_menubutton.getItems().get(2 + addRoomCount);
-            menuItem.setDisable(false);
-            menuItem.setVisible(true);
+        if(clientSk.currRoomNum < 4) {
+            clientSk.currRoomNum++;
         }
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("In map3controller before new game");

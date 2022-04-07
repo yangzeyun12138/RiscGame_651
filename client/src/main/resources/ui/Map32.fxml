@@ -194,9 +194,9 @@
                 <MenuButton fx:id="change_room_menubutton" layoutX="863.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#changeRoom" text="Change Room">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#changeToRoom1" text="Room1" />
-                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom2" text="Room2" />
-                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom3" text="Room3" />
-                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom4" text="Room4" />
+                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom2" text="Room2" visible="false" disable="true"/>
+                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom3" text="Room3" visible="false" disable="true"/>
+                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom4" text="Room4" visible="false" disable="true"/>
                     </items>
                 </MenuButton>
                 <AnchorPane fx:id="init_units_anchorpane" layoutX="847.0" layoutY="415.0" prefHeight="168.0" prefWidth="17.0">

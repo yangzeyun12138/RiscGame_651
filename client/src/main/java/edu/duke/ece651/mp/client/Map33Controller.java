@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -198,6 +195,12 @@ public class Map33Controller implements Initializable {
     @FXML
     void changeRoom(MouseEvent event) {
         me = event;
+        for (int i = 0; i < Client.ClientSkList.size(); i++) {
+            System.out.println("In for loop : " + i);
+            MenuItem menuItem = change_room_menubutton.getItems().get(i);
+            menuItem.setDisable(false);
+            menuItem.setVisible(true);
+        }
     }
 
     @FXML
@@ -492,6 +495,7 @@ public class Map33Controller implements Initializable {
         this.changeQueue  = new LinkedBlockingQueue<>();
         bind_client();
         this.TerriList = new ArrayList<>();
+        this.addRoomCount = 0;
     }
 
 
@@ -595,7 +599,12 @@ public class Map33Controller implements Initializable {
 
     @FXML
     void addRoom(MouseEvent event) throws IOException, ClassNotFoundException {
+
     }
+
+    private int addRoomCount;
+
+
 
     @FXML
     void changeToRoom1(ActionEvent ae) {

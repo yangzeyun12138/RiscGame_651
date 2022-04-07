@@ -194,18 +194,17 @@ public class Map3Controller implements Initializable {
     @FXML
     void addRoom(MouseEvent event) throws IOException, ClassNotFoundException {
         //me = event;
-        addRoomCount++;
-        if (addRoomCount > 0 && addRoomCount < 4) {
-            MenuItem menuItem = change_room_menubutton.getItems().get(addRoomCount);
-            menuItem.setDisable(false);
-            menuItem.setVisible(true);
-            System.out.println(menuItem.getText() + " disable is " + menuItem.isDisable());
+        if(clientSk.currRoomNum < 4) {
+            clientSk.currRoomNum++;
+            System.out.println("******************" +
+                    "************In add Room current room num is " + clientSk.currRoomNum);
         }
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("In map3controller before new game");
         Client.new_game("0.0.0.0", "9999", input, System.out, false);
         System.out.println("In map3controller after new game");
     }
+
 
     @FXML
     void changeToRoom1(ActionEvent ae) {
@@ -272,6 +271,14 @@ public class Map3Controller implements Initializable {
     @FXML
     void changeRoom(MouseEvent event) {
         me = event;
+        System.out.println("%%%%%%%%%%%%%%\n" +
+                "In change room!!!!!!!!!!");
+        for (int i = 0; i < Client.ClientSkList.size(); i++) {
+            System.out.println("In for loop : " + i);
+            MenuItem menuItem = change_room_menubutton.getItems().get(i);
+            menuItem.setDisable(false);
+            menuItem.setVisible(true);
+        }
     }
 
     @FXML

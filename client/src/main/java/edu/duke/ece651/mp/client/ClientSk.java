@@ -46,6 +46,7 @@ public class ClientSk {
   public Map32Controller map32Controller;
   public Map33Controller map33Controller;
   public int signal;
+  public int currRoomNum;
 
   public void setLoginController(LoginController loginController){
     this.loginController = loginController;
@@ -113,6 +114,7 @@ public class ClientSk {
     this.changeQueue  = new LinkedBlockingQueue<>();
     this.leftBottomBoard = "";
     this.map3ControllerList = new Quartet<>(null,null,null,null);
+    this.currRoomNum = 1;
   }
 
 
@@ -137,11 +139,16 @@ public class ClientSk {
   }
 
   public void do_register() throws IOException, ClassNotFoundException, InterruptedException {
-    send_string("Need register");
+
     String temp = null;
     System.out.println("in do register");
     Triplet<String, String, String> temp_tuple = null;
-
+    while (registerController.register == null) {
+      System.out.print("");
+    }
+    System.out.println("");
+    if (registerController.register.equals("Need register")) {
+      send_string("Need register");
       while (true) {
         canBeTaken(user_pwd1_pwd2);
         System.out.println("lbq size: " + user_pwd1_pwd2.size());
@@ -195,6 +202,19 @@ public class ClientSk {
         });
         break;
       }
+    } else {
+      send_string("No need register");
+      System.out.println("&&&&&&&&&In no need register");
+      Platform.runLater(() -> {
+        try {
+          System.out.println("before switch to login");
+          registerController.switchToLogin();
+          System.out.println("after switch to login");
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      });
+    }
 
   }
 
