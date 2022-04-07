@@ -12,7 +12,7 @@ public class OrderTest {
     int numUnit = 3;
     Player player = makePlayer();
     
-    Order order = new Order(player, src, dest, numUnit);
+    Order order = new Order(player, src, dest, numUnit, 0, 0);
     assertEquals("Gondor", order.getSrc());
     assertEquals("Oz", order.getDest());
     assertEquals(3, order.getNumUnit());
@@ -21,8 +21,8 @@ public class OrderTest {
 
   public Player makePlayer(){
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
-    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red");
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red", 2);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt1.setBasicUnit(3);

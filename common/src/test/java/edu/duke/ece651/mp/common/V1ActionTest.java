@@ -12,9 +12,9 @@ public class V1ActionTest {
   @Test
   public void test_move() {
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red");
-    LandTerritory lt2 = new LandTerritory("Mordor", "Red");
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
     lt2.addNeigh(lt3);
@@ -49,22 +49,22 @@ public class V1ActionTest {
 
   }
 
-  @Disabled
+  //@Disabled
   @Test
   public void test_rolldice(){
     V1Action action = new V1Action();
     assertTrue(action.rollDice());
   }
 
-  @Disabled
+  //@Disabled
   @Test
   public void test_Attack(){
     HashSet<Territory> test_territory1 = new HashSet<>();
     HashSet<Territory> test_territory2 = new HashSet<>();
-    LandTerritory lt2 = new LandTerritory("Mordor", "Red");
-    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red");
-    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
-    LandTerritory lt5 = new LandTerritory("Elantris", "Blue");
+    LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
+    LandTerritory lt3 = new LandTerritory("Hogwarts", "Red", 2);
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue", 2);
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue", 3);
 
     lt2.addNeigh(lt3);
     lt2.addNeigh(lt4);
@@ -97,14 +97,14 @@ public class V1ActionTest {
     for(Territory neigh : left.getNeigh()){
       assertEquals("Red", neigh.getColor());
     }
-    assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1, players));
+    //    assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", 1, players));
   }
 
   @Test
   public void test_done(){
     HashSet<Territory> test_territory2 = new HashSet<>();
-    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
-    LandTerritory lt5 = new LandTerritory("Elantris", "Blue");
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue", 2);
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue", 3);
 
     lt4.addNeigh(lt5);
     lt5.addNeigh(lt4);
@@ -137,10 +137,10 @@ public class V1ActionTest {
     ArrayList<Player> players = makePlayer2();
     Player player1 = players.get(0);
     Player player2 = players.get(1);
-    Order order1 = new Order(player1, "Gondor", "Oz", 1);
-    Order order2 = new Order(player1, "Hogwarts", "Oz", 1);
-    Order order3 = new Order(player2, "Oz", "Gondor", 1);
-    Order order4 = new Order(player2, "Oz", "Hogwarts", 1);
+    Order order1 = new Order(player1, "Gondor", "Oz", 1, 0, 0);
+    Order order2 = new Order(player1, "Hogwarts", "Oz", 1, 0, 0);
+    Order order3 = new Order(player2, "Oz", "Gondor", 1, 0, 0);
+    Order order4 = new Order(player2, "Oz", "Hogwarts", 1, 0, 0);
     Orders orders1 = new Orders();
     Orders orders2 = new Orders();
     orders1.AttackList.add(order1);
@@ -164,9 +164,9 @@ public class V1ActionTest {
 
   public Player makePlayer1(){
     HashSet<Territory> test_territory = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
-    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red"); 
-    LandTerritory lt3 = new LandTerritory("Oz", "Green");
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red", 2); 
+    LandTerritory lt3 = new LandTerritory("Oz", "Green", 4);
     lt1.addNeigh(lt2);
     lt1.addNeigh(lt3);
     lt2.addNeigh(lt1);
@@ -182,10 +182,10 @@ public class V1ActionTest {
   public ArrayList<Player> makePlayer2(){
     HashSet<Territory> test_territory1 = new HashSet<>();
     HashSet<Territory> test_territory2 = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Gondor", "Red");
-    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red"); 
-    LandTerritory lt3 = new LandTerritory("Oz", "Green");
-    LandTerritory lt4 = new LandTerritory("Narnia", "Green");
+    LandTerritory lt1 = new LandTerritory("Gondor", "Red", 4);
+    LandTerritory lt2 = new LandTerritory("Hogwarts", "Red", 2); 
+    LandTerritory lt3 = new LandTerritory("Oz", "Green", 4);
+    LandTerritory lt4 = new LandTerritory("Narnia", "Green", 2);
     lt1.addNeigh(lt2);
     lt1.addNeigh(lt3);
     lt2.addNeigh(lt1);
@@ -225,8 +225,8 @@ public class V1ActionTest {
     ArrayList<Player> players = new ArrayList<>();
     ArrayList<Orders> Orders  = new ArrayList<>();
     HashSet<Territory> test_territory1 = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Mordor", "Red");
-    LandTerritory lt2 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt1 = new LandTerritory("Mordor", "Red", 3);
+    LandTerritory lt2 = new LandTerritory("Gondor", "Red", 4);
 
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
@@ -237,8 +237,8 @@ public class V1ActionTest {
     Player p1 = new Player("Red", test_territory1);
 
     HashSet<Territory> test_territory2 = new HashSet<>();
-    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
-    LandTerritory lt5 = new LandTerritory("Elantris", "Blue");
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue", 2);
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue", 3);
 
     lt4.addNeigh(lt5);
     lt5.addNeigh(lt4);
@@ -248,14 +248,17 @@ public class V1ActionTest {
     test_territory2.add(lt5);
     Player p2 = new Player("Blue", test_territory2);
 
+    lt1.addNeigh(lt4);
+    lt4.addNeigh(lt1);
+    lt2.addNeigh(lt5);
+    lt5.addNeigh(lt2);
+
     players.add(p1);
     players.add(p2);
-
-
     Orders os1 = new Orders();
     Orders os2 = new Orders();
-    Order oA1 = new Order(p1, "Gondor", "Elantris", 1);
-    Order oA2 = new Order(p2, "Scadrial", "Mordor",1);
+    Order oA1 = new Order(p1, "Gondor", "Elantris", 1, 0, 0);
+    Order oA2 = new Order(p2, "Scadrial", "Mordor",1, 0, 0);
     os1.AttackList.add(oA1);
     os2.AttackList.add(oA2);
     Orders.add(os1);
@@ -273,8 +276,8 @@ public class V1ActionTest {
     ArrayList<Player> players = new ArrayList<>();
     ArrayList<Orders> Orders  = new ArrayList<>();
     HashSet<Territory> test_territory1 = new HashSet<>();
-    LandTerritory lt1 = new LandTerritory("Mordor", "Red");
-    LandTerritory lt2 = new LandTerritory("Gondor", "Red");
+    LandTerritory lt1 = new LandTerritory("Mordor", "Red", 3);
+    LandTerritory lt2 = new LandTerritory("Gondor", "Red", 4);
 
     lt1.addNeigh(lt2);
     lt2.addNeigh(lt1);
@@ -285,8 +288,8 @@ public class V1ActionTest {
     Player p1 = new Player("Red", test_territory1);
 
     HashSet<Territory> test_territory2 = new HashSet<>();
-    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue");
-    LandTerritory lt5 = new LandTerritory("Elantris", "Blue");
+    LandTerritory lt4 = new LandTerritory("Scadrial", "Blue", 2);
+    LandTerritory lt5 = new LandTerritory("Elantris", "Blue", 3);
 
     lt4.addNeigh(lt5);
     lt5.addNeigh(lt4);
@@ -299,10 +302,10 @@ public class V1ActionTest {
     players.add(p1);
     players.add(p2);
     ArrayList<Order> oList = new ArrayList<Order>();
-    Order o1 = new Order(players.get(0), "Mordor", "Elantris", 1);
-    Order o2 = new Order(players.get(1), "Scadrial", "Elantris", 1);
-    Order o3 = new Order(players.get(0), "Gondor", "Elantris", 2);
-    Order o4 = new Order(players.get(1), "Gondor", "Elantris", 1);
+    Order o1 = new Order(players.get(0), "Mordor", "Elantris", 1, 0, 0);
+    Order o2 = new Order(players.get(1), "Scadrial", "Elantris", 1, 0, 0);
+    Order o3 = new Order(players.get(0), "Gondor", "Elantris", 2, 0, 0);
+    Order o4 = new Order(players.get(1), "Gondor", "Elantris", 1, 0, 0);
     oList.add(o1);
     oList.add(o2);
     oList.add(o3);

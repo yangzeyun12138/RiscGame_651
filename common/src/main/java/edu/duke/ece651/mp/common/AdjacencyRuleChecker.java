@@ -9,9 +9,10 @@ public class AdjacencyRuleChecker extends AttackChecker {
    *@param src is the name of the source territory
    *@param dest is the name of the dest territory
    *@param numUnit is the number of unit that player wants to do the attack.
+   *@param level is the level of unit
    *@return return the error string, and return null if there is no error. 
    */
-  protected String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players){
+  protected String checkMyRule(Player player, String src, String dest, int numUnit, ArrayList<Player> players, int level){
     for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(src)){
         for(Territory neigh : curr_t.getNeigh()){
