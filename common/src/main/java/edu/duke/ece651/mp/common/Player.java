@@ -1,22 +1,57 @@
 package edu.duke.ece651.mp.common;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 public class Player implements java.io.Serializable{
     private static final long serialVersionUID = 1L;
     public String color;
-    public HashSet<Territory> player_terri_set;
     private int tech_level;
     private int food;
+    public HashSet<Territory> player_terri_set;
+    
+    public HashMap<String, ArrayList<Territory>> old_view_map;
+    public HashMap<String, ArrayList<Territory>> new_view_map;
 
-    public Player(String color, HashSet<Territory> player_terri_set) {
+  public Player(String color, HashSet<Territory> player_terri_set) {
         this.color = color;
         this.player_terri_set = player_terri_set;
         this.tech_level = 1; // set initial technology level to 1
-        this.food = 140;// set initial food to 140 
+        this.food = 140;// set initial food to 140
+        this.old_view_map = viewMapInitializer(player_terri_set);
+        this.new_view_map = viewMapInitializer(player_terri_set);
     }
+
+  public HashMap<String, ArrayList<Territory>> viewMapInitializer(HashSet<Territory> player_terri_set){
+    ArrayList<Territory> current_viewed_territory = new ArrayList<Territory>();
+    ArrayList<Territory> current_grey_territory = new ArrayList<Territory>();
+    HashSet<String> current_viewed_territory_name = new HashSet<String>();
+    // Adding the Territories that the player owns
+    for(Territory t : player_terri_set){
+      current_viewed_territory.add(t);
+      current_viewed_territory_name.add(t.getName());
+    }
+
+    // Adding the Neighbors of those Territories
+    ArrayList<Territory> current_viewed_territory_copy = new ArrayList<Territory>();
+    // deep copy
+    for(Territory t : current_viewed_territory){
+      Territory copy = t.deep_copy();
+      current_viewed_territory_copy.add(copy);
+    }
+    //Traverse Neighbors now
+    for(Territory terri : current_viewed_territory_copy){
+      for(Territory neigh : terri.getNeigh()){
+        if(neigh.getName())
+      }
+    }
+   
+
+    HashMap<String, ArrayList<Territory>> current_new_map = new HashMap<String, ArrayList<Territory>>();
+    current_new_map.put("viewed", current_viewed_territory);
+    current_new_map.put("grey", current_grey_territory);
+    return current_new_map;
+  }
 
     /**
      * @return a String that display the player color and their territories info
