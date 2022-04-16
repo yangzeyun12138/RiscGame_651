@@ -1,5 +1,5 @@
 package edu.duke.ece651.mp.common;
-
+import java.io.*;
 import java.util.ArrayList;
 import java.util.*;
 
@@ -10,6 +10,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
   protected String color;
   protected ArrayList<Unit> units;
   protected final int size;
+  public ArrayList<Spy> spyList;
 
   /**Land Territory Constructor: initialize name, color, units, and neighbors
    *@param: Name: name of the LandTerritory; Color: Color of the LandTerritory;
@@ -20,6 +21,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
     this.color = Color;
     this.units = new ArrayList<Unit>();
     this.size = size;
+    this.spyList = new ArrayList<Spy>();
   }
 
   /**
@@ -328,4 +330,23 @@ public class LandTerritory implements Territory, java.io.Serializable {
     }
     return  res;
   }
+
+  @Override
+  public Territory deep_copy() {
+      Territory deep_copy = null;
+      try {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          ObjectOutputStream oos = new ObjectOutputStream(baos);
+          oos.writeObject(this);
+
+          ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+          ObjectInputStream ois = new ObjectInputStream(bais);
+          deep_copy = (Territory) ois.readObject();
+      } catch (ClassNotFoundException | IOException e) {
+          e.printStackTrace();
+      }
+      return deep_copy;
+  }
+
+    
 }
