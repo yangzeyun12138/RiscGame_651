@@ -334,6 +334,7 @@ public class V2Action implements AbstractActionFactory {
 
   @Override
   public void Done(ArrayList<Player> players){
+    resetSpyMovables(players);
     for (Player p : players) {
       for (Territory t : p.player_terri_set) {
         t.addBasicUnit(1);
@@ -537,6 +538,27 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
+    if (new_level == 9){
+      int SpyCreationCost = 20;
+      boolean checkTerri = false;
+      if(player.getFood() < SpyCreationCost){
+        return new String(player.getColor()+" Player: There is not enough food to create a spy!");
+      }
+      for(Territory curr_t : player.player_terri_set){
+        if(curr_t.getName().equals(src)){
+          if(curr_t.countLevel(0) < 0){
+            return new String(player.getColor()+" Player: There is not enough Level 0 Units to create a spy!");
+          }
+          checkTerri = true;
+        
+        }
+      }
+    
+      if(checkTerri == false){
+        return new String(player.getColor()+" Player: There is no Spy in this Territory!");
+      }
+    }
+    
     UpgradeChecker tech = new TechRuleChecker(null);
     UpgradeChecker level = new LevelRuleChecker(tech);
     UpgradeChecker downgrade = new NoDowngradeRuleChecker(level);
@@ -546,6 +568,7 @@ public class V2Action implements AbstractActionFactory {
     String res =null;
     res = name.checkUpgrade(player, src, numUnit, curr_level, new_level);
     return res;
+    
   }
   /**
    *computeCost: compute the cost for upgrade from current level to the new level
@@ -567,14 +590,89 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
-
-    for(Territory curr_t: player.player_terri_set){
+    if (new_level == 9){
+      this.createSpy(player, src);
+    }else{
+      for(Territory curr_t: player.player_terri_set){
+        if(curr_t.getName().equals(src)){
+          curr_t.upgradeUnit(numUnit, curr_level, new_level);
+        }
+      }
+      player.costFood(computeCost(numUnit, curr_level, new_level));
+    }
+  }
+  /**
+   *createSpy: create a spy
+   *@param: player: the player who wants to create the spy
+   *@param: src: the name of the territory to place the spy
+   *@throws: players do not have enough food
+   *@throws: cannot find src territory from player's territory
+   */
+  @Override
+  public void createSpy(Player player, String src){
+    int SpyCreationCost = 20;
+    boolean checkTerri = false;
+    
+    for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(src)){
-        curr_t.upgradeUnit(numUnit, curr_level, new_level);
+        curr_t.loseUnit(0);
+        curr_t.addSpy(player.getColor());
+        checkTerri = true;
+        player.costFood(SpyCreationCost);
       }
     }
-    player.costFood(computeCost(numUnit, curr_level, new_level));
+  }
+  /**
+   *checkForSpyMove: check all the rules before move a spy
+   *@param: player: the player who wants to move the spy
+   *@param: players: the list of all players
+   *@param: src: the name of the source territory
+   *@param: dest: the name of the destination territory
+   *@return: result: null if there is no errors; Error message as a String
+   */
+  @Override
+  public String checkForSpyMove(Player player, ArrayList<Player> players, String src, String dest){
+    SpyChecker SpyCost = new SpyCostRuleChecker(null);
+    SpyChecker SpyMove = new SpyMoveRuleChecker(SpyCost);
+    SpyChecker SpyOnce = new SpyOnceRuleChecker(SpyMove);
+    
+    String result = SpyOnce.checkSpy(player, players, src, dest);
+    return result;
   }
 
+  /**
+   *checkForSpyMove: move a spy of the player from the source to destination
+   *@param: player: the player who wants to move the spy
+   *@param: players: the list of all players
+   *@param: src: the name of the source territory
+   *@param: dest: the name of the destination territory
+   */
+  @Override
+  public void spyMove(Player player, ArrayList<Player> players, String src, String dest){
+    int SpyMoveCost = 20;
+    for (Player p : players){
+      for(Territory t : p.player_terri_set){
+        if (t.getName().equals(src)){
+          t.loseSpy(player.getColor());
+        }
+        if (t.getName().equals(dest)){
+          t.addSpy(player.getColor());
+        }
+      }
+    }
+    player.costFood(SpyMoveCost);
+  }
 
+  /**
+   *resetSpyMovables: set all spies in the map movable
+   *@param: players: arraylist of player
+   */
+  @Override
+  public void resetSpyMovables(ArrayList<Player> players){
+    for (Player p : players){
+      for (Territory t : p.player_terri_set){
+        t.resetAllSpies();
+      }
+    }
+  }
 }

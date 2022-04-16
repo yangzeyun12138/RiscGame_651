@@ -32,4 +32,9 @@ public interface AbstractActionFactory {
   public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level);
   public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level);
   public Territory findTerritory(Player player, String name);
+  
+  public void createSpy(Player player,String src);
+  public String checkForSpyMove(Player player, ArrayList<Player> players, String src, String dest);
+  public void spyMove(Player player, ArrayList<Player> players, String src, String dest);
+  public void resetSpyMovables(ArrayList<Player> players);
 }

@@ -73,6 +73,9 @@ fx:controller="edu.duke.ece651.mp.client.RegisterController">
                             </FlowPane.margin></Button>
                     </children>
                 </FlowPane>
+                <Text fx:id="if_register" layoutX="39.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want to register?" wrappingWidth="246.21630859375" />
+                <Button fx:id="yesClick" layoutX="39.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#yesClick" text="yes" />
+                <Button fx:id="noClick" layoutX="126.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#noClick" text="no" />
             </children>
         </AnchorPane>
     </children>

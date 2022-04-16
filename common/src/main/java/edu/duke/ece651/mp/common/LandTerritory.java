@@ -1,5 +1,5 @@
 package edu.duke.ece651.mp.common;
-
+import java.io.*;
 import java.util.ArrayList;
 import java.util.*;
 import java.io.*;
@@ -10,6 +10,8 @@ public class LandTerritory implements Territory, java.io.Serializable {
   protected String color;
   protected ArrayList<Unit> units;
   protected final int size;
+  public ArrayList<Spy> spyList;
+  
 
   /**Land Territory Constructor: initialize name, color, units, and neighbors
    *@param: Name: name of the LandTerritory; Color: Color of the LandTerritory;
@@ -20,6 +22,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
     this.color = Color;
     this.units = new ArrayList<Unit>();
     this.size = size;
+    this.spyList = new ArrayList<Spy>();
   }
 
   /**
@@ -328,7 +331,10 @@ public class LandTerritory implements Territory, java.io.Serializable {
     }
     return  res;
   }
-
+  /**
+   *deep_copy: make a deep copy of territory
+   *@return a territory which has the same info as this one
+   */
   @Override
   public Territory deep_copy() {
       Territory deep_copy = null;
@@ -344,5 +350,48 @@ public class LandTerritory implements Territory, java.io.Serializable {
           e.printStackTrace();
       }
       return deep_copy;
+  }
+  /**
+   *addSpy: add a spy which belongs to the Color 
+   *@param Color: input Color as a string
+   */
+  @Override
+  public void addSpy(String Color){
+    Spy s = new Spy(Color);
+    s.setCanMove(false);
+    spyList.add(s);
+  }
+  /**
+   *loseSpy: lost a spy which has the color of Color 
+   *@param Color: input Color as a String 
+   *@return successfulness of loseSpy: true if successful lost of Spy
+   */
+  @Override
+  public boolean loseSpy(String Color){
+    for (int i=0; i<this.spyList.size(); i++){
+      if (spyList.get(i).getColor().equals(Color)){
+        spyList.remove(i);
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   *getSpyList:
+   *@return the spyList of this territory
+   */
+  @Override
+  public ArrayList<Spy> getSpyList(){
+    return this.spyList;
+  }
+
+  /**
+   *resetAllSpies: reset all spies in this territory to movable state 
+   */
+  @Override
+  public void resetAllSpies(){
+    for (Spy s : spyList){
+      s.setCanMove(true);
+    }
   }
 }
