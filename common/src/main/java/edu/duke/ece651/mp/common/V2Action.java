@@ -563,7 +563,7 @@ public class V2Action implements AbstractActionFactory {
     UpgradeChecker level = new LevelRuleChecker(tech);
     UpgradeChecker downgrade = new NoDowngradeRuleChecker(level);
     UpgradeChecker cost = new UpgradeCostRuleChecker(downgrade);
-    UpgradeChecker name = new  NameUpgradeRuleChecker(cost);
+    UpgradeChecker name = new NameUpgradeRuleChecker(cost);
 
     String res =null;
     res = name.checkUpgrade(player, src, numUnit, curr_level, new_level);
