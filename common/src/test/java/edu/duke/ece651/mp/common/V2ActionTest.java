@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions.*;
 
 import java.awt.desktop.AppForegroundListener;
 import java.util.*;
@@ -483,6 +484,27 @@ public class V2ActionTest {
     int temp = player.getFood();
     assertEquals(temp, player.getFood());
   }
-  
+
+  @Test
+  public void test_SpyMoves(){
+    ArrayList<Player> players = makePlayer2();
+    Player player1 = players.get(0);
+    AbstractActionFactory action = new V2Action();
+    action.createSpy(player1, "Gondor");
+    player1.costFood(115);
+    assertThrows(IllegalArgumentException.class,()-> action.createSpy(player1, "Gondor"));
+    player1.addFood(115);
+    assertThrows(IllegalArgumentException.class,()-> action.createSpy(player1, "Oz"));
+
+    action.checkForSpyMove(player1, players,"Gondor","Oz");
+    action.spyMove(player1, players, "Gondor", "Oz");
+    player1.costFood(95);
+    assertEquals("Red player. Invalid Spy Movement: The cost of the Spy movement is higher than the food of the player!\n", action.checkForSpyMove(player1, players,"Gondor","Oz"));
+    player1.addFood(1000);
+    assertEquals("Red player. Invalid Spy Movement: The destination territory is not reachable from Source Territory!\n", action.checkForSpyMove(player1, players,"Hogwarts","Narnia"));
+    action.spyMove(player1, players, "Oz","Narnia");
+    action.createSpy(player1, "Gondor");
+    assertEquals(null ,action.checkForSpyMove(player1, players,"Gondor","Hogwarts"));
+  }
 }
 

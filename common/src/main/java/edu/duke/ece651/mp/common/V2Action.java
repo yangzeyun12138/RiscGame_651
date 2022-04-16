@@ -575,5 +575,48 @@ public class V2Action implements AbstractActionFactory {
     player.costFood(computeCost(numUnit, curr_level, new_level));
   }
 
+  @Override
+  public void createSpy(Player player, String src){
+    int SpyCreationCost = 20;
+    boolean checkTerri = false;
+    if(player.getFood() < SpyCreationCost){
+      throw new IllegalArgumentException(player.getColor()+" Player: There is not enough food to create a spy!");
+    }
+    for(Territory curr_t : player.player_terri_set){
+      if(curr_t.getName().equals(src)){
+        curr_t.addSpy(player.getColor());
+        checkTerri = true;
+        player.costFood(SpyCreationCost);
+      }
+    }
+    if(checkTerri == false){
+      throw new IllegalArgumentException(player.getColor()+" Player: There is no Spy in this Territory!");
+    }
+  }
+
+  @Override
+  public String checkForSpyMove(Player player, ArrayList<Player> players, String src, String dest){
+    SpyChecker SpyCost = new SpyCostRuleChecker(null);
+    SpyChecker SpyMove = new SpyMoveRuleChecker(SpyCost);
+    
+    String result = SpyMove.checkSpy(player, players, src, dest);
+    return result;
+  }
+  
+  @Override
+  public void spyMove(Player player, ArrayList<Player> players, String src, String dest){
+    int SpyMoveCost = 20;
+    for (Player p : players){
+      for(Territory t : p.player_terri_set){
+        if (t.getName().equals(src)){
+          t.loseSpy(player.getColor());
+        }
+        if (t.getName().equals(dest)){
+          t.addSpy(player.getColor());
+        }
+      }
+    }
+    player.costFood(SpyMoveCost);
+  }
 
 }

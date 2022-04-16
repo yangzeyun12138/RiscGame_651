@@ -11,6 +11,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
   protected ArrayList<Unit> units;
   protected final int size;
   public ArrayList<Spy> spyList;
+  
 
   /**Land Territory Constructor: initialize name, color, units, and neighbors
    *@param: Name: name of the LandTerritory; Color: Color of the LandTerritory;
@@ -348,5 +349,21 @@ public class LandTerritory implements Territory, java.io.Serializable {
       return deep_copy;
   }
 
+  @Override
+  public void addSpy(String Color){
+    Spy s = new Spy(Color);
+    spyList.add(s);
+  }
+
+  @Override
+  public boolean loseSpy(String Color){
+    for (int i=0; i<this.spyList.size(); i++){
+      if (spyList.get(i).getColor().equals(Color)){
+        spyList.remove(i);
+        return true;
+      }
+    }
+    return false;
+  }
     
 }

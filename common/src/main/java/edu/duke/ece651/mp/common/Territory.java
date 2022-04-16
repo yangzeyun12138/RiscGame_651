@@ -31,4 +31,7 @@ public interface Territory {
   public boolean loseUnits(int numUnit, int level);
   public int countLevel(int level);
   public Territory deep_copy();
+
+  public void addSpy(String Color);
+  public boolean loseSpy(String Color);
 }

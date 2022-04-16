@@ -326,4 +326,15 @@ public class V1Action implements AbstractActionFactory {
   }
   @Override
   public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {}
+  @Override
+  public void createSpy(Player player,String src){};
+
+  @Override
+  public String checkForSpyMove(Player player, ArrayList<Player> players, String src, String dest){
+    return null;
+  };
+
+  @Override
+  public void spyMove(Player player, ArrayList<Player> players, String src, String dest){};
+
 }
