@@ -122,6 +122,7 @@ public class V2ActionTest {
     //assertThrows(IllegalArgumentException.class, ()->  action.Attack(attacker, defender, "Mordor", "Hogwarts", units, players));
   }
 
+  @Disabled
   @Test
   public void test_attack_rules(){
    HashSet<Territory> test_territory1 = new HashSet<>();
