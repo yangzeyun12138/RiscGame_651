@@ -2,7 +2,7 @@ package edu.duke.ece651.mp.common;
 
 import java.util.ArrayList;
 import java.util.*;
-
+import java.io.*;
 public class LandTerritory implements Territory, java.io.Serializable {
   private static final long serialVersionUID = 1L;
   protected String name;
@@ -329,5 +329,20 @@ public class LandTerritory implements Territory, java.io.Serializable {
     return  res;
   }
 
+  @Override
+  public Territory deep_copy() {
+      Territory deep_copy = null;
+      try {
+          ByteArrayOutputStream baos = new ByteArrayOutputStream();
+          ObjectOutputStream oos = new ObjectOutputStream(baos);
+          oos.writeObject(this);
 
+          ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+          ObjectInputStream ois = new ObjectInputStream(bais);
+          deep_copy = (Territory) ois.readObject();
+      } catch (ClassNotFoundException | IOException e) {
+          e.printStackTrace();
+      }
+      return deep_copy;
+  }
 }

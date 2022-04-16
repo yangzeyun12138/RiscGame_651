@@ -30,5 +30,5 @@ public interface Territory {
   public boolean loseUnit(int level);
   public boolean loseUnits(int numUnit, int level);
   public int countLevel(int level);
-
+  public Territory deep_copy();
 }
