@@ -824,7 +824,7 @@ public class ClientSk {
       }
     }
     else {
-      //Change
+      //Change 7=Bomber, 8=Fat Nerd, 9=Spy
       String temp = Action.checkForUpgrade(temp_player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
       if (temp != null) {
         return temp;

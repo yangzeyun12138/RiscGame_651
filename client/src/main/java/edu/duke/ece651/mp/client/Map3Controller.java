@@ -751,5 +751,36 @@ public class Map3Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.roomNum.setText("Room1");
     }
+
+    @FXML
+    void moveSpy(ActionEvent event) {
+
+    }
+
+    @FXML
+    void clickSpy(ActionEvent event) {
+
+    }
+
+    @FXML
+    void clickBomber(ActionEvent event) {
+
+    }
+
+    @FXML
+    void clickFatNerd(ActionEvent event) {
+
+    }
+
+    @FXML
+    void Cloak(ActionEvent event) {
+
+    }
+
+    @FXML
+    void DivineGuard(ActionEvent event) {
+
+    }
+
 }
 

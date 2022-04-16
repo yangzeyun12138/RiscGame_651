@@ -116,8 +116,8 @@
                   <Button fx:id="move_spy" layoutX="252.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#moveSpy" prefHeight="28.0" prefWidth="75.0" text="MoveSpy" />
                   <MenuButton fx:id="skill" layoutX="346.0" layoutY="38.0" mnemonicParsing="false" popupSide="TOP" prefHeight="26.0" prefWidth="65.0" text="Skill">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Cloak" />
-                      <MenuItem mnemonicParsing="false" text="Divine Guard" />
+                      <MenuItem mnemonicParsing="false" text="Cloak" onAction="#Cloak" />
+                      <MenuItem mnemonicParsing="false" text="Divine Guard" onAction="#DivineGuard"/>
                     </items>
                   </MenuButton>
                     </children>
@@ -292,9 +292,9 @@
                                 <Button fx:id="submit_button" layoutX="54.0" layoutY="288.0" mnemonicParsing="false" onMouseClicked="#submitClick" prefHeight="24.0" prefWidth="56.0" text="Submit" />
                         <MenuButton layoutX="21.0" layoutY="31.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="119.0" text="Special Unit" textAlignment="CENTER" wrapText="true">
                           <items>
-                            <MenuItem mnemonicParsing="false" onAction="#clinkSpy" text="Spy" />
+                            <MenuItem mnemonicParsing="false" onAction="#clickSpy" text="Spy" />
                             <MenuItem mnemonicParsing="false" onAction="#clickBomber" text="Bomber" />
-                              <MenuItem mnemonicParsing="false" onAction="clickFatNerd" text="Fat Nerd" />
+                              <MenuItem mnemonicParsing="false" onAction="#clickFatNerd" text="Fat Nerd" />
                           </items>
                            <font>
                               <Font size="14.0" />
