@@ -26,6 +26,7 @@ public class Player implements java.io.Serializable{
     ArrayList<Territory> current_viewed_territory = new ArrayList<Territory>();
     ArrayList<Territory> current_grey_territory = new ArrayList<Territory>();
     HashSet<String> current_viewed_territory_name = new HashSet<String>();
+
     // Adding the Territories that the player owns
     for(Territory t : player_terri_set){
       current_viewed_territory.add(t);
@@ -34,19 +35,24 @@ public class Player implements java.io.Serializable{
 
     // Adding the Neighbors of those Territories
     ArrayList<Territory> current_viewed_territory_copy = new ArrayList<Territory>();
-    // deep copy
+    // 1. Deep copy
     for(Territory t : current_viewed_territory){
       Territory copy = t.deep_copy();
       current_viewed_territory_copy.add(copy);
     }
-    //Traverse Neighbors now
+    
+    // 2. Traverse Neighbors now
     for(Territory terri : current_viewed_territory_copy){
       for(Territory neigh : terri.getNeigh()){
-        if(neigh.getName())
+        // current_viewed_territory doesn't have the neigh territory
+        if(!current_viewed_territory_name.contains(neigh.getName())){
+          current_viewed_territory.add(neigh);
+          current_viewed_territory_name.add(neigh.getName());
+        }
       }
     }
-   
 
+    // 3. Prepare to return 
     HashMap<String, ArrayList<Territory>> current_new_map = new HashMap<String, ArrayList<Territory>>();
     current_new_map.put("viewed", current_viewed_territory);
     current_new_map.put("grey", current_grey_territory);
