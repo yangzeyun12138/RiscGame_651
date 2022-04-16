@@ -538,6 +538,27 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public String checkForUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
+    if (new_level == 9){
+      int SpyCreationCost = 20;
+      boolean checkTerri = false;
+      if(player.getFood() < SpyCreationCost){
+        return new String(player.getColor()+" Player: There is not enough food to create a spy!");
+      }
+      for(Territory curr_t : player.player_terri_set){
+        if(curr_t.getName().equals(src)){
+          if(curr_t.countLevel(0) < 0){
+            return new String(player.getColor()+" Player: There is not enough Level 0 Units to create a spy!");
+          }
+          checkTerri = true;
+        
+        }
+      }
+    
+      if(checkTerri == false){
+        return new String(player.getColor()+" Player: There is no Spy in this Territory!");
+      }
+    }
+    
     UpgradeChecker tech = new TechRuleChecker(null);
     UpgradeChecker level = new LevelRuleChecker(tech);
     UpgradeChecker downgrade = new NoDowngradeRuleChecker(level);
@@ -547,6 +568,7 @@ public class V2Action implements AbstractActionFactory {
     String res =null;
     res = name.checkUpgrade(player, src, numUnit, curr_level, new_level);
     return res;
+    
   }
   /**
    *computeCost: compute the cost for upgrade from current level to the new level
@@ -568,12 +590,16 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
-    for(Territory curr_t: player.player_terri_set){
-      if(curr_t.getName().equals(src)){
-        curr_t.upgradeUnit(numUnit, curr_level, new_level);
+    if (new_level == 9){
+      this.createSpy(player, src);
+    }else{
+      for(Territory curr_t: player.player_terri_set){
+        if(curr_t.getName().equals(src)){
+          curr_t.upgradeUnit(numUnit, curr_level, new_level);
+        }
       }
+      player.costFood(computeCost(numUnit, curr_level, new_level));
     }
-    player.costFood(computeCost(numUnit, curr_level, new_level));
   }
   /**
    *createSpy: create a spy
@@ -586,18 +612,14 @@ public class V2Action implements AbstractActionFactory {
   public void createSpy(Player player, String src){
     int SpyCreationCost = 20;
     boolean checkTerri = false;
-    if(player.getFood() < SpyCreationCost){
-      throw new IllegalArgumentException(player.getColor()+" Player: There is not enough food to create a spy!");
-    }
+    
     for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(src)){
+        curr_t.loseUnit(0);
         curr_t.addSpy(player.getColor());
         checkTerri = true;
         player.costFood(SpyCreationCost);
       }
-    }
-    if(checkTerri == false){
-      throw new IllegalArgumentException(player.getColor()+" Player: There is no Spy in this Territory!");
     }
   }
   /**

@@ -9,10 +9,10 @@ public class LevelInfoTest {
   public void test_level_info() {
     LevelInfo Info = new LevelInfo();
     assertThrows(IllegalArgumentException.class, ()->Info.getBonus(-1));
-    assertThrows(IllegalArgumentException.class, ()->Info.getCost(7));
+    assertThrows(IllegalArgumentException.class, ()->Info.getCost(10));
     assertEquals(8, Info.getBonus(4));
     assertEquals(90, Info.getCost(5));
-    assertThrows(IllegalArgumentException.class,()->Info.getTechCost(8));
+    assertThrows(IllegalArgumentException.class,()->Info.getTechCost(10));
   }
 
 }

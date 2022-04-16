@@ -22,6 +22,8 @@ public class LevelInfo {
     BonusMap.put(4,8);
     BonusMap.put(5,11);
     BonusMap.put(6,15);
+    BonusMap.put(7,0);
+    BonusMap.put(8,8);
     CostMap.put(0,0);
     CostMap.put(1,3);
     CostMap.put(2, 11);
@@ -29,6 +31,8 @@ public class LevelInfo {
     CostMap.put(4,55);
     CostMap.put(5,90);
     CostMap.put(6,140);
+    CostMap.put(7,55);
+    CostMap.put(8,30);
   }
 
   /**
@@ -38,7 +42,7 @@ public class LevelInfo {
    *@throws: illegal argument exception if the number of level is out of range
    */
   public int getBonus(int level){
-    if(level < 0 || level > 6){
+    if(level < 0 || level > 8){
       throw new IllegalArgumentException("The number of the Level in BonusMap is invalid!");
     }
     return BonusMap.get(level);
@@ -50,7 +54,7 @@ public class LevelInfo {
    *@throws: illegal argument exception if the number of level is out of range
    */
   public int getCost(int level){
-    if(level < 0 || level > 6){
+    if(level < 0 || level > 8){
       throw new IllegalArgumentException("The number of the Level in CostMap is invalid!");
     }
     return CostMap.get(level);
@@ -62,7 +66,7 @@ public class LevelInfo {
    *@throws: illegal argument exception if the number of technology level is out of range
    */
   public int getTechCost(int level){
-    if(level < 1 || level > 6){
+    if(level < 1 || level > 8){
     throw new IllegalArgumentException("The number of the Level in TechCostMap is invalid!");
     }
     return TechCostMap.get(level);
