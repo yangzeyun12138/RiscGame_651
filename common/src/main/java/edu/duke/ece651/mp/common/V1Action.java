@@ -337,4 +337,6 @@ public class V1Action implements AbstractActionFactory {
   @Override
   public void spyMove(Player player, ArrayList<Player> players, String src, String dest){};
 
+  @Override
+  public void resetSpyMovables(ArrayList<Player> players){};
 }

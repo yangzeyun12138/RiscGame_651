@@ -334,6 +334,7 @@ public class V2Action implements AbstractActionFactory {
 
   @Override
   public void Done(ArrayList<Player> players){
+    resetSpyMovables(players);
     for (Player p : players) {
       for (Territory t : p.player_terri_set) {
         t.addBasicUnit(1);
@@ -574,7 +575,13 @@ public class V2Action implements AbstractActionFactory {
     }
     player.costFood(computeCost(numUnit, curr_level, new_level));
   }
-
+  /**
+   *createSpy: create a spy
+   *@param: player: the player who wants to create the spy
+   *@param: src: the name of the territory to place the spy
+   *@throws: players do not have enough food
+   *@throws: cannot find src territory from player's territory
+   */
   @Override
   public void createSpy(Player player, String src){
     int SpyCreationCost = 20;
@@ -593,16 +600,31 @@ public class V2Action implements AbstractActionFactory {
       throw new IllegalArgumentException(player.getColor()+" Player: There is no Spy in this Territory!");
     }
   }
-
+  /**
+   *checkForSpyMove: check all the rules before move a spy
+   *@param: player: the player who wants to move the spy
+   *@param: players: the list of all players
+   *@param: src: the name of the source territory
+   *@param: dest: the name of the destination territory
+   *@return: result: null if there is no errors; Error message as a String
+   */
   @Override
   public String checkForSpyMove(Player player, ArrayList<Player> players, String src, String dest){
     SpyChecker SpyCost = new SpyCostRuleChecker(null);
     SpyChecker SpyMove = new SpyMoveRuleChecker(SpyCost);
+    SpyChecker SpyOnce = new SpyOnceRuleChecker(SpyMove);
     
-    String result = SpyMove.checkSpy(player, players, src, dest);
+    String result = SpyOnce.checkSpy(player, players, src, dest);
     return result;
   }
-  
+
+  /**
+   *checkForSpyMove: move a spy of the player from the source to destination
+   *@param: player: the player who wants to move the spy
+   *@param: players: the list of all players
+   *@param: src: the name of the source territory
+   *@param: dest: the name of the destination territory
+   */
   @Override
   public void spyMove(Player player, ArrayList<Player> players, String src, String dest){
     int SpyMoveCost = 20;
@@ -619,4 +641,16 @@ public class V2Action implements AbstractActionFactory {
     player.costFood(SpyMoveCost);
   }
 
+  /**
+   *resetSpyMovables: set all spies in the map movable
+   *@param: players: arraylist of player
+   */
+  @Override
+  public void resetSpyMovables(ArrayList<Player> players){
+    for (Player p : players){
+      for (Territory t : p.player_terri_set){
+        t.resetAllSpies();
+      }
+    }
+  }
 }

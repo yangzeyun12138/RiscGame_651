@@ -8,10 +8,10 @@ public class SpyTest {
   @Test
   public void test_Spy() {
     Spy s = new Spy("Red");
-    assertTrue(s.getIsMove());
+    assertTrue(s.getCanMove());
     assertEquals("Red",s.getColor());
-    s.setIsMove(false);
-    assertFalse(s.getIsMove());
+    s.setCanMove(false);
+    assertFalse(s.getCanMove());
     assertEquals(20,s.getCost());
   }
 

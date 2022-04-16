@@ -331,7 +331,10 @@ public class LandTerritory implements Territory, java.io.Serializable {
     }
     return  res;
   }
-
+  /**
+   *deep_copy: make a deep copy of territory
+   *@return a territory which has the same info as this one
+   */
   @Override
   public Territory deep_copy() {
       Territory deep_copy = null;
@@ -348,13 +351,21 @@ public class LandTerritory implements Territory, java.io.Serializable {
       }
       return deep_copy;
   }
-
+  /**
+   *addSpy: add a spy which belongs to the Color 
+   *@param Color: input Color as a string
+   */
   @Override
   public void addSpy(String Color){
     Spy s = new Spy(Color);
+    s.setCanMove(false);
     spyList.add(s);
   }
-
+  /**
+   *loseSpy: lost a spy which has the color of Color 
+   *@param Color: input Color as a String 
+   *@return successfulness of loseSpy: true if successful lost of Spy
+   */
   @Override
   public boolean loseSpy(String Color){
     for (int i=0; i<this.spyList.size(); i++){
@@ -365,5 +376,22 @@ public class LandTerritory implements Territory, java.io.Serializable {
     }
     return false;
   }
-    
+  /**
+   *getSpyList:
+   *@return the spyList of this territory
+   */
+  @Override
+  public ArrayList<Spy> getSpyList(){
+    return this.spyList;
+  }
+
+  /**
+   *resetAllSpies: reset all spies in this territory to movable state 
+   */
+  @Override
+  public void resetAllSpies(){
+    for (Spy s : spyList){
+      s.setCanMove(true);
+    }
+  }
 }

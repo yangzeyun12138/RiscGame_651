@@ -498,13 +498,25 @@ public class V2ActionTest {
 
     action.checkForSpyMove(player1, players,"Gondor","Oz");
     action.spyMove(player1, players, "Gondor", "Oz");
-    player1.costFood(95);
+    player1.costFood(75);
+    assertEquals("Red player. Invalid Spy Movement: The Source territory does not have movable Spy belongs to the player!\n", action.checkForSpyMove(player1, players,"Gondor","Oz"));
+    
+    action.createSpy(player1, "Gondor");
+    action.resetSpyMovables(players);
     assertEquals("Red player. Invalid Spy Movement: The cost of the Spy movement is higher than the food of the player!\n", action.checkForSpyMove(player1, players,"Gondor","Oz"));
+    
     player1.addFood(1000);
+    action.createSpy(player1, "Hogwarts");
+    action.resetSpyMovables(players);
     assertEquals("Red player. Invalid Spy Movement: The destination territory is not reachable from Source Territory!\n", action.checkForSpyMove(player1, players,"Hogwarts","Narnia"));
     action.spyMove(player1, players, "Oz","Narnia");
     action.createSpy(player1, "Gondor");
+    action.resetSpyMovables(players);
     assertEquals(null ,action.checkForSpyMove(player1, players,"Gondor","Hogwarts"));
+    action.spyMove(player1, players, "Gondor", "Hogwarts");
+    
+    
   }
 }
+
 

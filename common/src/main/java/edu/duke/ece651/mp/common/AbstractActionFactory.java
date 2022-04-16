@@ -36,4 +36,5 @@ public interface AbstractActionFactory {
   public void createSpy(Player player,String src);
   public String checkForSpyMove(Player player, ArrayList<Player> players, String src, String dest);
   public void spyMove(Player player, ArrayList<Player> players, String src, String dest);
+  public void resetSpyMovables(ArrayList<Player> players);
 }
