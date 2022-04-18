@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="753.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.mp.client.Map32Controller">
+    <children>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="264.0" prefWidth="315.0" VBox.vgrow="ALWAYS">
+            <children>
+                <ImageView fitHeight="760.0" fitWidth="1005.0">
+                    <image>
+                        <Image url="@370214.jpg" />
+                    </image>
+                </ImageView>
+                <Button fx:id="roshar_button" layoutX="384.0" layoutY="534.0" mnemonicParsing="false" onMousePressed="#rosharClick" onMouseReleased="#rosharRelease" opacity="0.0" prefHeight="106.0" prefWidth="144.0" text="Roshar" />
+                <Button fx:id="midkemia_button" layoutX="438.0" layoutY="102.0" mnemonicParsing="false" onMousePressed="#midkemiaClick" onMouseReleased="#midkemiaRelease" opacity="0.0" prefHeight="96.0" prefWidth="119.0" text="Midkemia" />
+                <Button fx:id="elantris_button" layoutX="197.0" layoutY="393.0" mnemonicParsing="false" onMousePressed="#elantrisClick" onMouseReleased="#elantrisRelease" opacity="0.0" prefHeight="115.0" prefWidth="131.0" text="Elantris" />
+                <Button fx:id="scadrial_button" layoutX="458.0" layoutY="405.0" mnemonicParsing="false" onMousePressed="#scadrialClick" onMouseReleased="#scadrialRelease" opacity="0.0" prefHeight="106.0" prefWidth="131.0" text="Scadrial" />
+                <Button fx:id="mordor_button" layoutX="655.0" layoutY="325.0" mnemonicParsing="false" onMousePressed="#mordorClick" onMouseReleased="#mordorRelease" opacity="0.0" prefHeight="106.0" prefWidth="144.0" text="Mordor" />
+                <Button fx:id="hogwarts_button" layoutX="720.0" layoutY="529.0" mnemonicParsing="false" onMousePressed="#hogwartsClick" onMouseReleased="#hogwartsRelease" opacity="0.0" prefHeight="106.0" prefWidth="131.0" text="Hogwarts" />
+                <Button fx:id="gondor_button" layoutX="752.0" layoutY="138.0" mnemonicParsing="false" onMousePressed="#gondorClick" onMouseReleased="#gondorRelease" opacity="0.0" prefHeight="96.0" prefWidth="128.0" text="Gondor" />
+                <Button fx:id="narnia_button" layoutX="218.0" layoutY="179.0" mnemonicParsing="false" onMousePressed="#narniaClick" onMouseReleased="#narniaRelease" opacity="0.0" prefHeight="115.0" prefWidth="128.0" text="Narnia" />
+                <Button fx:id="oz_button" layoutX="570.0" layoutY="214.0" mnemonicParsing="false" onMousePressed="#ozClick" onMouseReleased="#ozRelease" opacity="0.0" prefHeight="106.0" prefWidth="103.0" text="Oz" />
+                <Pane layoutX="14.0" layoutY="114.0" prefHeight="157.0" prefWidth="147.0">
+                    <children>
+                        <Rectangle fx:id="tech_text" arcHeight="5.0" arcWidth="5.0" fill="#4659ab" height="158.0" opacity="0.16" stroke="BLACK" strokeType="INSIDE" width="147.0" />
+                        <Text layoutX="6.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player: " />
+                        <Text layoutX="6.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tech: " />
+                        <Text layoutX="5.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Food: " />
+                        <Button fx:id="upgrade_tech_button" layoutX="18.0" layoutY="113.0" mnemonicParsing="false" onMouseClicked="#upgradeTechClick" text="Upgrade Tech">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
+                        <Text fx:id="player_text" layoutX="61.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
+                        <Text fx:id="player_text1" layoutX="60.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
+                        <Text fx:id="player_text2" layoutX="59.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
+                    </children></Pane>
+                <Pane layoutX="459.0" layoutY="671.0" prefHeight="77.0" prefWidth="289.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#8d572a" height="84.0" layoutX="-6.0" layoutY="-3.0" opacity="0.66" stroke="BLACK" strokeType="INSIDE" width="297.0" />
+                        <Button fx:id="move_button" layoutX="6.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#moveClick" prefHeight="48.0" prefWidth="77.0" text="Move">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
+                        <Button fx:id="attack_button" layoutX="102.0" layoutY="17.0" mnemonicParsing="false" onMouseClicked="#attackClick" prefHeight="48.0" prefWidth="77.0" text="Attack">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
+                        <Button fx:id="upgrade_button" layoutX="195.0" layoutY="16.0" mnemonicParsing="false" onMouseClicked="#upgradeClick" prefHeight="48.0" prefWidth="77.0" text="Upgrade">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></Button>
+                    </children>
+                </Pane>
+                <Button fx:id="done_button" layoutX="778.0" layoutY="686.0" mnemonicParsing="false" onMouseClicked="#doneClick" prefHeight="48.0" prefWidth="77.0" text="Done">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor></Button>
+                <Button fx:id="add_room_button" layoutX="905.0" layoutY="59.0" mnemonicParsing="false" onMouseClicked="#addRoom" text="Add Room" />
+                <SplitPane dividerPositions="0.5" layoutX="14.0" layoutY="280.0" orientation="VERTICAL" prefHeight="344.0" prefWidth="164.0">
+                    <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="80.0" prefWidth="162.0">
+                            <children>
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0d3e54" height="184.0" layoutX="-10.0" layoutY="-8.0" opacity="0.57" stroke="BLACK" strokeType="INSIDE" width="170.0" />
+                                <Text layoutX="9.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Territory Information">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Text>
+                                <Text layoutX="4.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
+                                <Text layoutX="5.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lv" />
+                                <Text layoutX="5.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Unit" />
+                                <Text layoutX="6.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Owner: " />
+                                <Text fx:id="owner_text" layoutX="66.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
+                                <GridPane gridLinesVisible="true" layoutX="34.0" layoutY="60.0" prefHeight="48.0" prefWidth="128.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints maxHeight="46.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="18.062828063964844" />
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="19.396156311035156" GridPane.columnIndex="1" />
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="17.396156311035156" GridPane.columnIndex="2" />
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3" wrappingWidth="18.72948455810547" GridPane.columnIndex="3" />
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="16.7294921875" GridPane.columnIndex="4" />
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5" wrappingWidth="16.7294921875" GridPane.columnIndex="5" />
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="6" wrappingWidth="13.396163940429688" GridPane.columnIndex="6" />
+                                        <Text fx:id="units_level0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.02668762207031" GridPane.rowIndex="1" />
+                                        <Text fx:id="units_level1" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="46.693359375" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Text fx:id="units_level2" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="43.693359375" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <Text fx:id="units_level3" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="41.693359375" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                        <Text fx:id="units_level4" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="45.693359375" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                        <Text fx:id="units_level5" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="43.693359375" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                                        <Text fx:id="units_level6" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="40.693359375" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                                    </children>
+                                </GridPane>
+                                <MenuButton fx:id="territory_name_menubutton" layoutX="49.0" layoutY="30.0" mnemonicParsing="false" onMouseClicked="#getTerritory" prefHeight="24.0" prefWidth="111.0" text="Choose Territory">
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#NarniaInfo" text="Narnia" />
+                                        <MenuItem mnemonicParsing="false" onAction="#MidkemiaInfo" text="Midkemia" />
+                                        <MenuItem mnemonicParsing="false" onAction="#OzInfo" text="Oz" />
+                                        <MenuItem mnemonicParsing="false" onAction="#GondorInfo" text="Gondor" />
+                                        <MenuItem mnemonicParsing="false" onAction="#ElantrisInfo" text="Elantris" />
+                                        <MenuItem mnemonicParsing="false" onAction="#ScadrialInfo" text="Scadrial" />
+                                        <MenuItem mnemonicParsing="false" onAction="#MordorInfo" text="Mordor" />
+                                        <MenuItem mnemonicParsing="false" onAction="#RosharInfo" text="Roshar" />
+                                        <MenuItem mnemonicParsing="false" onAction="#HogwartsInfo" text="Hogwarts" />
+                                    </items>
+                                    <font>
+                                        <Font size="10.0" />
+                                    </font>
+                                </MenuButton>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="280.0" prefWidth="162.0">
+                            <children>
+                                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#175b94" height="184.0" layoutX="-5.0" layoutY="-14.0" opacity="0.53" stroke="#cbcdbf" strokeType="INSIDE" width="177.0" />
+                                <Text layoutX="13.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Operations Options">
+                                    <font>
+                                        <Font name="System Bold" size="12.0" />
+                                    </font>
+                                </Text>
+                                <Button fx:id="submit_button" layoutX="47.0" layoutY="142.0" mnemonicParsing="false" onMouseClicked="#submitClick" text="Submit" />
+                                <TextField fx:id="number_of_units_textfield" layoutX="19.0" layoutY="114.0" prefHeight="24.0" prefWidth="128.0" promptText="# of Units" />
+                                <TextField fx:id="from_level_menubutton" layoutX="19.0" layoutY="21.0" prefHeight="24.0" prefWidth="128.0" promptText="# of From level" />
+                                <TextField fx:id="to_level_menubutton" layoutX="19.0" layoutY="52.0" prefHeight="24.0" prefWidth="128.0" promptText="# of To level" />
+                                <TextField fx:id="choose_level_menubutton" layoutX="19.0" layoutY="83.0" prefHeight="24.0" prefWidth="128.0" promptText="# of Level" />
+                            </children>
+                        </AnchorPane>
+                    </items>
+                </SplitPane>
+                <AnchorPane layoutX="14.0" layoutY="637.0" prefHeight="114.0" prefWidth="388.0">
+                    <children>
+                        <TextArea fx:id="system_textarea" opacity="0.8" prefHeight="115.0" prefWidth="388.0" />
+                    </children>
+                </AnchorPane>
+                <MenuButton fx:id="change_room_menubutton" layoutX="863.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#changeRoom" text="Change Room">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom1" text="Room1" />
+                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom2" text="Room2" visible="false" disable="true"/>
+                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom3" text="Room3" visible="false" disable="true"/>
+                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom4" text="Room4" visible="false" disable="true"/>
+                    </items>
+                </MenuButton>
+                <AnchorPane fx:id="init_units_anchorpane" layoutX="847.0" layoutY="415.0" prefHeight="168.0" prefWidth="17.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e0ae58" height="175.0" layoutY="1.0" opacity="0.66" stroke="BLACK" strokeType="INSIDE" width="144.0" />
+                        <Text fx:id="territory1" layoutX="12.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" wrappingWidth="76.99999999999989" />
+                        <Text fx:id="territory2" layoutX="12.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" wrappingWidth="76.99999999999989" />
+                        <Text fx:id="territory3" layoutX="12.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" wrappingWidth="81.0" />
+                        <TextField fx:id="first_textfield" layoutX="80.0" layoutY="43.0" prefHeight="24.0" prefWidth="39.0" />
+                        <TextField fx:id="second_textfield" layoutX="80.0" layoutY="79.0" prefHeight="24.0" prefWidth="39.0" />
+                        <Text fx:id="third_text" layoutX="80.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
+                        <Text layoutX="46.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Init Units" />
+                        <Button fx:id="set_unit_button" layoutX="52.0" layoutY="145.0" mnemonicParsing="false" onMouseClicked="#initialize_units" prefHeight="24.0" prefWidth="40.0" text="Set" />
+                    </children>
+                </AnchorPane>
+                <Text fx:id="Narnia_color" layoutX="261.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Midkemia_color" layoutX="568.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Elantris_color" layoutX="247.0" layoutY="523.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Scadrial_color" layoutX="589.0" layoutY="491.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Mordor_color" layoutX="799.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Oz_color" layoutX="673.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Roshar_color" layoutX="536.0" layoutY="606.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Hogwarts_color" layoutX="778.0" layoutY="523.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="Gondor_color" layoutX="799.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="result_text" disable="true" fill="#e9f80b" layoutX="194.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YOU HAVE LOST! CONTINUE WATCHING?" visible="false">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Text>
+                <Button fx:id="continue_button" disable="true" layoutX="197.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#continueClick" text="CONTINUE" visible="false" />
+                <Button fx:id="quit_button" disable="true" layoutX="304.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#quitClick" text="QUIT" visible="false" />
+                <Text fx:id="roomNum" fill="#e9f80b" layoutX="900.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="236.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 2" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="800.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 4" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="673.0" layoutY="411.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 3" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="738.0" layoutY="616.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 2" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="424.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 3" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="589.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 4" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="478.0" layoutY="509.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 2" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="406.0" layoutY="588.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 4" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fill="aqua" layoutX="215.0" layoutY="506.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 3" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
