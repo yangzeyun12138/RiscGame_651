@@ -18,8 +18,6 @@ public class Player implements java.io.Serializable{
         this.player_terri_set = player_terri_set;
         this.tech_level = 1; // set initial technology level to 1
         this.food = 140;// set initial food to 140
-        this.old_view_map = viewMapInitializer(player_terri_set);
-        this.new_view_map = viewMapInitializer(player_terri_set);
     }
   
     /**
@@ -153,6 +151,14 @@ public class Player implements java.io.Serializable{
       }
       return null;
   }
+
+  /**
+   * initViewMap
+   */
+  public void initViewMap(HashSet<Territory> player_terri_set){
+    this.old_view_map = viewMapInitializer(player_terri_set);
+    this.new_view_map = viewMapInitializer(player_terri_set);
+  }
     
   /**
    * viewMapInitializer() is called by the Player's constructor, and it can help the constructor to initialize old_view_map, new_view_map.
@@ -230,10 +236,19 @@ public class Player implements java.io.Serializable{
         
       }
     }
-    HashMap<String, ArrayList<Territory>> cur_new_map = new HashMap<String, ArrayList<Territory>>();    
+    HashMap<String, ArrayList<Territory>> cur_new_map = new HashMap<String, ArrayList<Territory>>();
+    System.out.println("cur_viewed_list.size()" + cur_viewed_list.size());
+    System.out.println("cur_grey_list.size()" + cur_grey_list.size());
     cur_new_map.put("viewed", cur_viewed_list);
     cur_new_map.put("grey", cur_grey_list);
     this.new_view_map = cur_new_map;
+
+     HashMap<String, ArrayList<Territory>> cur_old_map = new HashMap<String, ArrayList<Territory>>();
+     System.out.println("old_viewed_list.size()" + old_viewed_list.size());
+    System.out.println("old_grey_list.size()" + old_grey_list.size());
+    cur_old_map.put("viewed", old_viewed_list);
+    cur_old_map.put("grey", old_grey_list);
+    this.old_view_map = cur_old_map;    
     }
 
   /**
