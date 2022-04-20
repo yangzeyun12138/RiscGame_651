@@ -470,6 +470,7 @@ public class Map3Controller implements Initializable {
             s2 = "8";
             isFatNerd = false;
         } else if (isSpy == true) {
+            System.out.println("In map3controller isSpy = " + isSpy);
             s1 = "0";
             s2 = "9";
             isSpy = false;

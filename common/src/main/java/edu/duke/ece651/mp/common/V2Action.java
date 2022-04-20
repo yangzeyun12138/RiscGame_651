@@ -147,7 +147,7 @@ public class V2Action implements AbstractActionFactory {
   @Override
   public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players, int level){
     if(level == 8){
-      return new String(attacker.color + " Player: Level 8 should not be used to attack");
+      return new String(attacker.color + " Player: Fat Nerd should not be used to attack");
     }
     AttackChecker AttackCostCheck = new AttackCostRuleChecker(null);
     AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(AttackCostCheck);
@@ -616,17 +616,20 @@ public class V2Action implements AbstractActionFactory {
       if(checkTerri == false){
         return new String(player.getColor()+" Player: There is no Spy in this Territory!");
       }
-    }
-    
-    UpgradeChecker tech = new TechRuleChecker(null);
-    UpgradeChecker level = new LevelRuleChecker(tech);
-    UpgradeChecker downgrade = new NoDowngradeRuleChecker(level);
-    UpgradeChecker cost = new UpgradeCostRuleChecker(downgrade);
-    UpgradeChecker name = new NameUpgradeRuleChecker(cost);
 
-    String res =null;
-    res = name.checkUpgrade(player, src, numUnit, curr_level, new_level);
-    return res;
+      return null;
+    }
+    else {
+      UpgradeChecker tech = new TechRuleChecker(null);
+      UpgradeChecker level = new LevelRuleChecker(tech);
+      UpgradeChecker downgrade = new NoDowngradeRuleChecker(level);
+      UpgradeChecker cost = new UpgradeCostRuleChecker(downgrade);
+      UpgradeChecker name = new NameUpgradeRuleChecker(cost);
+
+      String res = null;
+      res = name.checkUpgrade(player, src, numUnit, curr_level, new_level);
+      return res;
+    }
     
   }
   /**

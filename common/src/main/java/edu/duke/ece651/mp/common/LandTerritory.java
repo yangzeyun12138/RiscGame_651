@@ -406,6 +406,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
 
   @Override
   public int countSpy(String color) {
+    System.out.println("############In count spy");
     int count = 0;
     for (Spy s : spyList) {
       if (s.getColor().equals(color)) {

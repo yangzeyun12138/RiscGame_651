@@ -717,6 +717,9 @@ public class ClientSk {
       s2 = ans.getValue3();
       s3 = ans.getValue0();
       s4 = ans.getValue1();
+      System.out.println("$$$$$$$$$$$$$$$$$In update unit ");
+      System.out.println("To level is + " + s4);
+
       //s1: territoryName, s2: numToUp, s3:currLevel, s4:afterLevel
       if(!check_num(s2)) {
         return "Please enter a valid integer as numToUp!\n";
