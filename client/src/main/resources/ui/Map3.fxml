@@ -116,8 +116,8 @@
                   <Button fx:id="move_spy" layoutX="252.0" layoutY="37.0" mnemonicParsing="false" onMouseClicked="#moveSpy" prefHeight="28.0" prefWidth="75.0" text="MoveSpy" />
                   <MenuButton fx:id="skill" layoutX="346.0" layoutY="38.0" mnemonicParsing="false" popupSide="TOP" prefHeight="26.0" prefWidth="65.0" text="Skill">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Cloak" onAction="#Cloak" />
-                      <MenuItem mnemonicParsing="false" text="Divine Guard" onAction="#DivineGuard"/>
+                      <MenuItem mnemonicParsing="false" onAction="#Cloak" text="Cloak" />
+                      <MenuItem mnemonicParsing="false" onAction="#DivineGuard" text="Divine Guard" />
                     </items>
                   </MenuButton>
                     </children>
@@ -345,49 +345,49 @@
                         <Button fx:id="set_unit_button" layoutX="54.0" layoutY="141.0" mnemonicParsing="false" onMouseClicked="#initialize_units" prefHeight="24.0" prefWidth="40.0" text="Set" />
                     </children>
                 </AnchorPane>
-                <Text fx:id="Narnia_color" layoutX="261.0" layoutY="321.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Narnia_color" layoutX="240.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="95.11425781249994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Midkemia_color" layoutX="568.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Midkemia_color" layoutX="418.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="95.11425781249994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Elantris_color" layoutX="247.0" layoutY="523.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Elantris_color" layoutX="247.0" layoutY="520.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="113.0">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Scadrial_color" layoutX="589.0" layoutY="491.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Scadrial_color" layoutX="589.0" layoutY="490.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="136.17968749999994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Mordor_color" layoutX="799.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Mordor_color" layoutX="760.0" layoutY="377.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="120.99999999999994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Oz_color" layoutX="673.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Oz_color" layoutX="570.0" layoutY="310.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="120.99999999999994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Roshar_color" layoutX="536.0" layoutY="606.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Roshar_color" layoutX="536.0" layoutY="583.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="127.99999999999994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Hogwarts_color" layoutX="778.0" layoutY="523.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Hogwarts_color" layoutX="720.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="127.99999999999994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
-                <Text fx:id="Gondor_color" layoutX="799.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="42.732421875">
+                <Text fx:id="Gondor_color" layoutX="740.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" " textAlignment="CENTER" visible="false" wrappingWidth="127.99999999999994">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Text>
                 <Text fx:id="result_text" disable="true" fill="#e9f80b" layoutX="194.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="YOU HAVE LOST! CONTINUE WATCHING?" visible="false">
@@ -407,7 +407,7 @@
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Text>
-                <Text fill="aqua" layoutX="800.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 4" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                <Text fill="aqua" layoutX="782.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 4" textAlignment="CENTER" wrappingWidth="64.99999999999994">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
@@ -427,7 +427,7 @@
                         <Font name="System Bold" size="16.0" />
                     </font>
                 </Text>
-                <Text fill="aqua" layoutX="589.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 4" textAlignment="CENTER" wrappingWidth="64.99999999999994">
+                <Text fill="aqua" layoutX="623.0" layoutY="198.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size: 4" textAlignment="CENTER" wrappingWidth="64.99999999999994">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>

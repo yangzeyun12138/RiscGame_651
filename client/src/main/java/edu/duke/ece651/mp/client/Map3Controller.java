@@ -81,8 +81,6 @@ public class Map3Controller implements Initializable {
     @FXML
     private TextField number_of_units_textfield;
 
-    @FXML
-    private Text owner_text;
 
     @FXML
     private Button oz_button;
@@ -557,11 +555,17 @@ public class Map3Controller implements Initializable {
 
     private void showTerriInfo(String terriName) {
         // viewed grey invisible
-        HashMap<String, ArrayList<Territory>> toShow = this.clientSk.player.new_view_map;
+        HashMap<String, ArrayList<Territory>> toShow = this.clientSk.new_view_map;
+        System.out.println("In show Terri Info + new view map is " + toShow);
         Pair<Territory, String> res = getTerri(terriName, toShow);
         Territory t = res.getKey();
         if (res.getValue() != null) {
             if (res.getValue().equals("viewed")) {
+                for (Territory temp : this.clientSk.temp_player.player_terri_set) {
+                    if (t.getName().equals(temp.getName())){
+                        t = temp;
+                    }
+                }
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
                 units_level2.setText(String.valueOf(t.countLevelUnit(2)));
@@ -569,25 +573,22 @@ public class Map3Controller implements Initializable {
                 units_level4.setText(String.valueOf(t.countLevelUnit(4)));
                 units_level5.setText(String.valueOf(t.countLevelUnit(5)));
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
-                owner_text.setText(t.getColor());
             }
             else {
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
-                units_level0.setFill(Color.GREY);
+                units_level0.setFill(Color.WHITE);
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
-                units_level1.setFill(Color.GREY);
+                units_level1.setFill(Color.WHITE);
                 units_level2.setText(String.valueOf(t.countLevelUnit(2)));
-                units_level2.setFill(Color.GREY);
+                units_level2.setFill(Color.WHITE);
                 units_level3.setText(String.valueOf(t.countLevelUnit(3)));
-                units_level3.setFill(Color.GREY);
+                units_level3.setFill(Color.WHITE);
                 units_level4.setText(String.valueOf(t.countLevelUnit(4)));
-                units_level4.setFill(Color.GREY);
+                units_level4.setFill(Color.WHITE);
                 units_level5.setText(String.valueOf(t.countLevelUnit(5)));
-                units_level5.setFill(Color.GREY);
+                units_level5.setFill(Color.WHITE);
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
-                units_level6.setFill(Color.GREY);
-                owner_text.setText(t.getColor());
-                owner_text.setFill(Color.GREY);
+                units_level6.setFill(Color.WHITE);
             }
         }
         else {
@@ -598,7 +599,6 @@ public class Map3Controller implements Initializable {
             units_level4.setText("x");
             units_level5.setText("x");
             units_level6.setText("x");
-            owner_text.setText("xxx");
         }
     }
 
@@ -682,7 +682,7 @@ public class Map3Controller implements Initializable {
     }
 
     public void updateColor() {
-        HashMap<String, ArrayList<Territory>> toShow = this.clientSk.player.new_view_map;
+        HashMap<String, ArrayList<Territory>> toShow = this.clientSk.new_view_map;
         // viewed grey invisible
         for (Territory t : toShow.get("viewed")) {
             if (t.getName().equals("Narnia")) {
@@ -729,6 +729,35 @@ public class Map3Controller implements Initializable {
         }
     }
 
+    public void updateColorAsWatch() {
+        ArrayList<Player> players = clientSk.players;
+        for (Player p : players) {
+            for (Territory t : p.player_terri_set) {
+                System.out.println("3####################");
+                System.out.println(t.getColor());
+                if (t.getName().equals("Narnia")) {
+                    colorHelper(Narnia_color, t);
+                } else if (t.getName().equals("Elantris")){
+                    colorHelper(Elantris_color, t);
+                } else if (t.getName().equals("Gondor")) {
+                    colorHelper(Gondor_color, t);
+                } else if (t.getName().equals("Hogwarts")) {
+                    colorHelper(Hogwarts_color, t);
+                } else if(t.getName().equals("Midkemia")) {
+                    colorHelper(Midkemia_color, t);
+                } else  if (t.getName().equals("Mordor")) {
+                    colorHelper(Mordor_color, t);
+                } else if(t.getName().equals("Oz")) {
+                    colorHelper(Oz_color, t);
+                } else if(t.getName().equals("Roshar")) {
+                    colorHelper(Roshar_color, t);
+                } else {
+                    colorHelper(Scadrial_color, t);
+                }
+            }
+        }
+    }
+
     public void colorHelper(Text text, Territory t) {
         text.setVisible(true);
         text.setText(t.getColor());
@@ -744,7 +773,7 @@ public class Map3Controller implements Initializable {
     public void colorHelper2(Text text, Territory t) {
         text.setVisible(true);
         text.setText(t.getColor());
-        text.setFill(Color.GREY);
+        text.setFill(Color.WHITE);
     }
 
     @Override

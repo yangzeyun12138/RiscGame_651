@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -455,23 +456,72 @@ public class Map33Controller implements Initializable {
         showTerriInfo("Hogwarts");
     }
 
-    private void showTerriInfo(String terriName) {
-        ArrayList<Player> players = clientSk.players;
-        Player temp = clientSk.Action.getPlayer(terriName, players);
-        Territory t = null;
-        if (temp == clientSk.player) {
-            t = clientSk.Action.findTerritory(clientSk.temp_player, terriName);
-        } else {
-            t = clientSk.Action.findTerritory(temp, terriName);
+    private Pair<Territory, String> getTerri(String terriName, HashMap<String, ArrayList<Territory>> toShow){
+        ArrayList<Territory> viewed = toShow.get("viewed");
+        ArrayList<Territory> grey = toShow.get("grey");
+        for (Territory t : viewed) {
+            if (t.getName().equals(terriName)) {
+                Pair<Territory, String> ans = new Pair<>(t, "viewed");
+                return ans;
+            }
         }
-        units_level0.setText(String.valueOf(t.countLevelUnit(0)));
-        units_level1.setText(String.valueOf(t.countLevelUnit(1)));
-        units_level2.setText(String.valueOf(t.countLevelUnit(2)));
-        units_level3.setText(String.valueOf(t.countLevelUnit(3)));
-        units_level4.setText(String.valueOf(t.countLevelUnit(4)));
-        units_level5.setText(String.valueOf(t.countLevelUnit(5)));
-        units_level6.setText(String.valueOf(t.countLevelUnit(6)));
-        owner_text.setText(temp.color);
+        for (Territory t : grey) {
+            if (t.getName().equals(terriName)) {
+                Pair<Territory, String> ans = new Pair<>(t, "grey");
+                return ans;
+            }
+        }
+        Pair<Territory, String> ans = new Pair<>(null, null);
+        return ans;
+    }
+
+    private void showTerriInfo(String terriName) {
+        // viewed grey invisible
+        HashMap<String, ArrayList<Territory>> toShow = this.clientSk.new_view_map;
+        System.out.println("In show Terri Info + new view map is " + toShow);
+        Pair<Territory, String> res = getTerri(terriName, toShow);
+        Territory t = res.getKey();
+        if (res.getValue() != null) {
+            if (res.getValue().equals("viewed")) {
+                for (Territory temp : this.clientSk.temp_player.player_terri_set) {
+                    if (t.getName().equals(temp.getName())){
+                        t = temp;
+                    }
+                }
+                units_level0.setText(String.valueOf(t.countLevelUnit(0)));
+                units_level1.setText(String.valueOf(t.countLevelUnit(1)));
+                units_level2.setText(String.valueOf(t.countLevelUnit(2)));
+                units_level3.setText(String.valueOf(t.countLevelUnit(3)));
+                units_level4.setText(String.valueOf(t.countLevelUnit(4)));
+                units_level5.setText(String.valueOf(t.countLevelUnit(5)));
+                units_level6.setText(String.valueOf(t.countLevelUnit(6)));
+            }
+            else {
+                units_level0.setText(String.valueOf(t.countLevelUnit(0)));
+                units_level0.setFill(Color.GREY);
+                units_level1.setText(String.valueOf(t.countLevelUnit(1)));
+                units_level1.setFill(Color.GREY);
+                units_level2.setText(String.valueOf(t.countLevelUnit(2)));
+                units_level2.setFill(Color.GREY);
+                units_level3.setText(String.valueOf(t.countLevelUnit(3)));
+                units_level3.setFill(Color.GREY);
+                units_level4.setText(String.valueOf(t.countLevelUnit(4)));
+                units_level4.setFill(Color.GREY);
+                units_level5.setText(String.valueOf(t.countLevelUnit(5)));
+                units_level5.setFill(Color.GREY);
+                units_level6.setText(String.valueOf(t.countLevelUnit(6)));
+                units_level6.setFill(Color.GREY);
+            }
+        }
+        else {
+            units_level0.setText("x");
+            units_level1.setText("x");
+            units_level2.setText("x");
+            units_level3.setText("x");
+            units_level4.setText("x");
+            units_level5.setText("x");
+            units_level6.setText("x");
+        }
     }
 
     private LinkedBlockingQueue<Pair<String, String>> initQueue;
@@ -553,6 +603,54 @@ public class Map33Controller implements Initializable {
     }
 
     public void updateColor() {
+        HashMap<String, ArrayList<Territory>> toShow = this.clientSk.new_view_map;
+        // viewed grey invisible
+        for (Territory t : toShow.get("viewed")) {
+            if (t.getName().equals("Narnia")) {
+                colorHelper(Narnia_color, t);
+            } else if (t.getName().equals("Elantris")){
+                colorHelper(Elantris_color, t);
+            } else if (t.getName().equals("Gondor")) {
+                colorHelper(Gondor_color, t);
+            } else if (t.getName().equals("Hogwarts")) {
+                colorHelper(Hogwarts_color, t);
+            } else if(t.getName().equals("Midkemia")) {
+                colorHelper(Midkemia_color, t);
+            } else  if (t.getName().equals("Mordor")) {
+                colorHelper(Mordor_color, t);
+            } else if(t.getName().equals("Oz")) {
+                colorHelper(Oz_color, t);
+            } else if(t.getName().equals("Roshar")) {
+                colorHelper(Roshar_color, t);
+            } else {
+                colorHelper(Scadrial_color, t);
+            }
+        }
+
+        for (Territory t : toShow.get("grey")) {
+            if (t.getName().equals("Narnia")) {
+                colorHelper2(Narnia_color, t);
+            } else if (t.getName().equals("Elantris")){
+                colorHelper2(Elantris_color, t);
+            } else if (t.getName().equals("Gondor")) {
+                colorHelper2(Gondor_color, t);
+            } else if (t.getName().equals("Hogwarts")) {
+                colorHelper2(Hogwarts_color, t);
+            } else if(t.getName().equals("Midkemia")) {
+                colorHelper2(Midkemia_color, t);
+            } else  if (t.getName().equals("Mordor")) {
+                colorHelper2(Mordor_color, t);
+            } else if(t.getName().equals("Oz")) {
+                colorHelper2(Oz_color, t);
+            } else if(t.getName().equals("Roshar")) {
+                colorHelper2(Roshar_color, t);
+            } else {
+                colorHelper2(Scadrial_color, t);
+            }
+        }
+    }
+
+    public void updateColorAsWatch() {
         ArrayList<Player> players = clientSk.players;
         for (Player p : players) {
             for (Territory t : p.player_terri_set) {
@@ -591,6 +689,12 @@ public class Map33Controller implements Initializable {
         } else {
             text.setFill(Color.GREEN);
         }
+    }
+
+    public void colorHelper2(Text text, Territory t) {
+        text.setVisible(true);
+        text.setText(t.getColor());
+        text.setFill(Color.GREY);
     }
 
 

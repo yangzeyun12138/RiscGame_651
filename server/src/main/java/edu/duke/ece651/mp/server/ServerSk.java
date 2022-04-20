@@ -657,6 +657,7 @@ public class ServerSk {
     ArrayList<Player> players = map.get_player_list();
     while (true) {
       do_one_turn(socket_list, map.get_player_list());
+
       send_map_to_all(socket_list, map);
       //checkLose
       handlePotentialLose(players, socket_list);
