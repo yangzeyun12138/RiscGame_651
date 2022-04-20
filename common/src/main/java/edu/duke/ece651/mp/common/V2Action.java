@@ -541,12 +541,14 @@ public class V2Action implements AbstractActionFactory {
     if (new_level == 9){
       int SpyCreationCost = 20;
       boolean checkTerri = false;
-      if(player.getFood() < SpyCreationCost){
+      
+      if(player.getFood() < SpyCreationCost*numUnit){
         return new String(player.getColor()+" Player: There is not enough food to create a spy!");
       }
+      
       for(Territory curr_t : player.player_terri_set){
         if(curr_t.getName().equals(src)){
-          if(curr_t.countLevel(0) < 0){
+          if(curr_t.countLevel(0) < numUnit){
             return new String(player.getColor()+" Player: There is not enough Level 0 Units to create a spy!");
           }
           checkTerri = true;
@@ -591,7 +593,9 @@ public class V2Action implements AbstractActionFactory {
   @Override
   public void unitUpgrade(Player player, String src, int numUnit, int curr_level, int new_level) {
     if (new_level == 9){
-      this.createSpy(player, src);
+      for(int i = 0; i<numUnit; i++){
+        this.createSpy(player, src);
+      }
     }else{
       for(Territory curr_t: player.player_terri_set){
         if(curr_t.getName().equals(src)){
@@ -605,19 +609,16 @@ public class V2Action implements AbstractActionFactory {
    *createSpy: create a spy
    *@param: player: the player who wants to create the spy
    *@param: src: the name of the territory to place the spy
-   *@throws: players do not have enough food
-   *@throws: cannot find src territory from player's territory
+
    */
   @Override
   public void createSpy(Player player, String src){
     int SpyCreationCost = 20;
-    boolean checkTerri = false;
     
     for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(src)){
         curr_t.loseUnit(0);
         curr_t.addSpy(player.getColor());
-        checkTerri = true;
         player.costFood(SpyCreationCost);
       }
     }
