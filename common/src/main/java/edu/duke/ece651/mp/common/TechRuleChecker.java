@@ -12,10 +12,19 @@ public class TechRuleChecker extends UpgradeChecker {
    *@return return the error string, and return null if there is no error. 
    */
   protected String checkMyRule(Player player, String src, int numUnit, int level, int newLevel){
-    if(newLevel > player.getTechLevel()){
-      return new String(player.color + " player. Invalid Upgrade: The technology level of player should be higher than the current level!\n");
+    String error = new String(player.color + " player. Invalid Upgrade: The technology level of player should be higher than the current level!\n");
+    if (newLevel == 7 && player.getTechLevel()>=4){
+      return null;
     }
-    return null;
+    else if (newLevel == 8 && player.getTechLevel()>=3){
+      return null;
+    }
+    else{
+      if(newLevel <= player.getTechLevel()){
+        return null;
+      }
+    }
+    return error;
   }
 
   public TechRuleChecker(UpgradeChecker next){
