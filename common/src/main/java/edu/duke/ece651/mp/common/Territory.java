@@ -36,4 +36,5 @@ public interface Territory {
   public boolean loseSpy(String Color);
   public ArrayList<Spy> getSpyList();
   public void resetAllSpies();
+  public int countSpy(String color);
 }

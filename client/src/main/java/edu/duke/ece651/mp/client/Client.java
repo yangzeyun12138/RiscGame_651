@@ -64,11 +64,11 @@ public class Client extends Application {
             ClientSk clientSk = new ClientSk(hostName, port, input, out);
             ClientSkList.add(clientSk);
             if (ClientSkList.size() == 2) {
-                SceneList.add(createScene("Map31.fxml"));
+                SceneList.add(createScene("Map31.fxml", 1000, 760));
             } else if (ClientSkList.size() == 3) {
-                SceneList.add(createScene("Map32.fxml"));
+                SceneList.add(createScene("Map32.fxml", 1000, 760));
             } else {
-                SceneList.add(createScene("Map33.fxml"));
+                SceneList.add(createScene("Map33.fxml", 1000, 760));
             }
             System.out.println("after new add room");
             ClientSkList.get(ClientSkList.size() - 1).game_begin();
@@ -96,19 +96,19 @@ public class Client extends Application {
     }
 
     public static void setAllScene() throws IOException {
-       Scene loginScene = createScene("Login.fxml") ;
-       Scene registerScene = createScene("Register.fxml");
-       Scene Map3Scene = createScene("Map3.fxml");
+       Scene loginScene = createScene("Login.fxml", 640, 400) ;
+       Scene registerScene = createScene("Register.fxml", 620, 400);
+       Scene Map3Scene = createScene("Map3.fxml", 1000, 760);
        SceneList.add(loginScene);
        SceneList.add(registerScene);
        SceneList.add(Map3Scene);
     }
 
-    public static Scene createScene(String fileName) throws IOException {
+    public static Scene createScene(String fileName, int width, int height) throws IOException {
         URL fxmlResource = Client.class.getResource("/ui/" + fileName);
         FXMLLoader loader = new FXMLLoader(fxmlResource);
         VBox vbox = loader.load();
-        Scene scene = new Scene(vbox, 1000, 760);
+        Scene scene = new Scene(vbox, width, height);
         return scene;
     }
 }

@@ -459,8 +459,25 @@ public class Map3Controller implements Initializable {
     @FXML
     void submitClick(MouseEvent event) throws InterruptedException {
         moveQueue.clear();
-        String s1 = from_level_menubutton.getText();
-        String s2 = to_level_menubutton.getText();
+        String s1 = null;
+        String s2 = null;
+        if (isBomber == true) {
+            s1 = "0";
+            s2 = "7";
+            isBomber = false;
+        } else if (isFatNerd == true) {
+            s1 = "0";
+            s2 = "8";
+            isFatNerd = false;
+        } else if (isSpy == true) {
+            s1 = "0";
+            s2 = "9";
+            isSpy = false;
+        } else {
+            s1 = from_level_menubutton.getText();
+            s2 = to_level_menubutton.getText();
+
+        }
         String s3 = choose_level_menubutton.getText();
         String s4 = number_of_units_textfield.getText();
         Quartet<String, String , String, String> ans = new Quartet<>(s1,s2,s3,s4);
@@ -573,6 +590,9 @@ public class Map3Controller implements Initializable {
                 units_level4.setText(String.valueOf(t.countLevelUnit(4)));
                 units_level5.setText(String.valueOf(t.countLevelUnit(5)));
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
+                bomber_text.setText(String.valueOf(t.countLevel(7)));
+                fatnerd_text.setText(String.valueOf(t.countLevel(8)));
+                spy_text.setText(String.valueOf(t.countSpy(this.clientSk.player.color)));
             }
             else {
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
@@ -589,6 +609,10 @@ public class Map3Controller implements Initializable {
                 units_level5.setFill(Color.WHITE);
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
                 units_level6.setFill(Color.WHITE);
+                bomber_text.setText(String.valueOf(t.countLevel(7)));
+                bomber_text.setFill(Color.WHITE);
+                fatnerd_text.setText(String.valueOf(t.countLevel(8)));
+                fatnerd_text.setFill(Color.WHITE);
             }
         }
         else {
@@ -599,6 +623,9 @@ public class Map3Controller implements Initializable {
             units_level4.setText("x");
             units_level5.setText("x");
             units_level6.setText("x");
+            bomber_text.setText("x");
+            fatnerd_text.setText("x");
+            spy_text.setText("x");
         }
     }
 
@@ -625,6 +652,9 @@ public class Map3Controller implements Initializable {
         bind_client();
         this.TerriList = new ArrayList<>();
         this.addRoomCount = 0;
+        isSpy = false;
+        isFatNerd = false;
+        isBomber = false;
     }
 
 
@@ -786,19 +816,21 @@ public class Map3Controller implements Initializable {
 
     }
 
+
+
     @FXML
     void clickSpy(ActionEvent event) {
-
+        isSpy = true;
     }
 
     @FXML
     void clickBomber(ActionEvent event) {
-
+        isBomber = true;
     }
 
     @FXML
     void clickFatNerd(ActionEvent event) {
-
+        isFatNerd = true;
     }
 
     @FXML
@@ -811,5 +843,17 @@ public class Map3Controller implements Initializable {
 
     }
 
+    private boolean isSpy;
+    private boolean isFatNerd;
+    private boolean isBomber;
+
+    @FXML
+    private Text bomber_text;
+
+    @FXML
+    private Text fatnerd_text;
+
+    @FXML
+    private  Text spy_text;
 }
 

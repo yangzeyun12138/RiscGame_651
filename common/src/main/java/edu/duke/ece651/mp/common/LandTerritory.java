@@ -301,7 +301,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
    */
   @Override
   public void loseUnitsAt(int idx){
-    this.Units.remove(idx);
+    this.units.remove(idx);
   }
 
   /**
@@ -402,5 +402,16 @@ public class LandTerritory implements Territory, java.io.Serializable {
     for (Spy s : spyList){
       s.setCanMove(true);
     }
+  }
+
+  @Override
+  public int countSpy(String color) {
+    int count = 0;
+    for (Spy s : spyList) {
+      if (s.getColor().equals(color)) {
+        count++;
+      }
+    }
+    return count;
   }
 }

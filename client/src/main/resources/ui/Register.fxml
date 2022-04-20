@@ -32,50 +32,64 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="edu.duke.ece651.mp.client.RegisterController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.mp.client.RegisterController">
     <children>
         <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
             <children>
-                <FlowPane prefHeight="373.0" prefWidth="640.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
-                    <children>
-                        <TextField fx:id="account_textfield" promptText="Username">
-                            <FlowPane.margin>
-                                <Insets />
-                            </FlowPane.margin>
-                        </TextField>
-                        <TextField fx:id="password_textfield" promptText="Password">
-                            <FlowPane.margin>
-                                <Insets />
-                            </FlowPane.margin>
-                        </TextField>
-                        <TextField fx:id="password_textfield1" promptText="Retype-Password" />
-                        <Text strokeType="OUTSIDE" fx:id="Invalid_label" strokeWidth="0.0" text="" wrappingWidth="411.20849609375">
-                            <FlowPane.margin>
-                                <Insets left="30.0" right="100.0" />
-                            </FlowPane.margin>
-                        </Text>
-                        <Button fx:id="register_button" mnemonicParsing="false" onMouseClicked="#sendRegistration" text="Register">
-                            <FlowPane.margin>
-                                <Insets left="50.0" />
-                            </FlowPane.margin></Button>
-                    </children>
-                </FlowPane>
-                <Text fx:id="if_register" layoutX="39.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want to register?" wrappingWidth="246.21630859375" />
-                <Button fx:id="yesClick" layoutX="39.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#yesClick" text="yes" />
-                <Button fx:id="noClick" layoutX="126.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#noClick" text="no" />
+                <ImageView fitHeight="400.0" fitWidth="640.0">
+                    <image>
+                        <Image url="@images.jpg" />
+                    </image>
+                </ImageView>
+                <FlowPane prefHeight="38.0" prefWidth="488.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="122.0" AnchorPane.topAnchor="30.0" />
+                <TextField fx:id="account_textfield" layoutX="31.0" layoutY="83.0" promptText="Username">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+                <TextField fx:id="password_textfield" layoutX="31.0" layoutY="141.0" promptText="Password">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+                <Text fx:id="Invalid_label" layoutX="30.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="" wrappingWidth="398.20849609375">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Text>
+                <Button fx:id="register_button" layoutX="89.0" layoutY="258.0" mnemonicParsing="false" onMouseClicked="#sendRegistration" text="Register">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+                <Text fx:id="if_register" layoutX="31.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want to register?" wrappingWidth="246.21630859375">
+               <font>
+                  <Font size="18.0" />
+               </font></Text>
+                <Button fx:id="yesClick" layoutX="64.0" layoutY="176.0" mnemonicParsing="false" onMouseClicked="#yesClick" text="yes">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+                <Button fx:id="noClick" layoutX="142.0" layoutY="176.0" mnemonicParsing="false" onMouseClicked="#noClick" text="no">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+                <TextField fx:id="password_textfield1" layoutX="31.0" layoutY="200.0" promptText="Retype-Password">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+                <Text layoutX="18.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Risc Game" wrappingWidth="201.7294921875">
+                    <font>
+                        <Font size="36.0" />
+                    </font>
+                </Text>
             </children>
         </AnchorPane>
     </children>

@@ -495,22 +495,29 @@ public class Map33Controller implements Initializable {
                 units_level4.setText(String.valueOf(t.countLevelUnit(4)));
                 units_level5.setText(String.valueOf(t.countLevelUnit(5)));
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
+                bomber_text.setText(String.valueOf(t.countLevel(7)));
+                fatnerd_text.setText(String.valueOf(t.countLevel(8)));
+                spy_text.setText(String.valueOf(t.countSpy(this.clientSk.player.color)));
             }
             else {
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
-                units_level0.setFill(Color.GREY);
+                units_level0.setFill(Color.WHITE);
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
-                units_level1.setFill(Color.GREY);
+                units_level1.setFill(Color.WHITE);
                 units_level2.setText(String.valueOf(t.countLevelUnit(2)));
-                units_level2.setFill(Color.GREY);
+                units_level2.setFill(Color.WHITE);
                 units_level3.setText(String.valueOf(t.countLevelUnit(3)));
-                units_level3.setFill(Color.GREY);
+                units_level3.setFill(Color.WHITE);
                 units_level4.setText(String.valueOf(t.countLevelUnit(4)));
-                units_level4.setFill(Color.GREY);
+                units_level4.setFill(Color.WHITE);
                 units_level5.setText(String.valueOf(t.countLevelUnit(5)));
-                units_level5.setFill(Color.GREY);
+                units_level5.setFill(Color.WHITE);
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
-                units_level6.setFill(Color.GREY);
+                units_level6.setFill(Color.WHITE);
+                bomber_text.setText(String.valueOf(t.countLevel(7)));
+                bomber_text.setFill(Color.WHITE);
+                fatnerd_text.setText(String.valueOf(t.countLevel(8)));
+                fatnerd_text.setFill(Color.WHITE);
             }
         }
         else {
@@ -521,6 +528,9 @@ public class Map33Controller implements Initializable {
             units_level4.setText("x");
             units_level5.setText("x");
             units_level6.setText("x");
+            bomber_text.setText("x");
+            fatnerd_text.setText("x");
+            spy_text.setText("x");
         }
     }
 
@@ -546,6 +556,9 @@ public class Map33Controller implements Initializable {
         bind_client();
         this.TerriList = new ArrayList<>();
         this.addRoomCount = 0;
+        isSpy = false;
+        isFatNerd = false;
+        isBomber = false;
     }
 
 
@@ -694,7 +707,7 @@ public class Map33Controller implements Initializable {
     public void colorHelper2(Text text, Territory t) {
         text.setVisible(true);
         text.setText(t.getColor());
-        text.setFill(Color.GREY);
+        text.setFill(Color.WHITE);
     }
 
 
@@ -767,5 +780,18 @@ public class Map33Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.roomNum.setText("Room4");
     }
+
+    private boolean isSpy;
+    private boolean isFatNerd;
+    private boolean isBomber;
+    @FXML
+    private Text bomber_text;
+
+    @FXML
+    private Text fatnerd_text;
+
+    @FXML
+    private  Text spy_text;
+
 }
 
