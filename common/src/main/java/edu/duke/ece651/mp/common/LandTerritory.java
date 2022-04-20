@@ -296,6 +296,15 @@ public class LandTerritory implements Territory, java.io.Serializable {
   }
 
   /**
+   *loseUnitAt: lose specified Unit At the specified index
+   *@param: the index of array
+   */
+  @Override
+  public void loseUnitsAt(int idx){
+    this.Units.remove(idx);
+  }
+
+  /**
    *getUnitsFromIndex: get the unit from Units at given index
    *@param: the index of unit as integer
    *@return: the unit at the given index

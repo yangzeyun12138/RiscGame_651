@@ -146,6 +146,9 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public String checkForAttack(Player attacker, String src, String dest, int numUnit, ArrayList<Player> players, int level){
+    if(level == 8){
+      return new String(attacker.color + " Player: Level 8 should not be used to attack");
+    }
     AttackChecker AttackCostCheck = new AttackCostRuleChecker(null);
     AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(AttackCostCheck);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
@@ -154,6 +157,57 @@ public class V2Action implements AbstractActionFactory {
     return result;
   }
 
+  public int countBomb(ArrayList<Unit> Units){
+    int num = 0;
+    for (int i = 0 ; i < Units.size();i++){
+      if(Units.get(i).getLevel() == 7){
+        num += 1;
+      }
+    }
+    return num;
+  }
+  
+  public void BombsAttack (ArrayList<Unit> attackUnits, Territory defendTerritory){
+    int NumAtkBomb = countBomb(attackUnits);
+    int NumDefBomb = defendTerritory.countLevelUnit(7);
+    
+    
+    
+    defendTerritory.loseUnits(NumDefBomb, 7);
+
+    while(attackUnits.size() >0 && defendTerritory.countUnit() >0){
+      if(NumDefBomb>0){
+        Random rand = new Random();
+        int Dice = rand.nextInt(attackUnits.size());
+        attackUnits.remove(Dice);
+        NumAtkBomb = countBomb(attackUnits);
+      }
+      if(NumAtkBomb>0){
+        Random rand = new Random();
+        int Dice = rand.nextInt(defendTerritory.countUnit());
+        defendTerritory.loseUnitsAt(Dice);
+        NumDefBomb = defendTerritory.countLevelUnit(7);
+      }
+      if(NumDefBomb == 0 && NumAtkBomb == 0){
+        break;
+      }
+    }
+    
+    if(NumAtkBomb > 0){
+      for (int i=0; i<NumAtkBomb; i++){
+        Unit b = new BasicUnit(7);
+        attackUnits.add(b);
+      }
+    }
+    if(NumDefBomb > 0){
+      for (int i=0; i<NumDefBomb; i++){
+        Unit b = new BasicUnit(7);
+        defendTerritory.addUnit(b);
+      }
+    }
+  }
+
+  
   /**
    * Attack() would implement the command of attack.
    * @param attacker is the Player who attacks others
@@ -172,10 +226,13 @@ public class V2Action implements AbstractActionFactory {
     //attackerTerri.loseUnit(numUnit);
 
     // Attacker win Defender
-    int numUnit = attackUnits.size();
+    
     // Sort the Units from minimum to maximum
     this.sortUnit(attackUnits);
     defenderTerri.sortUnit();
+    this.BombsAttack(attackUnits,defenderTerri);
+    
+    int numUnit = attackUnits.size();
     boolean unitRemain = (numUnit > 0) && (defenderTerri.countUnit() > 0);
     while(unitRemain){
       // If attacker wins:

@@ -24,7 +24,7 @@ public interface Territory {
   public boolean loseUnits(int numUnit);
   public void changeColor(String Color);
   public int getSize();
-
+  public void loseUnitsAt(int idx);
   public Unit getUnitsFromIndex(int index);
 
   public boolean loseUnit(int level);
