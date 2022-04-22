@@ -167,12 +167,19 @@ public class V2Action implements AbstractActionFactory {
     }
     return num;
   }
+
+  public void removeBomb(ArrayList<Unit> Units){
+    for (int i=0; i<Units.size(); i++){
+      if(Units.get(i).getLevel() == 7){
+        Units.remove(i);
+        break;
+      }
+    }
+  }
   
   public void BombsAttack (ArrayList<Unit> attackUnits, Territory defendTerritory){
     int NumAtkBomb = countBomb(attackUnits);
     int NumDefBomb = defendTerritory.countLevelUnit(7);
-    
-    
     
     defendTerritory.loseUnits(NumDefBomb, 7);
 
@@ -181,12 +188,14 @@ public class V2Action implements AbstractActionFactory {
         Random rand = new Random();
         int Dice = rand.nextInt(attackUnits.size());
         attackUnits.remove(Dice);
+        defendTerritory.loseUnit(7);
         NumAtkBomb = countBomb(attackUnits);
       }
       if(NumAtkBomb>0){
         Random rand = new Random();
         int Dice = rand.nextInt(defendTerritory.countUnit());
         defendTerritory.loseUnitsAt(Dice);
+        removeBomb(attackUnits);
         NumDefBomb = defendTerritory.countLevelUnit(7);
       }
       if(NumDefBomb == 0 && NumAtkBomb == 0){
