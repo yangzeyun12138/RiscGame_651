@@ -106,10 +106,10 @@ public class Player implements java.io.Serializable{
   public void upgradeTechLevel(){
     LevelInfo info = new LevelInfo();
     int totalCost = (info.getTechCost(this.tech_level + 1) - info.getTechCost(this.tech_level));
-    this.tech_level += 1;
     if(this.food < totalCost){
       throw new IllegalArgumentException("The number of food is lower than the totalCost when upgrading tech level!\n");
     }
+    this.tech_level += 1;
     this.food -= totalCost;
   }
   /**

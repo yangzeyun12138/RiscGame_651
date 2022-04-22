@@ -6,6 +6,7 @@ import java.io.*;
 public class V2Action implements AbstractActionFactory {
   @Override
   public String checkForMove(Player player, String src, String dest, int numUnit, int level){
+
     MoveChecker CostCheck = new MoveCostRuleChecker(null);
     MoveChecker UnitCheck = new UnitRuleChecker(CostCheck);
     MoveChecker PathCheck = new PathRuleChecker(UnitCheck);
@@ -678,7 +679,7 @@ public class V2Action implements AbstractActionFactory {
     for(Territory curr_t : player.player_terri_set){
       if(curr_t.getName().equals(src)){
         curr_t.loseUnit(0);
-        curr_t.addSpy(player.getColor());
+        curr_t.addInitSpy(player.getColor());
         player.costFood(SpyCreationCost);
       }
     }
@@ -693,6 +694,10 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public String checkForSpyMove(Player player, ArrayList<Player> players, String src, String dest){
+    if (src.equals(dest)) {
+      return null;
+    }
+
     SpyChecker SpyCost = new SpyCostRuleChecker(null);
     SpyChecker SpyMove = new SpyMoveRuleChecker(SpyCost);
     SpyChecker SpyOnce = new SpyOnceRuleChecker(SpyMove);
@@ -710,6 +715,9 @@ public class V2Action implements AbstractActionFactory {
    */
   @Override
   public void spyMove(Player player, ArrayList<Player> players, String src, String dest){
+    if (src.equals(dest)) {
+      return;
+    }
     int SpyMoveCost = 20;
     for (Player p : players){
       for(Territory t : p.player_terri_set){
@@ -717,6 +725,7 @@ public class V2Action implements AbstractActionFactory {
           t.loseSpy(player.getColor());
         }
         if (t.getName().equals(dest)){
+          System.out.println("############inspyMove dest is " + t.getName());
           t.addSpy(player.getColor());
         }
       }

@@ -138,7 +138,7 @@
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <Text layoutX="33.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spy : " wrappingWidth="75.0">
+                        <Text layoutX="33.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your spy : " wrappingWidth="75.0">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -322,25 +322,22 @@
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c9a556" height="181.0" layoutX="4.0" layoutY="-1.0" opacity="0.8" stroke="#9aaac3" strokeWidth="2.0" width="137.0" />
                         <Text fx:id="territory1" layoutX="22.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" wrappingWidth="55.99999999999994">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="14.0" />
                      </font></Text>
                         <Text fx:id="territory2" layoutX="22.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" wrappingWidth="76.99999999999989">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="14.0" />
                      </font></Text>
                         <Text fx:id="territory3" layoutX="22.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" wrappingWidth="81.0">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="14.0" />
                      </font></Text>
-                        <TextField fx:id="first_textfield" layoutX="104.0" layoutY="46.0" prefHeight="26.0" prefWidth="26.0" />
-                        <TextField fx:id="second_textfield" layoutX="104.0" layoutY="83.0" prefHeight="26.0" prefWidth="26.0" />
-                        <Text fx:id="third_text" layoutX="104.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx">
-                     <font>
-                        <Font size="16.0" />
-                     </font></Text>
+                        <TextField fx:id="first_textfield" layoutX="94.0" layoutY="46.0" prefHeight="26.0" prefWidth="36.0" />
+                        <TextField fx:id="second_textfield" layoutX="94.0" layoutY="83.0" prefHeight="26.0" prefWidth="36.0" />
+                        <Text fx:id="third_text" layoutX="99.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="xxx" />
                         <Text layoutX="43.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Init Units">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="14.0" />
                      </font></Text>
                         <Button fx:id="set_unit_button" layoutX="54.0" layoutY="141.0" mnemonicParsing="false" onMouseClicked="#initialize_units" prefHeight="24.0" prefWidth="40.0" text="Set" />
                     </children>

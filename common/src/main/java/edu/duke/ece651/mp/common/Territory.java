@@ -37,4 +37,5 @@ public interface Territory {
   public ArrayList<Spy> getSpyList();
   public void resetAllSpies();
   public int countSpy(String color);
+  public void addInitSpy(String Color);
 }

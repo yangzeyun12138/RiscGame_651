@@ -12,17 +12,17 @@ public class SpyOnceRuleChecker extends SpyChecker {
    */
   @Override
   protected String checkMyRule(Player player,ArrayList<Player> players, String src, String dest){
-
-    for(Territory curr_t : player.player_terri_set){
-      if(curr_t.getName().equals(src)){
-        for(Spy s : curr_t.getSpyList()){
-          if (s.getColor().equals(player.color) && s.getCanMove() == true){
-            return null;
+    for (Player p : players) {
+      for (Territory curr_t : p.player_terri_set) {
+        if (curr_t.getName().equals(src)) {
+          for (Spy s : curr_t.getSpyList()) {
+            if (s.getColor().equals(player.color) && s.getCanMove() == true) {
+              return null;
+            }
           }
         }
       }
     }
-    
     return new String(player.color + " player. Invalid Spy Movement: The Source territory does not have movable Spy belongs to the player!\n");
   }
 

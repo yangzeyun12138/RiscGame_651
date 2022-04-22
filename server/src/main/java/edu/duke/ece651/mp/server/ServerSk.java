@@ -423,20 +423,26 @@ public class ServerSk {
   public void do_move_up(ArrayList<Orders> ordersList, ArrayList<Player> players)  {
     for (int i = 0; i < ordersList.size(); i++) {
       for (Order o : ordersList.get(i).MoveUpList) {
-        if (o.getSrc().equals(" ")) {
-          //upgrade total tech
-          players.get(i).upgradeTechLevel();
-        }
-        else if (o.getDest().equals(" ")){
-          //change unit type
-          Action.checkForUpgrade(players.get(i), o.getSrc(), o.getNumUnit(), o.currLevel, o.afterLevel);
-          Action.unitUpgrade(players.get(i), o.getSrc(), o.getNumUnit(), o.currLevel, o.afterLevel);
+        //move spy
+        if (o.moveSpy) {
+          Action.checkForSpyMove(players.get(i), players, o.getSrc(), o.getDest());
+          Action.spyMove(players.get(i), players, o.getSrc(), o.getDest());
         }
         else {
-          //move
-          Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), o.currLevel);
 
-          Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), o.currLevel);
+          if (o.getSrc().equals(" ")) {
+            //upgrade total tech
+            players.get(i).upgradeTechLevel();
+          } else if (o.getDest().equals(" ")) {
+            //change unit type
+            Action.checkForUpgrade(players.get(i), o.getSrc(), o.getNumUnit(), o.currLevel, o.afterLevel);
+            Action.unitUpgrade(players.get(i), o.getSrc(), o.getNumUnit(), o.currLevel, o.afterLevel);
+          } else {
+            //move
+            Action.checkForMove(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), o.currLevel);
+
+            Action.Move(players.get(i), o.getSrc(), o.getDest(), o.getNumUnit(), o.currLevel);
+          }
         }
       }
     }

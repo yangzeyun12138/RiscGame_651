@@ -369,6 +369,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
     Spy s = new Spy(Color);
     s.setCanMove(false);
     spyList.add(s);
+    System.out.println("#########In addSpy add a " + Color + " spy to " + name);
   }
   /**
    *loseSpy: lost a spy which has the color of Color 
@@ -378,7 +379,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
   @Override
   public boolean loseSpy(String Color){
     for (int i=0; i<this.spyList.size(); i++){
-      if (spyList.get(i).getColor().equals(Color)){
+      if (spyList.get(i).getColor().equals(Color) && spyList.get(i).getCanMove()){
         spyList.remove(i);
         return true;
       }
@@ -407,6 +408,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
   @Override
   public int countSpy(String color) {
     System.out.println("############In count spy");
+    System.out.println("#############spyList size = " + spyList.size());
     int count = 0;
     for (Spy s : spyList) {
       if (s.getColor().equals(color)) {
@@ -414,5 +416,11 @@ public class LandTerritory implements Territory, java.io.Serializable {
       }
     }
     return count;
+  }
+
+  @Override
+  public void addInitSpy(String Color){
+    Spy s = new Spy(Color);
+    spyList.add(s);
   }
 }

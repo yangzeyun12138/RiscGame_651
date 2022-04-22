@@ -22,7 +22,6 @@ public class ClientSk {
   private String color;
   private int num_units;
   public Player player;
-  public Player temp_player;
   final BufferedReader inputReader;
   final PrintStream out;
   public AbstractActionFactory Action;
@@ -583,7 +582,7 @@ public class ClientSk {
           break;
         } catch (IllegalArgumentException | IOException e) {
           out.println(e.getMessage());
-          writeLeftBottomBoard(e.getMessage() + "\n");
+          //writeLeftBottomBoard(e.getMessage() + "\n");
           canBeTaken(initQueue);
           res = initQueue.take();
         }
@@ -678,12 +677,13 @@ public class ClientSk {
    *@param players is the list of the all player
    *@throws IOException
    */  
-  public String parse_check_add(String action, Orders orders, ArrayList<Player> players, Player temp_player) throws IOException, InterruptedException {
+  public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException, InterruptedException {
 
     writeLeftBottomBoard("Now is " + action + "\n");
     canBeTaken(moveQueue);
     Quartet<String, String, String, String> ans = moveQueue.take();
 
+    System.out.println("In parse_and_check, after moveQueue().take *****************************");
     String s1 = null;
     String s2 = null;
     String s3 = null;
@@ -788,75 +788,114 @@ public class ClientSk {
       }
     }
 
-    if (action.equals("M")) {
-      String temp = Action.checkForMove(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
+    if (signal == 1) {
+      map3ControllerList.getValue0().TerriList.clear();
+    } else if (signal == 2) {
+      map3ControllerList.getValue1().TerriList.clear();
+    } else if(signal == 3) {
+      map3ControllerList.getValue2().TerriList.clear();
+    } else {
+      map3ControllerList.getValue3().TerriList.clear();
+    }
+
+    if (action.equals("MS")) {
+      System.out.println("In action.equals(MS) ##########################################");
+      String temp = Action.checkForSpyMove(player, players, s1, s2);
+      if (temp != null) {
+
+        return temp;
+      }
+      else {
+        Action.spyMove(player, players, s1, s2);
+
+        System.out.println("adter Action.spyMove()$$$$$$$$$$$$$$$$$$$$$$$$$");
+
+        if (signal == 1) {
+          map3ControllerList.getValue0().tempUpdateInfo();
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().tempUpdateInfo();
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().tempUpdateInfo();
+        } else {
+          map3ControllerList.getValue3().tempUpdateInfo();
+        }
+
+        //new a order class, add it to orders moveList
+        Order moveS = new Order(player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4));
+        moveS.moveSpy = true;
+        System.out.println("new order move spy %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        orders.MoveUpList.add(moveS);
+      }
+    }
+    else if (action.equals("M")) {
+      String temp = Action.checkForMove(player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
       System.out.println("#######Erro message is "+ temp);
       if (temp != null) {
         return temp;
       }
       else {
-        Action.Move(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
+        Action.Move(player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4));
 
         if (signal == 1) {
-          map3ControllerList.getValue0().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue0().tempUpdateInfo();
         } else if (signal == 2) {
-          map3ControllerList.getValue1().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue1().tempUpdateInfo();
         } else if(signal == 3) {
-          map3ControllerList.getValue2().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue2().tempUpdateInfo();
         } else {
-          map3ControllerList.getValue3().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue3().tempUpdateInfo();
         }
 
 
         //new a order class, add it to orders moveList
-        orders.MoveUpList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
+        orders.MoveUpList.add(new Order(player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
     }
     else if (action.equals("A")) {
-      String temp = Action.checkForAttack(temp_player, s1, s2, Integer.parseInt(s3), players, Integer.parseInt(s4));
+      String temp = Action.checkForAttack(player, s1, s2, Integer.parseInt(s3), players, Integer.parseInt(s4));
       if (temp != null) {
         return temp;
       }
       else {
-        Boolean res = temp_player.getTerritory(s1).loseUnits(Integer.parseInt(s3), Integer.parseInt(s4));
+        Boolean res = player.getTerritory(s1).loseUnits(Integer.parseInt(s3), Integer.parseInt(s4));
 
         if (res == false) {
-          return temp_player.color + " player has invalid attack orders. " +
+          return player.color + " player has invalid attack orders. " +
                   "The numUnits of level " + s4 + "is insufficient.\n";
         }
         if (signal == 1) {
-          map3ControllerList.getValue0().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue0().tempUpdateInfo();
         } else if (signal == 2) {
-          map3ControllerList.getValue1().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue1().tempUpdateInfo();
         } else if(signal == 3) {
-          map3ControllerList.getValue2().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue2().tempUpdateInfo();
         } else {
-          map3ControllerList.getValue3().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue3().tempUpdateInfo();
         }
         //new a order class, add it to orders attackList
 
-        orders.AttackList.add(new Order(temp_player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
+        orders.AttackList.add(new Order(player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4)));
       }
     }
     else {
       //Change 7=Bomber, 8=Fat Nerd, 9=Spy
-      String temp = Action.checkForUpgrade(temp_player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
+      String temp = Action.checkForUpgrade(player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
       if (temp != null) {
         return temp;
       }
       else {
-        Action.unitUpgrade(temp_player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
+        Action.unitUpgrade(player, s1, Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4));
         if (signal == 1) {
-          map3ControllerList.getValue0().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue0().tempUpdateInfo();
         } else if (signal == 2) {
-          map3ControllerList.getValue1().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue1().tempUpdateInfo();
         } else if(signal == 3) {
-          map3ControllerList.getValue2().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue2().tempUpdateInfo();
         } else {
-          map3ControllerList.getValue3().tempUpdateInfo(temp_player);
+          map3ControllerList.getValue3().tempUpdateInfo();
         }
         //new a order class, add it to orders attackList
-        orders.MoveUpList.add(new Order(temp_player, s1, " ", Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4)));
+        orders.MoveUpList.add(new Order(player, s1, " ", Integer.parseInt(s2), Integer.parseInt(s3), Integer.parseInt(s4)));
       }
     }
     return null;
@@ -867,6 +906,7 @@ public class ClientSk {
    *@return void
    *@param s is the player's input of the action
    */
+  /*
   public void check_action(String s) {
     if (s.length() != 1) {
       throw new IllegalArgumentException("Please enter one of the the first capital letter of action");
@@ -876,13 +916,15 @@ public class ClientSk {
     }
   }
 
+
+   */
   /**
    *collect one order of the player in one turn
    *@return the action of the player
    *@param orders is the player's orders
    *@throws IOException
    */
-  public String collect_one_order(Orders orders, ArrayList<Boolean> if_up, Player temp_player) throws IOException, InterruptedException {
+  public String collect_one_order(Orders orders, ArrayList<Boolean> if_up) throws IOException, InterruptedException {
     //out.println("You are the " + color + " player, what would you like to do?");
     //out.print("(M)ove\n(A)ttack\n(U)pgrade total tech level\n(C)hange unit level\n(D)one\nPlease enter the first capital letter\n");
     writeLeftBottomBoard("Attention: please do one or none U and some M, A, C, then ends with Done.\n");
@@ -891,7 +933,7 @@ public class ClientSk {
       try {
         canBeTaken(actionQueue);
         action = actionQueue.take();
-        check_action(action);
+        System.out.println("%%%%%%%%%%%%%%%%%  after actionQueue.take() &&&&&&&&&&&&& action is ");
         break;
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage());
@@ -907,28 +949,29 @@ public class ClientSk {
       else {
         do {
           if (!action.equals("U")) {
-            res = parse_check_add(action, orders, players, temp_player);
+            System.out.println("^^^^^^^^^^action is " + action + " ^^^^^^^^^^^^^before enter parse_and_check");
+            res = parse_check_add(action, orders, players);
           }
           else {
             if (!if_up.get(0)) {
-              if (temp_player.getTechLevel() < 6) {
+              if (player.getTechLevel() < 6) {
                 try {
-                  temp_player.upgradeTechLevel();
+                  player.upgradeTechLevel();
                   if_up.set(0, true);
-                  orders.MoveUpList.add(new Order(temp_player, " ", " ", 0, 0, 0));
+                  orders.MoveUpList.add(new Order(player, " ", " ", 0, 0, 0));
 
                   if (signal == 1) {
-                    map3ControllerList.getValue0().tempUpdateInfo1(temp_player);
+                    map3ControllerList.getValue0().tempUpdateInfo1();
                   } else if (signal == 2) {
-                    map3ControllerList.getValue1().tempUpdateInfo1(temp_player);
+                    map3ControllerList.getValue1().tempUpdateInfo1();
                   } else if(signal == 3) {
-                    map3ControllerList.getValue2().tempUpdateInfo1(temp_player);
+                    map3ControllerList.getValue2().tempUpdateInfo1();
                   } else {
-                    map3ControllerList.getValue3().tempUpdateInfo1(temp_player);
+                    map3ControllerList.getValue3().tempUpdateInfo1();
                   }
 
                 } catch(IllegalArgumentException e) {
-                  out.print(e.getMessage());
+                  writeLeftBottomBoard(e.getMessage());
                 }
               }
               else {
@@ -937,11 +980,11 @@ public class ClientSk {
             } else{
               res = "You can only update total level once in one turn!\n";
               writeLeftBottomBoard(res);
-              String temp_action = collect_one_order(orders, if_up, temp_player);
+              String temp_action = collect_one_order(orders, if_up);
               if (!temp_action.equals("U")) {
                 return temp_action;
               } else {
-                temp_action = collect_one_order(orders, if_up, temp_player);
+                temp_action = collect_one_order(orders, if_up);
               }
             }
           }
@@ -988,9 +1031,8 @@ public class ClientSk {
     String temp = new String();
     ArrayList<Boolean> if_up = new ArrayList<>();
     if_up.add(false);
-    this.temp_player = this.player.deep_copy();
     do {
-      temp = collect_one_order(orders, if_up, temp_player);
+      temp = collect_one_order(orders, if_up);
       System.out.println("temp action is " + temp);
     } while (!temp.equals("D"));
     send_orders(orders);
@@ -1379,6 +1421,18 @@ public class ClientSk {
         }
       }
     }
+
+    //4. Add where spy at
+    for (Player p : players){
+      for (Territory t : p.player_terri_set) {
+        if (t.countSpy(player.color) > 0 && !cur_viewed_name.contains(t.getName())) {
+          Territory copy = findTerritory(t.getName()).deep_copy();
+          cur_viewed_list.add(copy);
+          cur_viewed_name.add(t.getName());
+        }
+      }
+    }
+
 
     return cur_viewed_list;
   }

@@ -486,7 +486,7 @@ public class Map32Controller implements Initializable {
         Territory t = res.getKey();
         if (res.getValue() != null) {
             if (res.getValue().equals("viewed")) {
-                for (Territory temp : this.clientSk.temp_player.player_terri_set) {
+                for (Territory temp : this.clientSk.player.player_terri_set) {
                     if (t.getName().equals(temp.getName())){
                         t = temp;
                     }
@@ -608,14 +608,14 @@ public class Map32Controller implements Initializable {
         player_text2.setText(String.valueOf(clientSk.player.getFood()));
     }
 
-    public void tempUpdateInfo(Player temp_player) {
-        player_text1.setText(String.valueOf(temp_player.getTechLevel()));
-        player_text2.setText(String.valueOf(temp_player.getFood()));
+    public void tempUpdateInfo() {
+        player_text1.setText(String.valueOf(clientSk.player.getTechLevel()));
+        player_text2.setText(String.valueOf(clientSk.player.getFood()));
     }
 
-    public void tempUpdateInfo1(Player temp_player) {
-        player_text1.setText(String.valueOf(temp_player.getTechLevel()));
-        player_text2.setText(String.valueOf(temp_player.getFood()));
+    public void tempUpdateInfo1() {
+        player_text1.setText(String.valueOf(clientSk.player.getTechLevel()));
+        player_text2.setText(String.valueOf(clientSk.player.getFood()));
     }
 
     public void updateColor() {
@@ -785,9 +785,42 @@ public class Map32Controller implements Initializable {
         this.roomNum.setText("Room3");
     }
 
+    @FXML
+    void moveSpy(ActionEvent event) {
+
+    }
+
+
+
+    @FXML
+    void clickSpy(ActionEvent event) {
+        isSpy = true;
+    }
+
+    @FXML
+    void clickBomber(ActionEvent event) {
+        isBomber = true;
+    }
+
+    @FXML
+    void clickFatNerd(ActionEvent event) {
+        isFatNerd = true;
+    }
+
+    @FXML
+    void Cloak(ActionEvent event) {
+
+    }
+
+    @FXML
+    void DivineGuard(ActionEvent event) {
+
+    }
+
     private boolean isSpy;
     private boolean isFatNerd;
     private boolean isBomber;
+
     @FXML
     private Text bomber_text;
 

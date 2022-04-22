@@ -476,11 +476,22 @@ public class Map3Controller implements Initializable {
             isSpy = false;
         } else {
             s1 = from_level_menubutton.getText();
+            if (s1.equals("")) {
+                s1 = "0";
+            }
             s2 = to_level_menubutton.getText();
-
+            if (s2.equals("")) {
+                s2 = "0";
+            }
         }
         String s3 = choose_level_menubutton.getText();
+        if (s3.equals("")) {
+            s3 = "0";
+        }
         String s4 = number_of_units_textfield.getText();
+        if (s4.equals("")) {
+            s4 = "0";
+        }
         Quartet<String, String , String, String> ans = new Quartet<>(s1,s2,s3,s4);
         moveQueue.put(ans);
         from_level_menubutton.clear();
@@ -579,20 +590,31 @@ public class Map3Controller implements Initializable {
         Territory t = res.getKey();
         if (res.getValue() != null) {
             if (res.getValue().equals("viewed")) {
-                for (Territory temp : this.clientSk.temp_player.player_terri_set) {
-                    if (t.getName().equals(temp.getName())){
-                        t = temp;
+                for (Player p : clientSk.players) {
+                    for (Territory temp : p.player_terri_set) {
+                        if (t.getName().equals(temp.getName())) {
+                            t = temp;
+                        }
                     }
                 }
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
+                units_level0.setFill(Color.BLACK);
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
+                units_level1.setFill(Color.BLACK);
                 units_level2.setText(String.valueOf(t.countLevelUnit(2)));
+                units_level2.setFill(Color.BLACK);
                 units_level3.setText(String.valueOf(t.countLevelUnit(3)));
+                units_level3.setFill(Color.BLACK);
                 units_level4.setText(String.valueOf(t.countLevelUnit(4)));
+                units_level4.setFill(Color.BLACK);
                 units_level5.setText(String.valueOf(t.countLevelUnit(5)));
+                units_level5.setFill((Color.BLACK));
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
+                units_level6.setFill(Color.BLACK);
                 bomber_text.setText(String.valueOf(t.countLevel(7)));
+                bomber_text.setFill(Color.BLACK);
                 fatnerd_text.setText(String.valueOf(t.countLevel(8)));
+                fatnerd_text.setFill(Color.BLACK);
                 spy_text.setText(String.valueOf(t.countSpy(this.clientSk.player.color)));
             }
             else {
@@ -614,6 +636,7 @@ public class Map3Controller implements Initializable {
                 bomber_text.setFill(Color.WHITE);
                 fatnerd_text.setText(String.valueOf(t.countLevel(8)));
                 fatnerd_text.setFill(Color.WHITE);
+                spy_text.setText("0");
             }
         }
         else {
@@ -626,7 +649,7 @@ public class Map3Controller implements Initializable {
             units_level6.setText("x");
             bomber_text.setText("x");
             fatnerd_text.setText("x");
-            spy_text.setText("x");
+            spy_text.setText("0");
         }
     }
 
@@ -702,14 +725,14 @@ public class Map3Controller implements Initializable {
         player_text2.setText(String.valueOf(clientSk.player.getFood()));
     }
 
-    public void tempUpdateInfo(Player temp_player) {
-        player_text1.setText(String.valueOf(temp_player.getTechLevel()));
-        player_text2.setText(String.valueOf(temp_player.getFood()));
+    public void tempUpdateInfo() {
+        player_text1.setText(String.valueOf(this.clientSk.player.getTechLevel()));
+        player_text2.setText(String.valueOf(this.clientSk.player.getFood()));
     }
 
-    public void tempUpdateInfo1(Player temp_player) {
-        player_text1.setText(String.valueOf(temp_player.getTechLevel()));
-        player_text2.setText(String.valueOf(temp_player.getFood()));
+    public void tempUpdateInfo1() {
+        player_text1.setText(String.valueOf(this.clientSk.player.getTechLevel()));
+        player_text2.setText(String.valueOf(this.clientSk.player.getFood()));
     }
 
     public void updateColor() {
@@ -813,8 +836,10 @@ public class Map3Controller implements Initializable {
     }
 
     @FXML
-    void moveSpy(ActionEvent event) {
-
+    void moveSpy(MouseEvent event) throws InterruptedException {
+        actionQueue.clear();
+        TerriList.clear();
+        this.actionQueue.put("MS");
     }
 
 
