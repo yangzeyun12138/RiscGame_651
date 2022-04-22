@@ -2,7 +2,7 @@ package edu.duke.ece651.mp.common;
 
 import java.util.*;
 import java.util.Random;
-import java.io.*;
+
 public class V2Action implements AbstractActionFactory {
   @Override
   public String checkForMove(Player player, String src, String dest, int numUnit, int level){
@@ -392,6 +392,7 @@ public class V2Action implements AbstractActionFactory {
 
   @Override
   public void Done(ArrayList<Player> players){
+    resetSkill(players);
     resetSpyMovables(players);
     for (Player p : players) {
       for (Territory t : p.player_terri_set) {
@@ -746,5 +747,15 @@ public class V2Action implements AbstractActionFactory {
     }
   }
 
-
+  @Override
+  public void resetSkill(ArrayList<Player> players) {
+    for (Player p : players) {
+      for (Territory t : p.player_terri_set) {
+        t.setBeGuarded(false);
+        if (t.getBeCloakedNum() > 0) {
+          t.setBeCloakedNum(t.getBeCloakedNum() - 1);
+        }
+      }
+    }
+  }
 }

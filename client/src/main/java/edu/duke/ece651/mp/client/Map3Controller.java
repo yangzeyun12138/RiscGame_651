@@ -461,18 +461,25 @@ public class Map3Controller implements Initializable {
         moveQueue.clear();
         String s1 = null;
         String s2 = null;
+        String s3 = choose_level_menubutton.getText();
+        if (s3.equals("")) {
+            s3 = "0";
+        }
         if (isBomber == true) {
             s1 = "0";
             s2 = "7";
+            s3 = "7";
             isBomber = false;
         } else if (isFatNerd == true) {
             s1 = "0";
             s2 = "8";
+            s3 = "8";
             isFatNerd = false;
         } else if (isSpy == true) {
             System.out.println("In map3controller isSpy = " + isSpy);
             s1 = "0";
             s2 = "9";
+            s3 = "9";
             isSpy = false;
         } else {
             s1 = from_level_menubutton.getText();
@@ -484,10 +491,7 @@ public class Map3Controller implements Initializable {
                 s2 = "0";
             }
         }
-        String s3 = choose_level_menubutton.getText();
-        if (s3.equals("")) {
-            s3 = "0";
-        }
+
         String s4 = number_of_units_textfield.getText();
         if (s4.equals("")) {
             s4 = "0";
@@ -513,6 +517,8 @@ public class Map3Controller implements Initializable {
 
     @FXML
     void upgradeTechClick(MouseEvent event) throws InterruptedException {
+        actionQueue.clear();
+        TerriList.clear();
         this.actionQueue.put("U");
     }
 
@@ -860,13 +866,17 @@ public class Map3Controller implements Initializable {
     }
 
     @FXML
-    void Cloak(ActionEvent event) {
-
+    void Cloak(ActionEvent event) throws InterruptedException {
+        actionQueue.clear();
+        TerriList.clear();
+        this.actionQueue.put("Cloak");
     }
 
     @FXML
-    void DivineGuard(ActionEvent event) {
-
+    void DivineGuard(ActionEvent event) throws InterruptedException {
+        actionQueue.clear();
+        TerriList.clear();
+        this.actionQueue.put("G");
     }
 
     private boolean isSpy;

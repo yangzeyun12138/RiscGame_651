@@ -38,4 +38,12 @@ public interface Territory {
   public void resetAllSpies();
   public int countSpy(String color);
   public void addInitSpy(String Color);
+
+  boolean getBeGuarded();
+
+  int getBeCloakedNum();
+
+  void setBeGuarded(boolean beGuarded);
+
+  void setBeCloakedNum(int beCloakedNum);
 }

@@ -12,6 +12,8 @@ public class Order implements java.io.Serializable{
   public int afterLevel;
   public ArrayList<Unit> unitList;
   public boolean moveSpy;
+  public boolean doCloak;
+  public boolean doGuard;
 
   public Order(Player player, String src, String dest, int numUnit, int currLevel, int afterLevel){
     this.src = src;
@@ -22,6 +24,8 @@ public class Order implements java.io.Serializable{
     this.afterLevel = afterLevel;
     this.unitList = new ArrayList<>();
     this.moveSpy = false;
+    this.doCloak = false;
+    this.doGuard = false;
   }
 
   public String getSrc(){

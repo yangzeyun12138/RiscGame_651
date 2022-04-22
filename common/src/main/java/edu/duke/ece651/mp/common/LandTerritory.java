@@ -1,8 +1,7 @@
 package edu.duke.ece651.mp.common;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.*;
-import java.io.*;
+
 public class LandTerritory implements Territory, java.io.Serializable {
   private static final long serialVersionUID = 1L;
   protected String name;
@@ -11,7 +10,8 @@ public class LandTerritory implements Territory, java.io.Serializable {
   protected ArrayList<Unit> units;
   protected final int size;
   public ArrayList<Spy> spyList;
-  
+  public boolean beGuarded;
+  public int beCloakedNum;
 
   /**Land Territory Constructor: initialize name, color, units, and neighbors
    *@param: Name: name of the LandTerritory; Color: Color of the LandTerritory;
@@ -23,6 +23,8 @@ public class LandTerritory implements Territory, java.io.Serializable {
     this.units = new ArrayList<Unit>();
     this.size = size;
     this.spyList = new ArrayList<Spy>();
+    this.beGuarded = false;
+    this.beCloakedNum = 0;
   }
 
   /**
@@ -264,6 +266,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
    */
   @Override
   public boolean loseUnit(int level) {
+
     Unit toRemove = null;
     if(this.countLevel(level) > 0){
       for (Unit u : units) {
@@ -285,6 +288,9 @@ public class LandTerritory implements Territory, java.io.Serializable {
    */
   @Override
   public boolean loseUnits(int numUnit, int level){
+    if (this.countLevel(level) < numUnit) {
+      return false;
+    }
     for(int i = 0; i < numUnit; i++){
       boolean thislose = this.loseUnit(level);
       if(!thislose){
@@ -422,5 +428,25 @@ public class LandTerritory implements Territory, java.io.Serializable {
   public void addInitSpy(String Color){
     Spy s = new Spy(Color);
     spyList.add(s);
+  }
+
+  @Override
+  public boolean getBeGuarded() {
+    return beGuarded;
+  }
+
+  @Override
+  public int getBeCloakedNum() {
+    return beCloakedNum;
+  }
+
+  @Override
+  public void setBeGuarded(boolean beGuarded) {
+    this.beGuarded = beGuarded;
+  }
+
+  @Override
+  public void setBeCloakedNum(int beCloakedNum) {
+    this.beCloakedNum = beCloakedNum;
   }
 }

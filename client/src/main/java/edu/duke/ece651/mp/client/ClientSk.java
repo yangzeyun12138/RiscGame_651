@@ -678,113 +678,141 @@ public class ClientSk {
    *@throws IOException
    */  
   public String parse_check_add(String action, Orders orders, ArrayList<Player> players) throws IOException, InterruptedException {
-
     writeLeftBottomBoard("Now is " + action + "\n");
-    canBeTaken(moveQueue);
-    Quartet<String, String, String, String> ans = moveQueue.take();
-
-    System.out.println("In parse_and_check, after moveQueue().take *****************************");
     String s1 = null;
     String s2 = null;
     String s3 = null;
     String s4 = null;
+    if (!action.equals("Cloak") && !action.equals("G")) {
+      canBeTaken(moveQueue);
+      Quartet<String, String, String, String> ans = moveQueue.take();
 
-    if (action.equals("C")) {
-      int temp_size = 0;
-      if (signal == 1) {
-        temp_size = map3ControllerList.getValue0().TerriList.size();
-      } else if (signal == 2) {
-        temp_size = map3ControllerList.getValue1().TerriList.size();
-      } else if(signal == 3) {
-        temp_size = map3ControllerList.getValue2().TerriList.size();
-      } else {
-        temp_size = map3ControllerList.getValue3().TerriList.size();
-      }
-      if(temp_size == 0){
-        return "You should choose a territory to upgrade your units!\n";
-      }
+      System.out.println("In parse_and_check, after moveQueue().take *****************************");
 
-      if (signal == 1) {
-        s1 = map3ControllerList.getValue0().TerriList.get(0);
-      } else if (signal == 2) {
-        s1 = map3ControllerList.getValue1().TerriList.get(0);
-      } else if(signal == 3) {
-        s1 = map3ControllerList.getValue2().TerriList.get(0);
-      } else {
-        s1 = map3ControllerList.getValue3().TerriList.get(0);
-      }
-
-      s2 = ans.getValue3();
-      s3 = ans.getValue0();
-      s4 = ans.getValue1();
-      System.out.println("$$$$$$$$$$$$$$$$$In update unit ");
-      System.out.println("To level is + " + s4);
-
-      //s1: territoryName, s2: numToUp, s3:currLevel, s4:afterLevel
-      if(!check_num(s2)) {
-        return "Please enter a valid integer as numToUp!\n";
-      }
-      if(check_num(s3)) {
-        if (!check_num_level(s3)) {
-          return "Unit level should within 0 - 6\n";
+      if (action.equals("C")) {
+        int temp_size = 0;
+        if (signal == 1) {
+          temp_size = map3ControllerList.getValue0().TerriList.size();
+        } else if (signal == 2) {
+          temp_size = map3ControllerList.getValue1().TerriList.size();
+        } else if (signal == 3) {
+          temp_size = map3ControllerList.getValue2().TerriList.size();
+        } else {
+          temp_size = map3ControllerList.getValue3().TerriList.size();
         }
-      } else {
-        return "Please enter a valid integer as currLevel!\n";
-      }
-      if(check_num(s4)) {
-        if (!check_num_level(s4)) {
-          return "Unit level should within 0 - 6\n";
+        if (temp_size == 0) {
+          return "You should choose a territory to do your action!\n";
         }
 
+        if (signal == 1) {
+          s1 = map3ControllerList.getValue0().TerriList.get(0);
+        } else if (signal == 2) {
+          s1 = map3ControllerList.getValue1().TerriList.get(0);
+        } else if (signal == 3) {
+          s1 = map3ControllerList.getValue2().TerriList.get(0);
+        } else {
+          s1 = map3ControllerList.getValue3().TerriList.get(0);
+        }
+
+        s2 = ans.getValue3();
+        s3 = ans.getValue0();
+        s4 = ans.getValue1();
+        System.out.println("$$$$$$$$$$$$$$$$$ In update unit ");
+        System.out.println("To level is + " + s4);
+
+        //s1: territoryName, s2: numToUp, s3:currLevel, s4:afterLevel
+        if (!check_num(s2)) {
+          return "Please enter a valid integer as numToUp!\n";
+        }
+        if (check_num(s3)) {
+          if (!check_num_level(s3)) {
+            return "Unit level should within 0 - 6\n";
+          }
+        } else {
+          return "Please enter a valid integer as currLevel!\n";
+        }
+        if (check_num(s4)) {
+          if (!check_num_level(s4)) {
+            return "Unit level should within 0 - 6\n";
+          }
+
+        } else {
+          return "Please enter a valid integer as afterLevel!\n";
+        }
       } else {
-        return "Please enter a valid integer as afterLevel!\n";
-      }
-    } else {
 
 
-      int size = 0;
-      if (signal == 1) {
-        size = map3ControllerList.getValue0().TerriList.size();
-      } else if (signal == 2) {
-        size = map3ControllerList.getValue1().TerriList.size();
-      } else if(signal == 3) {
-        size = map3ControllerList.getValue2().TerriList.size();
-      } else {
-        size = map3ControllerList.getValue3().TerriList.size();
-      }
+        int size = 0;
+        if (signal == 1) {
+          size = map3ControllerList.getValue0().TerriList.size();
+        } else if (signal == 2) {
+          size = map3ControllerList.getValue1().TerriList.size();
+        } else if (signal == 3) {
+          size = map3ControllerList.getValue2().TerriList.size();
+        } else {
+          size = map3ControllerList.getValue3().TerriList.size();
+        }
 
 
-      if (size < 2) {
-        return "You should choose src territory and des territory for a move or attack order!\n";
-      }
+        if (size < 2) {
+          return "You should choose src territory and des territory for a move or attack order!\n";
+        }
 
-      if (signal == 1) {
-        s1 = map3ControllerList.getValue0().TerriList.get(0);
-        s2 = map3ControllerList.getValue0().TerriList.get(1);
-      } else if (signal == 2) {
-        s1 = map3ControllerList.getValue1().TerriList.get(0);
-        s2 = map3ControllerList.getValue1().TerriList.get(1);
-      } else if(signal == 3) {
-        s1 = map3ControllerList.getValue2().TerriList.get(0);
-        s2 = map3ControllerList.getValue2().TerriList.get(1);
-      } else {
-        s1 = map3ControllerList.getValue3().TerriList.get(0);
-        s2 = map3ControllerList.getValue3().TerriList.get(1);
-      }
+        if (signal == 1) {
+          s1 = map3ControllerList.getValue0().TerriList.get(0);
+          s2 = map3ControllerList.getValue0().TerriList.get(1);
+        } else if (signal == 2) {
+          s1 = map3ControllerList.getValue1().TerriList.get(0);
+          s2 = map3ControllerList.getValue1().TerriList.get(1);
+        } else if (signal == 3) {
+          s1 = map3ControllerList.getValue2().TerriList.get(0);
+          s2 = map3ControllerList.getValue2().TerriList.get(1);
+        } else {
+          s1 = map3ControllerList.getValue3().TerriList.get(0);
+          s2 = map3ControllerList.getValue3().TerriList.get(1);
+        }
 
-      s3 = ans.getValue3();
-      s4 = ans.getValue2();
-      //s1:sourceTerritoryName destinationTerritoryName numUnitsToDestination unitLevel
-      if(!check_num(s3)) {
-        return "Please enter a valid integer as numUnitsToDestination!\n";
-      }
-      if(check_num(s4)) {
-        if (!check_num_level(s4)) {
-          return "Unit level should within 0 - 6\n";
+        s3 = ans.getValue3();
+        s4 = ans.getValue2();
+        //s1:sourceTerritoryName destinationTerritoryName numUnitsToDestination unitLevel
+        if (!check_num(s3)) {
+          return "Please enter a valid integer as numUnitsToDestination!\n";
+        }
+        if (check_num(s4)) {
+          if (!check_num_level(s4)) {
+            return "Unit level should within 0 - 6\n";
+          }
+        } else {
+          return "Please enter a valid integer as unitLevel!\n";
         }
       }
-      else {
-        return "Please enter a valid integer as unitLevel!\n";
+
+    }
+
+    if (s1 == null) {
+      s2 = "0";
+      s3 = "0";
+      s4 = "0";
+    }
+
+    while (s1 == null) {
+      System.out.print("");
+      if (signal == 1) {
+        if (map3ControllerList.getValue0().TerriList.size() > 0) {
+          s1 = map3ControllerList.getValue0().TerriList.get(0);
+        }
+      } else if (signal == 2) {
+        if (map3ControllerList.getValue1().TerriList.size() > 0) {
+          s1 = map3ControllerList.getValue1().TerriList.get(0);
+        }
+      } else if (signal == 3) {
+        if (map3ControllerList.getValue2().TerriList.size() > 0) {
+          s1 = map3ControllerList.getValue2().TerriList.get(0);
+        }
+      } else {
+        if (map3ControllerList.getValue3().TerriList.size() > 0) {
+          s1 = map3ControllerList.getValue3().TerriList.get(0);
+        }
       }
     }
 
@@ -798,7 +826,86 @@ public class ClientSk {
       map3ControllerList.getValue3().TerriList.clear();
     }
 
-    if (action.equals("MS")) {
+
+
+    if (action.equals("Cloak")) {
+      //check territory belongs
+      Territory tempT = findTerritory(s1);
+      boolean ismy = false;
+      for (Territory t : player.player_terri_set) {
+        if (t.getName().equals(tempT.getName())) {
+          ismy = true;
+        }
+      }
+      if (!ismy) {
+        return "You can only cloak your own territory!\n";
+      }
+      //check for Cloak , total tech level >=3
+      if (player.getTechLevel() < 3) {
+        return "To use cloak, you total tech level should greater than or equal to 3\n";
+      }
+      if (player.getFood() < 50) {
+        return "Your resource is not enough to use cloak\n";
+      }
+
+      //do cloak
+      player.costFood(50);
+      tempT.setBeCloakedNum(3 + tempT.getBeCloakedNum());
+
+      if (signal == 1) {
+        map3ControllerList.getValue0().tempUpdateInfo();
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().tempUpdateInfo();
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().tempUpdateInfo();
+      } else {
+        map3ControllerList.getValue3().tempUpdateInfo();
+      }
+      //new a order class, add it to orders moveList
+      Order cloak = new Order(player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4));
+      cloak.doCloak = true;
+      orders.MoveUpList.add(cloak);
+    }
+
+    else if (action.equals("G")) {
+      //check territory belongs
+      Territory tempT = findTerritory(s1);
+      boolean ismy = false;
+      for (Territory t : player.player_terri_set) {
+        if (t.getName().equals(tempT.getName())) {
+          ismy = true;
+        }
+      }
+      if (!ismy) {
+        return "You can only guard your own territory!\n";
+      }
+      //check for guard , total tech level >=3
+      if (player.getTechLevel() < 3) {
+        return "To use divine guard, you total tech level should greater than or equal to 3\n";
+      }
+      if (player.getFood() < 60) {
+        return "Your resource is not enough to use divine guard\n";
+      }
+
+      //do guard
+      player.costFood(60);
+      tempT.setBeGuarded(true);
+
+      if (signal == 1) {
+        map3ControllerList.getValue0().tempUpdateInfo();
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().tempUpdateInfo();
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().tempUpdateInfo();
+      } else {
+        map3ControllerList.getValue3().tempUpdateInfo();
+      }
+      //new a order class, add it to orders moveList
+      Order guard = new Order(player, s1, s2, Integer.parseInt(s3), Integer.parseInt(s4), Integer.parseInt(s4));
+      guard.doGuard = true;
+      orders.MoveUpList.add(guard);
+    }
+    else if (action.equals("MS")) {
       System.out.println("In action.equals(MS) ##########################################");
       String temp = Action.checkForSpyMove(player, players, s1, s2);
       if (temp != null) {
@@ -852,6 +959,10 @@ public class ClientSk {
       }
     }
     else if (action.equals("A")) {
+      if (s4.equals("8")) {
+        return "Fat Nerd cannot take part in attacking!";
+      }
+
       String temp = Action.checkForAttack(player, s1, s2, Integer.parseInt(s3), players, Integer.parseInt(s4));
       if (temp != null) {
         return temp;
@@ -990,6 +1101,24 @@ public class ClientSk {
           }
           if (res != null) {
             writeLeftBottomBoard(res);
+            if (res.equals("You can only cloak your own territory!\n")) {
+              break;
+            }
+            if (res.equals("To use cloak, you total tech level should greater than or equal to 3\n")) {
+              break;
+            }
+            if (res.equals("Your resource is not enough to use cloak\n")) {
+              break;
+            }
+            if (res.equals("You can only guard your own territory!\n")) {
+              break;
+            }
+            if (res.equals("To use divine guard, you total tech level should greater than or equal to 3\n")) {
+              break;
+            }
+            if (res.equals("Your resource is not enough to use divine guard\n")) {
+              break;
+            }
           }
         } while (res != null);
         break;
@@ -1397,7 +1526,6 @@ public class ClientSk {
       System.out.println(t.getName() + " level 0 units is " + t.countLevelUnit(0));
     }
 
-    // Adding the Neighbors of those Territories
     // 2. Deep copy
     ArrayList<Territory> current_viewed_territory_copy = new ArrayList<Territory>();
     for(Territory t : cur_viewed_list){
@@ -1413,16 +1541,18 @@ public class ClientSk {
         if(!cur_viewed_name.contains(neigh.getName())){
 
           Territory copy = findTerritory(neigh.getName()).deep_copy();
-
-          cur_viewed_list.add(copy);
-          System.out.println("--------------copy neigh--------------------");
-          System.out.println(neigh.getName() + " level 0 units is " + copy.countLevelUnit(0));
-          cur_viewed_name.add(neigh.getName());
+          if (copy.getBeCloakedNum() == 0) {
+            cur_viewed_list.add(copy);
+            System.out.println("--------------copy neigh--------------------");
+            System.out.println(neigh.getName() + " level 0 units is " + copy.countLevelUnit(0));
+            cur_viewed_name.add(neigh.getName());
+          }
         }
       }
     }
 
-    //4. Add where spy at
+
+    //5. Add where spy at
     for (Player p : players){
       for (Territory t : p.player_terri_set) {
         if (t.countSpy(player.color) > 0 && !cur_viewed_name.contains(t.getName())) {
@@ -1432,7 +1562,6 @@ public class ClientSk {
         }
       }
     }
-
 
     return cur_viewed_list;
   }

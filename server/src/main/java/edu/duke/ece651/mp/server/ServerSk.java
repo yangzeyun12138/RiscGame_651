@@ -428,8 +428,17 @@ public class ServerSk {
           Action.checkForSpyMove(players.get(i), players, o.getSrc(), o.getDest());
           Action.spyMove(players.get(i), players, o.getSrc(), o.getDest());
         }
+        else if (o.doCloak) {
+          Territory tempT = findTerritory(o.getSrc(), players);
+          players.get(i).costFood(50);
+          tempT.setBeCloakedNum(3 + tempT.getBeCloakedNum());
+        }
+        else if (o.doGuard) {
+          Territory tempT = findTerritory(o.getSrc(), players);
+          players.get(i).costFood(60);
+          tempT.setBeGuarded(true);
+        }
         else {
-
           if (o.getSrc().equals(" ")) {
             //upgrade total tech
             players.get(i).upgradeTechLevel();
@@ -707,6 +716,19 @@ public class ServerSk {
     for (Socket s : socket_list) {
       s.close();
     }
+  }
+
+  public Territory findTerritory(String name, ArrayList<Player> players){
+    for (Player p : players) {
+      for (Territory t : p.player_terri_set) {
+        if (t.getName().equals(name)) {
+          System.out.println("before copy");
+          System.out.println(t.getName() + " level 0 units is " + t.countLevelUnit(0));
+          return t;
+        }
+      }
+    }
+    return null;
   }
   
 }
