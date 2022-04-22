@@ -285,6 +285,10 @@ public class LandTerritory implements Territory, java.io.Serializable {
    */
   @Override
   public boolean loseUnits(int numUnit, int level){
+    if(this.countLevel(level) < numUnit){
+      return false;
+    }
+    
     for(int i = 0; i < numUnit; i++){
       boolean thislose = this.loseUnit(level);
       if(!thislose){
