@@ -150,6 +150,8 @@ public class V2Action implements AbstractActionFactory {
     if(level == 8){
       return new String(attacker.color + " Player: Fat Nerd should not be used to attack");
     }
+
+
     AttackChecker AttackCostCheck = new AttackCostRuleChecker(null);
     AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(AttackCostCheck);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
@@ -181,12 +183,14 @@ public class V2Action implements AbstractActionFactory {
         Random rand = new Random();
         int Dice = rand.nextInt(attackUnits.size());
         attackUnits.remove(Dice);
+        defendTerritory.loseUnit(7);
         NumAtkBomb = countBomb(attackUnits);
       }
       if(NumAtkBomb>0){
         Random rand = new Random();
         int Dice = rand.nextInt(defendTerritory.countUnit());
         defendTerritory.loseUnitsAt(Dice);
+        removeBomb(attackUnits);
         NumDefBomb = defendTerritory.countLevelUnit(7);
       }
       if(NumDefBomb == 0 && NumAtkBomb == 0){
@@ -758,4 +762,14 @@ public class V2Action implements AbstractActionFactory {
       }
     }
   }
+
+  public void removeBomb(ArrayList<Unit> Units){
+    for (int i=0; i<Units.size(); i++){
+      if(Units.get(i).getLevel() == 7){
+        Units.remove(i);
+        break;
+      }
+    }
+  }
+
 }
