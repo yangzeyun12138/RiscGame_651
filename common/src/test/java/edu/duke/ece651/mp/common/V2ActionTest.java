@@ -68,11 +68,10 @@ public class V2ActionTest {
     Unit u2 = new BasicUnit();
     assertTrue(action.rollDice2(u1, u2));
   }
+  
   @Test
   public void test_bomb(){
 
-    HashSet<Territory> test_territory1 = new HashSet<>();
-    HashSet<Territory> test_territory2 = new HashSet<>();
     LandTerritory lt2 = new LandTerritory("Mordor", "Red", 3);
     LandTerritory lt1 = new LandTerritory("Hogwarts", "Green", 2);
     lt2.addNeigh(lt1);
@@ -81,18 +80,19 @@ public class V2ActionTest {
     Unit bomb1 = new BasicUnit(7);
     lt2.addUnit(u1);
     lt2.addUnit(bomb1);
-    test_territory1.add(lt1);
-    test_territory2.add(lt2);
-    
-    ArrayList<Player> players= new ArrayList<Player>();
-    Player player1 = new Player("Green", test_territory1);
-    Player player2 = new Player("Red", test_territory2);
     
     ArrayList<Unit> atkList = new ArrayList<Unit>();
-        atkList.add(u1);
+    atkList.add(u1);
     atkList.add(bomb1);
+
+    V2Action action = new V2Action();
+    action.BombsAttack(atkList, lt2);
+
+    assertEquals(0,lt2.countLevel(7));
+    assertEquals(0,action.countBomb(atkList));
     
   }
+  
 
   @Disabled
   @Test

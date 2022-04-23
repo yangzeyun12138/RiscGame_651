@@ -175,8 +175,9 @@ public class V2Action implements AbstractActionFactory {
   public void BombsAttack (ArrayList<Unit> attackUnits, Territory defendTerritory){
     int NumAtkBomb = countBomb(attackUnits);
     int NumDefBomb = defendTerritory.countLevelUnit(7);
+    
 
-    while(attackUnits.size() > 0 || defendTerritory.countUnit() > 0){
+    while(attackUnits.size() > 0 && defendTerritory.countUnit() > 0){
       if(NumDefBomb>0){
         Random rand = new Random();
         int Dice = rand.nextInt(attackUnits.size());
@@ -196,18 +197,6 @@ public class V2Action implements AbstractActionFactory {
       }
     }
     
-    if(NumAtkBomb > 0){
-      for (int i=0; i<NumAtkBomb; i++){
-        Unit b = new BasicUnit(7);
-        attackUnits.add(b);
-      }
-    }
-    if(NumDefBomb > 0){
-      for (int i=0; i<NumDefBomb; i++){
-        Unit b = new BasicUnit(7);
-        defendTerritory.addUnit(b);
-      }
-    }
   }
 
   
