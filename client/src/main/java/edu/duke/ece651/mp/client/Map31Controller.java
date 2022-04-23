@@ -844,7 +844,7 @@ public class Map31Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.roomNum.setText("Room2");
+        ;
     }
 
     @FXML
@@ -1006,6 +1006,20 @@ public class Map31Controller implements Initializable {
                 }
             }
         }
+    }
+
+    @FXML
+    void switchRoomClick(MouseEvent event) {
+        System.out.println("In changeToRoom2");
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Multiplayer.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
 

@@ -113,7 +113,6 @@
                         </MenuButton>
                     </children>
                 </Pane>
-                <Button fx:id="add_room_button" layoutX="905.0" layoutY="59.0" mnemonicParsing="false" onMouseClicked="#addRoom" text="Add Room" />
                 <SplitPane dividerPositions="0.9894259818731118" layoutX="11.0" layoutY="270.0" orientation="VERTICAL" prefHeight="333.0" prefWidth="175.0">
                     <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="324.0" prefWidth="157.0">
@@ -300,14 +299,6 @@
                         <TextArea fx:id="system_textarea" layoutX="1.0" layoutY="-10.0" opacity="0.8" prefHeight="124.0" prefWidth="372.0" />
                     </children>
                 </AnchorPane>
-                <MenuButton fx:id="change_room_menubutton" layoutX="863.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#changeRoom" text="Change Room">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#changeToRoom1" text="Room1" />
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#changeToRoom2" text="Room2" visible="false" />
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#changeToRoom3" text="Room3" visible="false" />
-                        <MenuItem disable="true" mnemonicParsing="false" onAction="#changeToRoom4" text="Room4" visible="false" />
-                    </items>
-                </MenuButton>
                 <AnchorPane fx:id="init_units_anchorpane" layoutX="858.0" layoutY="436.0" prefHeight="180.0" prefWidth="144.0">
                     <children>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c9a556" height="181.0" layoutX="4.0" layoutY="-1.0" opacity="0.8" stroke="#9aaac3" strokeWidth="2.0" width="137.0" />
@@ -385,7 +376,7 @@
                 </Text>
                 <Button fx:id="continue_button" disable="true" layoutX="197.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#continueClick" text="CONTINUE" visible="false" />
                 <Button fx:id="quit_button" disable="true" layoutX="304.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#quitClick" text="QUIT" visible="false" />
-                <Text fx:id="roomNum" fill="#e9f80b" layoutX="900.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                <Text fx:id="roomNum" fill="#e9f80b" layoutX="890.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room1">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -542,7 +533,9 @@
                 <Button fx:id="gondor_button" layoutX="752.0" layoutY="138.0" mnemonicParsing="false" onMousePressed="#gondorClick" onMouseReleased="#gondorRelease" opacity="0.0" prefHeight="96.0" prefWidth="128.0" text="Gondor" />
                 <Button fx:id="oz_button" layoutX="570.0" layoutY="214.0" mnemonicParsing="false" onMousePressed="#ozClick" onMouseReleased="#ozRelease" opacity="0.0" prefHeight="106.0" prefWidth="103.0" text="Oz" />
                 <Button fx:id="narnia_button" layoutX="218.0" layoutY="179.0" mnemonicParsing="false" onMousePressed="#narniaClick" onMouseReleased="#narniaRelease" opacity="0.0" prefHeight="115.0" prefWidth="128.0" text="Narnia" />
+
             </children>
+            <Button fx:id="switch_room_button" layoutX="880" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#switchRoomClick" text="Switch Room" />
         </AnchorPane>
     </children>
 </VBox>
