@@ -150,8 +150,10 @@ public class V2Action implements AbstractActionFactory {
     if(level == 8){
       return new String(attacker.color + " Player: Fat Nerd should not be used to attack");
     }
-
-
+    Territory t = findTerritory(dest, players);
+    if (t.getBeGuarded()) {
+      return "Territory you attack is under divine guard!\n";
+    }
     AttackChecker AttackCostCheck = new AttackCostRuleChecker(null);
     AttackChecker AdjacencyCheck = new AdjacencyRuleChecker(AttackCostCheck);
     AttackChecker FactionCheck = new FactionRuleChecker(AdjacencyCheck);
@@ -772,4 +774,17 @@ public class V2Action implements AbstractActionFactory {
     }
   }
 
+
+  public Territory findTerritory(String name, ArrayList<Player> players){
+    for (Player p : players) {
+      for (Territory t : p.player_terri_set) {
+        if (t.getName().equals(name)) {
+          System.out.println("before copy");
+          System.out.println(t.getName() + " level 0 units is " + t.countLevelUnit(0));
+          return t;
+        }
+      }
+    }
+    return null;
+  }
 }

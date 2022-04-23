@@ -707,7 +707,7 @@ public class Map3Controller implements Initializable {
             } else if(t.getName().equals("Roshar")) {
                 Roshar_fog.setOpacity(0.6);
             } else {
-                Scadrial_fog.setOpacity(0.7);
+                Scadrial_fog.setOpacity(0.6);
             }
         }
     }
