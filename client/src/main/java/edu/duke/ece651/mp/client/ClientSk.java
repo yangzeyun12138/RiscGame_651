@@ -1274,6 +1274,15 @@ public class ClientSk {
       );
       out.print(map_show);
       set_player();
+      if (signal == 1) {
+        map3ControllerList.getValue0().setGuard(players);
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().setGuard(players);
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().setGuard(players);
+      } else {
+        map3ControllerList.getValue3().setGuard(players);
+      }
       updateNewViewMap();
       initFog();
       if (signal == 1) {
@@ -1331,6 +1340,15 @@ public class ClientSk {
       out.print(map_show);
       set_player();
       updateNewViewMap();
+      if (signal == 1) {
+        map3ControllerList.getValue0().setGuard(players);
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().setGuard(players);
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().setGuard(players);
+      } else {
+        map3ControllerList.getValue3().setGuard(players);
+      }
       initFog();
       if (signal == 1) {
         map3ControllerList.getValue0().updateColor();

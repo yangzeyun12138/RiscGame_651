@@ -972,6 +972,122 @@ public class Map3Controller implements Initializable {
     @FXML
     private ImageView Scadrial_fog;
 
+    @FXML
+    private ImageView Narnia_guard;
+
+    @FXML
+    private  ImageView Elantris_guard;
+
+    @FXML
+    private  ImageView Gondor_guard;
+
+    @FXML
+    private  ImageView Hogwarts_guard;
+
+    @FXML
+    private ImageView Midkemia_guard;
+
+    @FXML
+    private  ImageView Mordor_guard;
+
+    @FXML
+    private ImageView Oz_guard;
+
+    @FXML
+    private ImageView Roshar_guard;
+
+    @FXML
+    private ImageView Scadrial_guard;
+
+    public void setGuard(ArrayList<Player> players) {
+
+        for (Player p : players) {
+            for (Territory t : p.player_terri_set) {
+                if (t.getName().equals("Narnia")) {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Narnia_guard.setVisible(true);
+                        } else {
+                            Narnia_guard.setVisible(false);
+                        }
+                    }
+                } else if (t.getName().equals("Elantris")){
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Elantris_guard.setVisible(true);
+                        } else {
+                            Elantris_guard.setVisible(false);
+                        }
+                    }
+                } else if (t.getName().equals("Gondor")) {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Gondor_guard.setVisible(true);
+                        } else {
+                            Gondor_guard.setVisible(false);
+                        }
+                    }
+                } else if (t.getName().equals("Hogwarts")) {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Hogwarts_guard.setVisible(true);
+                        } else {
+                            Hogwarts_guard.setVisible(false);
+                        }
+                    }
+                } else if(t.getName().equals("Midkemia")) {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Midkemia_guard.setVisible(true);
+                        } else {
+                            Midkemia_guard.setVisible(false);
+                        }
+                    }
+                } else  if (t.getName().equals("Mordor")) {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Mordor_guard.setVisible(true);
+                        } else {
+                            Mordor_guard.setVisible(false);
+                        }
+                    }
+                } else if(t.getName().equals("Oz")) {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Oz_guard.setVisible(true);
+                        } else {
+                            Oz_guard.setVisible(false);
+                        }
+                    }
+                } else if(t.getName().equals("Roshar")) {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Roshar_guard.setVisible(true);
+                        } else {
+                            Roshar_guard.setVisible(false);
+                        }
+                    }
+                } else {
+                    Pair<Territory, String> res = getTerri(t.getName(), this.clientSk.new_view_map);
+                    if (res.getValue() !=null && res.getValue().equals("viewed")) {
+                        if (t.getBeGuarded() > 0) {
+                            Scadrial_guard.setVisible(true);
+                        } else {
+                            Scadrial_guard.setVisible(false);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }
 
