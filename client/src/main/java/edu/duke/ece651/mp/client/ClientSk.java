@@ -341,16 +341,27 @@ public class ClientSk {
 
         System.out.println("before accept map");
         String map_show1 = new String(accept_map());
+
         System.out.println("before accept color");
         accept_color();
         if(Client.ClientSkList.size() != 1) {
           System.out.println("clientSklist.size() != 1 : before accept units");
         }
         System.out.println("before accpet units");
-
         accept_units();
         System.out.println("after accept units");
         set_player();
+        initViewMap();
+        initFog();
+        if (signal == 1) {
+          map3ControllerList.getValue0().updateColor();
+        } else if (signal == 2) {
+          map3ControllerList.getValue1().updateColor();
+        } else if(signal == 3) {
+          map3ControllerList.getValue2().updateColor();
+        } else {
+          map3ControllerList.getValue3().updateColor();
+        }
         System.out.println("after set player");
         init_unit();
         System.out.println(this.player.toString());
@@ -358,6 +369,7 @@ public class ClientSk {
         String map_show2 = new String(accept_map());
         set_player();
         initViewMap();
+        initFog();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println(new_view_map.get("viewed").get(4).getName() + " level 0 units is " +
                 new_view_map.get("viewed").get(4).countLevelUnit(0));
@@ -1263,6 +1275,7 @@ public class ClientSk {
       out.print(map_show);
       set_player();
       updateNewViewMap();
+      initFog();
       if (signal == 1) {
         map3ControllerList.getValue0().updateColorAsWatch();
         map3ControllerList.getValue0().updatePlayerInfo();
@@ -1318,7 +1331,7 @@ public class ClientSk {
       out.print(map_show);
       set_player();
       updateNewViewMap();
-
+      initFog();
       if (signal == 1) {
         map3ControllerList.getValue0().updateColor();
         map3ControllerList.getValue0().updatePlayerInfo();
@@ -1580,6 +1593,31 @@ public class ClientSk {
     return null;
   }
 
+  public void initFog() {
+    for (Territory t : new_view_map.get("viewed")) {
+      if (signal == 1) {
+        map3ControllerList.getValue0().setFog(t, "viewed");
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().setFog(t, "viewed");
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().setFog(t, "viewed");
+      } else {
+        map3ControllerList.getValue3().setFog(t, "viewed");
+      }
+    }
+
+    for (Territory t : new_view_map.get("grey")) {
+      if (signal == 1) {
+        map3ControllerList.getValue0().setFog(t, "grey");
+      } else if (signal == 2) {
+        map3ControllerList.getValue1().setFog(t, "grey");
+      } else if(signal == 3) {
+        map3ControllerList.getValue2().setFog(t, "grey");
+      } else {
+        map3ControllerList.getValue3().setFog(t, "grey");
+      }
+    }
+  }
 
 }
 

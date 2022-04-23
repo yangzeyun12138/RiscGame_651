@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -486,23 +487,36 @@ public class Map32Controller implements Initializable {
         Territory t = res.getKey();
         if (res.getValue() != null) {
             if (res.getValue().equals("viewed")) {
-                for (Territory temp : this.clientSk.player.player_terri_set) {
-                    if (t.getName().equals(temp.getName())){
-                        t = temp;
+                for (Player p : clientSk.players) {
+                    for (Territory temp : p.player_terri_set) {
+                        if (t.getName().equals(temp.getName())) {
+                            t = temp;
+                        }
                     }
                 }
+
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
+                units_level0.setFill(Color.BLACK);
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
+                units_level1.setFill(Color.BLACK);
                 units_level2.setText(String.valueOf(t.countLevelUnit(2)));
+                units_level2.setFill(Color.BLACK);
                 units_level3.setText(String.valueOf(t.countLevelUnit(3)));
+                units_level3.setFill(Color.BLACK);
                 units_level4.setText(String.valueOf(t.countLevelUnit(4)));
+                units_level4.setFill(Color.BLACK);
                 units_level5.setText(String.valueOf(t.countLevelUnit(5)));
+                units_level5.setFill((Color.BLACK));
                 units_level6.setText(String.valueOf(t.countLevelUnit(6)));
+                units_level6.setFill(Color.BLACK);
                 bomber_text.setText(String.valueOf(t.countLevel(7)));
+                bomber_text.setFill(Color.BLACK);
                 fatnerd_text.setText(String.valueOf(t.countLevel(8)));
+                fatnerd_text.setFill(Color.BLACK);
                 spy_text.setText(String.valueOf(t.countSpy(this.clientSk.player.color)));
             }
             else {
+
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
                 units_level0.setFill(Color.WHITE);
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
@@ -521,6 +535,7 @@ public class Map32Controller implements Initializable {
                 bomber_text.setFill(Color.WHITE);
                 fatnerd_text.setText(String.valueOf(t.countLevel(8)));
                 fatnerd_text.setFill(Color.WHITE);
+                spy_text.setText("0");
             }
         }
         else {
@@ -533,10 +548,53 @@ public class Map32Controller implements Initializable {
             units_level6.setText("x");
             bomber_text.setText("x");
             fatnerd_text.setText("x");
-            spy_text.setText("x");
+            spy_text.setText("0");
         }
     }
 
+    public void setFog(Territory t, String type) {
+        if (type.equals("viewed")) {
+            if (t.getName().equals("Narnia")) {
+                Narnia_fog.setOpacity(0);
+            } else if (t.getName().equals("Elantris")){
+                Elantris_fog.setOpacity(0);
+            } else if (t.getName().equals("Gondor")) {
+                Gondor_fog.setOpacity(0);
+            } else if (t.getName().equals("Hogwarts")) {
+                Hogwarts_fog.setOpacity(0);
+            } else if(t.getName().equals("Midkemia")) {
+                Midkemia_fog.setOpacity(0);
+            } else  if (t.getName().equals("Mordor")) {
+                Mordor_fog.setOpacity(0);
+            } else if(t.getName().equals("Oz")) {
+                Oz_fog.setOpacity(0);
+            } else if(t.getName().equals("Roshar")) {
+                Roshar_fog.setOpacity(0);
+            } else {
+                Scadrial_fog.setOpacity(0);
+            }
+        } else {
+            if (t.getName().equals("Narnia")) {
+                Narnia_fog.setOpacity(0.7);
+            } else if (t.getName().equals("Elantris")){
+                Elantris_fog.setOpacity(0.7);
+            } else if (t.getName().equals("Gondor")) {
+                Gondor_fog.setOpacity(0.7);
+            } else if (t.getName().equals("Hogwarts")) {
+                Hogwarts_fog.setOpacity(0.7);
+            } else if(t.getName().equals("Midkemia")) {
+                Midkemia_fog.setOpacity(0.7);
+            } else  if (t.getName().equals("Mordor")) {
+                Mordor_fog.setOpacity(0.7);
+            } else if(t.getName().equals("Oz")) {
+                Oz_fog.setOpacity(0.7);
+            } else if(t.getName().equals("Roshar")) {
+                Roshar_fog.setOpacity(0.7);
+            } else {
+                Scadrial_fog.setOpacity(0.7);
+            }
+        }
+    }
 
     private LinkedBlockingQueue<Pair<String, String>> initQueue;
     private LinkedBlockingQueue<String> terriNameQueue;
@@ -829,6 +887,33 @@ public class Map32Controller implements Initializable {
 
     @FXML
     private  Text spy_text;
+
+    @FXML
+    private ImageView Narnia_fog;
+
+    @FXML
+    private  ImageView Elantris_fog;
+
+    @FXML
+    private  ImageView Gondor_fog;
+
+    @FXML
+    private  ImageView Hogwarts_fog;
+
+    @FXML
+    private ImageView Midkemia_fog;
+
+    @FXML
+    private  ImageView Mordor_fog;
+
+    @FXML
+    private ImageView Oz_fog;
+
+    @FXML
+    private ImageView Roshar_fog;
+
+    @FXML
+    private ImageView Scadrial_fog;
 
 }
 

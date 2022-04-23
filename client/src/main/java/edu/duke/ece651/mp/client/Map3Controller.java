@@ -8,6 +8,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,8 +23,11 @@ import javafx.util.Pair;
 import org.checkerframework.checker.units.qual.A;
 import org.javatuples.Quartet;
 
+
 import javafx.event.ActionEvent;
 
+import javafx.scene.image.ImageView;
+import java.awt.*;
 import java.awt.event.TextEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -603,6 +610,7 @@ public class Map3Controller implements Initializable {
                         }
                     }
                 }
+
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
                 units_level0.setFill(Color.BLACK);
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
@@ -624,6 +632,7 @@ public class Map3Controller implements Initializable {
                 spy_text.setText(String.valueOf(t.countSpy(this.clientSk.player.color)));
             }
             else {
+
                 units_level0.setText(String.valueOf(t.countLevelUnit(0)));
                 units_level0.setFill(Color.WHITE);
                 units_level1.setText(String.valueOf(t.countLevelUnit(1)));
@@ -656,6 +665,50 @@ public class Map3Controller implements Initializable {
             bomber_text.setText("x");
             fatnerd_text.setText("x");
             spy_text.setText("0");
+        }
+    }
+
+    public void setFog(Territory t, String type) {
+        if (type.equals("viewed")) {
+            if (t.getName().equals("Narnia")) {
+                Narnia_fog.setOpacity(0);
+            } else if (t.getName().equals("Elantris")){
+                Elantris_fog.setOpacity(0);
+            } else if (t.getName().equals("Gondor")) {
+                Gondor_fog.setOpacity(0);
+            } else if (t.getName().equals("Hogwarts")) {
+                Hogwarts_fog.setOpacity(0);
+            } else if(t.getName().equals("Midkemia")) {
+                Midkemia_fog.setOpacity(0);
+            } else  if (t.getName().equals("Mordor")) {
+                Mordor_fog.setOpacity(0);
+            } else if(t.getName().equals("Oz")) {
+                Oz_fog.setOpacity(0);
+            } else if(t.getName().equals("Roshar")) {
+                Roshar_fog.setOpacity(0);
+            } else {
+                Scadrial_fog.setOpacity(0);
+            }
+        } else {
+            if (t.getName().equals("Narnia")) {
+                Narnia_fog.setOpacity(0.6);
+            } else if (t.getName().equals("Elantris")){
+                Elantris_fog.setOpacity(0.6);
+            } else if (t.getName().equals("Gondor")) {
+                Gondor_fog.setOpacity(0.6);
+            } else if (t.getName().equals("Hogwarts")) {
+                Hogwarts_fog.setOpacity(0.6);
+            } else if(t.getName().equals("Midkemia")) {
+                Midkemia_fog.setOpacity(0.6);
+            } else  if (t.getName().equals("Mordor")) {
+                Mordor_fog.setOpacity(0.6);
+            } else if(t.getName().equals("Oz")) {
+                Oz_fog.setOpacity(0.6);
+            } else if(t.getName().equals("Roshar")) {
+                Roshar_fog.setOpacity(0.6);
+            } else {
+                Scadrial_fog.setOpacity(0.7);
+            }
         }
     }
 
@@ -891,5 +944,34 @@ public class Map3Controller implements Initializable {
 
     @FXML
     private  Text spy_text;
+
+    @FXML
+    private ImageView Narnia_fog;
+
+    @FXML
+    private  ImageView Elantris_fog;
+
+    @FXML
+    private  ImageView Gondor_fog;
+
+    @FXML
+    private  ImageView Hogwarts_fog;
+
+    @FXML
+    private ImageView Midkemia_fog;
+
+    @FXML
+    private  ImageView Mordor_fog;
+
+    @FXML
+    private ImageView Oz_fog;
+
+    @FXML
+    private ImageView Roshar_fog;
+
+    @FXML
+    private ImageView Scadrial_fog;
+
+
 }
 

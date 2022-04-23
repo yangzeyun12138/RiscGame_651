@@ -452,47 +452,47 @@
                         <Font size="15.0" />
                     </font>
                 </Button>
-                <ImageView fx:id="Gondor_fog" fitHeight="251.0" fitWidth="219.0" layoutX="685.0" layoutY="55.0" opacity="0.7">
+                <ImageView fx:id="Gondor_fog" fitHeight="251.0" fitWidth="219.0" layoutX="685.0" layoutY="55.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Gondor.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Mordor_fog" fitHeight="228.0" fitWidth="318.0" layoutX="587.0" layoutY="282.0">
+                <ImageView fx:id="Mordor_fog" fitHeight="228.0" fitWidth="318.0" layoutX="587.0" layoutY="282.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Mordor.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Hogwarts_fog" fitHeight="181.0" fitWidth="219.0" layoutX="655.0" layoutY="474.0">
+                <ImageView fx:id="Hogwarts_fog" fitHeight="181.0" fitWidth="219.0" layoutX="655.0" layoutY="474.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Hogwarts.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Oz_fog" fitHeight="279.0" fitWidth="284.0" layoutX="461.0" layoutY="92.0">
+                <ImageView fx:id="Oz_fog" fitHeight="279.0" fitWidth="284.0" layoutX="461.0" layoutY="92.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Oz.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Scadrial_fog" fitHeight="168.0" fitWidth="387.0" layoutX="359.0" layoutY="358.0">
+                <ImageView fx:id="Scadrial_fog" fitHeight="168.0" fitWidth="387.0" layoutX="359.0" layoutY="358.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Scadrial.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Roshar_fog" fitHeight="168.0" fitWidth="374.0" layoutX="322.0" layoutY="491.0">
+                <ImageView fx:id="Roshar_fog" fitHeight="168.0" fitWidth="374.0" layoutX="322.0" layoutY="491.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Roshar.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Midkemia_fog" fitHeight="364.0" fitWidth="291.0" layoutX="353.0" layoutY="63.0">
+                <ImageView fx:id="Midkemia_fog" fitHeight="364.0" fitWidth="291.0" layoutX="353.0" layoutY="63.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Midkemia.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Narnia_fog" fitHeight="333.0" fitWidth="264.0" layoutX="187.0" layoutY="57.0">
+                <ImageView fx:id="Narnia_fog" fitHeight="333.0" fitWidth="264.0" layoutX="187.0" layoutY="57.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Narnia.png" />
                     </image>
                 </ImageView>
-                <ImageView fx:id="Elantris_fog" fitHeight="251.0" fitWidth="213.0" layoutX="187.0" layoutY="348.0">
+                <ImageView fx:id="Elantris_fog" fitHeight="251.0" fitWidth="213.0" layoutX="187.0" layoutY="348.0" opacity="0.95" disable="true">
                     <image>
                         <Image url="@Elantris.png" />
                     </image>
