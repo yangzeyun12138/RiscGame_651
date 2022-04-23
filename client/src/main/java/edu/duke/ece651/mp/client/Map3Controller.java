@@ -191,12 +191,13 @@ public class Map3Controller implements Initializable {
     private Text roomNum;
 
     @FXML
+    private Button switch_room_button;
+
+    @FXML
     void addRoom(MouseEvent event) throws IOException, ClassNotFoundException {
         //me = event;
         if(clientSk.currRoomNum < 4) {
             clientSk.currRoomNum++;
-            System.out.println("******************" +
-                    "************In add Room current room num is " + clientSk.currRoomNum);
         }
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("In map3controller before new game");
@@ -832,7 +833,7 @@ public class Map3Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.roomNum.setText("Room1");
+        ;
     }
 
     @FXML
@@ -868,6 +869,21 @@ public class Map3Controller implements Initializable {
     void DivineGuard(ActionEvent event) {
 
     }
+
+    @FXML
+    void switchRoomClick(MouseEvent event) {
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Multiplayer.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
 
     private boolean isSpy;
     private boolean isFatNerd;

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.mp.client.MultiplexerController">
+   <children>
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="649.0" layoutX="-6.0">
+               <image>
+                  <Image url="@multiplayer.jpg" />
+               </image>
+            </ImageView>
+            <Button fx:id="room1button" layoutX="391.0" layoutY="60.0" mnemonicParsing="false" onMouseClicked="#room1Click" prefHeight="61.0" prefWidth="68.0">
+               <graphic>
+                  <ImageView fitHeight="45.0" fitWidth="47.0" onMouseClicked="#room1Click">
+                     <image>
+                        <Image url="@shild.jpg" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Text fill="RED" layoutX="394.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room1" wrappingWidth="67.7294921875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text fill="RED" layoutX="515.0" layoutY="146.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room2" wrappingWidth="67.7294921875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text fill="RED" layoutX="391.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room3" wrappingWidth="67.7294921875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text fill="RED" layoutX="515.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room4" wrappingWidth="67.7294921875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Pane layoutX="508.0" layoutY="60.0" prefHeight="61.0" prefWidth="69.0">
+               <children>
+                  <Button fx:id="room2button" mnemonicParsing="false" onMouseClicked="#room2Click" prefHeight="61.0" prefWidth="68.0">
+                     <graphic>
+                        <ImageView fitHeight="51.0" fitWidth="49.0">
+                           <image>
+                              <Image url="@sword.jpg" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <ImageView fx:id="room2lock" fitHeight="61.0" fitWidth="69.0">
+                     <image>
+                        <Image url="@lock.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane layoutX="390.0" layoutY="177.0" prefHeight="61.0" prefWidth="69.0">
+               <children>
+                  <Button fx:id="room3button" mnemonicParsing="false" onMouseClicked="#room3Click" prefHeight="61.0" prefWidth="69.0">
+                     <graphic>
+                        <ImageView fitHeight="48.0" fitWidth="50.0">
+                           <image>
+                              <Image url="@crossbow.jpg" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <ImageView fx:id="room3lock" fitHeight="61.0" fitWidth="69.0">
+                     <image>
+                        <Image url="@lock.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Button fx:id="addRoom" layoutX="428.0" layoutY="274.0" mnemonicParsing="false" onMouseClicked="#addRoomClick" text="Add Room">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Pane layoutX="510.0" layoutY="175.0" prefHeight="61.0" prefWidth="69.0">
+               <children>
+                  <Button fx:id="room4button" mnemonicParsing="false" onMouseClicked="#room4Click" prefHeight="61.0" prefWidth="69.0">
+                     <graphic>
+                        <ImageView fitHeight="45.0" fitWidth="55.0">
+                           <image>
+                              <Image url="@images_helmet.jpg" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <ImageView fx:id="room4lock" fitHeight="61.0" fitWidth="69.0">
+                     <image>
+                        <Image url="@lock.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

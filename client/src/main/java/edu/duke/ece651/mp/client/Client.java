@@ -11,7 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.desktop.AppForegroundListener;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.URL;
@@ -83,15 +83,17 @@ public class Client extends Application {
         } else if (fileName.equals("Map3.fxml")) {
             return SceneList.get(2);
         } else if (fileName.equals("Map31.fxml")) {
-            return SceneList.get(3);
-        }
-        else if (fileName.equals("Map32.fxml")) {
             return SceneList.get(4);
         }
-        else if (fileName.equals("Map33.fxml")) {
+        else if (fileName.equals("Map32.fxml")) {
             return SceneList.get(5);
+        }
+        else if (fileName.equals("Map33.fxml")) {
+            return SceneList.get(6);
+        } else if (fileName.equals("Multiplayer.fxml")) {
+            return  SceneList.get(3);
         } else {
-            return  null;
+            return null;
         }
     }
 
@@ -99,9 +101,13 @@ public class Client extends Application {
        Scene loginScene = createScene("Login.fxml", 640, 400) ;
        Scene registerScene = createScene("Register.fxml", 620, 400);
        Scene Map3Scene = createScene("Map3.fxml", 1000, 760);
-       SceneList.add(loginScene);
-       SceneList.add(registerScene);
-       SceneList.add(Map3Scene);
+
+       //create multiplayer scene
+       Scene MultiplayerScene = createScene("Multiplayer.fxml", 640, 400);
+       SceneList.add(loginScene); //scenelist[0]
+       SceneList.add(registerScene); //scenelist[1]
+       SceneList.add(Map3Scene); //scenelist[2]
+       SceneList.add(MultiplayerScene); //scenelsit[3]
     }
 
     public static Scene createScene(String fileName, int width, int height) throws IOException {

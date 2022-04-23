@@ -553,6 +553,7 @@ public class Map33Controller implements Initializable {
         this.moveQueue = new LinkedBlockingQueue<>();
         this.attackQueue = new LinkedBlockingQueue<>();
         this.changeQueue  = new LinkedBlockingQueue<>();
+
         bind_client();
         this.TerriList = new ArrayList<>();
         this.addRoomCount = 0;
@@ -811,6 +812,19 @@ public class Map33Controller implements Initializable {
     @FXML
     void DivineGuard(ActionEvent event) {
 
+    }
+
+    @FXML
+    void switchRoomClick(MouseEvent event) {
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Multiplayer.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     private boolean isSpy;

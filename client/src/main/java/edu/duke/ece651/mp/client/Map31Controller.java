@@ -559,12 +559,14 @@ public class Map31Controller implements Initializable {
         this.moveQueue = new LinkedBlockingQueue<>();
         this.attackQueue = new LinkedBlockingQueue<>();
         this.changeQueue  = new LinkedBlockingQueue<>();
+
         bind_client();
         this.TerriList = new ArrayList<>();
         this.addRoomCount = 0;
         isSpy = false;
         isFatNerd = false;
         isBomber = false;
+
     }
 
 
@@ -785,7 +787,7 @@ public class Map31Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.roomNum.setText("Room2");
+        ;
     }
 
     @FXML
@@ -819,6 +821,22 @@ public class Map31Controller implements Initializable {
     void DivineGuard(ActionEvent event) {
 
     }
+
+
+    @FXML
+    void switchRoomClick(MouseEvent event) {
+        System.out.println("In changeToRoom2");
+        Scene scene = null;
+        try {
+            scene = Client.get_scene("Multiplayer.fxml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
 
     private boolean isSpy;
     private boolean isFatNerd;

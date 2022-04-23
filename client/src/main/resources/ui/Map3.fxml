@@ -394,7 +394,7 @@
                 </Text>
                 <Button fx:id="continue_button" disable="true" layoutX="197.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#continueClick" text="CONTINUE" visible="false" />
                 <Button fx:id="quit_button" disable="true" layoutX="304.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#quitClick" text="QUIT" visible="false" />
-                <Text fx:id="roomNum" fill="#e9f80b" layoutX="900.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                <Text fx:id="roomNum" fill="#e9f80b" layoutX="900.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Room1">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -452,6 +452,7 @@
                   <Font size="15.0" />
                </font>
             </Button>
+            <Button fx:id="switch_room_button" layoutX="755.0" layoutY="28.0" mnemonicParsing="false" onMouseClicked="#switchRoomClick" text="Switch Room" />
             </children>
         </AnchorPane>
     </children>
