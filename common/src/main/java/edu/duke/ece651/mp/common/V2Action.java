@@ -151,7 +151,7 @@ public class V2Action implements AbstractActionFactory {
       return new String(attacker.color + " Player: Fat Nerd should not be used to attack");
     }
     Territory t = findTerritory(dest, players);
-    if (t.getBeGuarded()) {
+    if (t.getBeGuarded() > 0) {
       return "Territory you attack is under divine guard!\n";
     }
     AttackChecker AttackCostCheck = new AttackCostRuleChecker(null);
@@ -757,7 +757,9 @@ public class V2Action implements AbstractActionFactory {
   public void resetSkill(ArrayList<Player> players) {
     for (Player p : players) {
       for (Territory t : p.player_terri_set) {
-        t.setBeGuarded(false);
+        if (t.getBeGuarded() > 0) {
+          t.setBeGuarded(t.getBeGuarded() - 1);
+        }
         if (t.getBeCloakedNum() > 0) {
           t.setBeCloakedNum(t.getBeCloakedNum() - 1);
         }

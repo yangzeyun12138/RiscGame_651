@@ -39,11 +39,11 @@ public interface Territory {
   public int countSpy(String color);
   public void addInitSpy(String Color);
 
-  boolean getBeGuarded();
+  int getBeGuarded();
 
   int getBeCloakedNum();
 
-  void setBeGuarded(boolean beGuarded);
+  void setBeGuarded(int beGuarded);
 
   void setBeCloakedNum(int beCloakedNum);
 }

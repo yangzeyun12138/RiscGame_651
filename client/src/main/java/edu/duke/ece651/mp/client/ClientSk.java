@@ -862,7 +862,7 @@ public class ClientSk {
 
       //do cloak
       player.costFood(50);
-      tempT.setBeCloakedNum(3 + tempT.getBeCloakedNum());
+
 
       if (signal == 1) {
         map3ControllerList.getValue0().tempUpdateInfo();
@@ -901,7 +901,7 @@ public class ClientSk {
 
       //do guard
       player.costFood(60);
-      tempT.setBeGuarded(true);
+
 
       if (signal == 1) {
         map3ControllerList.getValue0().tempUpdateInfo();

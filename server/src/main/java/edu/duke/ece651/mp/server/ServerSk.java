@@ -431,12 +431,12 @@ public class ServerSk {
         else if (o.doCloak) {
           Territory tempT = findTerritory(o.getSrc(), players);
           players.get(i).costFood(50);
-          tempT.setBeCloakedNum(3 + tempT.getBeCloakedNum());
+          tempT.setBeCloakedNum(4 + tempT.getBeCloakedNum());
         }
         else if (o.doGuard) {
           Territory tempT = findTerritory(o.getSrc(), players);
           players.get(i).costFood(60);
-          tempT.setBeGuarded(true);
+          tempT.setBeGuarded(2 + tempT.getBeGuarded());
         }
         else {
           if (o.getSrc().equals(" ")) {

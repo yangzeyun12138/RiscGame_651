@@ -10,7 +10,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
   protected ArrayList<Unit> units;
   protected final int size;
   public ArrayList<Spy> spyList;
-  public boolean beGuarded;
+  public int beGuarded;
   public int beCloakedNum;
 
   /**Land Territory Constructor: initialize name, color, units, and neighbors
@@ -23,7 +23,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
     this.units = new ArrayList<Unit>();
     this.size = size;
     this.spyList = new ArrayList<Spy>();
-    this.beGuarded = false;
+    this.beGuarded = 0;
     this.beCloakedNum = 0;
   }
 
@@ -431,7 +431,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
   }
 
   @Override
-  public boolean getBeGuarded() {
+  public int getBeGuarded() {
     return beGuarded;
   }
 
@@ -441,7 +441,7 @@ public class LandTerritory implements Territory, java.io.Serializable {
   }
 
   @Override
-  public void setBeGuarded(boolean beGuarded) {
+  public void setBeGuarded(int beGuarded) {
     this.beGuarded = beGuarded;
   }
 
