@@ -289,6 +289,4 @@ class PlayerTest {
   }
 
    */
-  
 }
-*/
