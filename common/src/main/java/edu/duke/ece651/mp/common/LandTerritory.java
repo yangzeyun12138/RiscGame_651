@@ -423,28 +423,43 @@ public class LandTerritory implements Territory, java.io.Serializable {
     }
     return count;
   }
-
+  /**
+   *addInitSpy: add spys into the territory in the spy creation phase
+   *@param: color of the spy and the player
+   */
   @Override
   public void addInitSpy(String Color){
     Spy s = new Spy(Color);
     spyList.add(s);
   }
-
+  /**
+   *getBeGuarded: get the boolean beGuarded
+   *@return: beGuarded boolean
+   */
   @Override
   public int getBeGuarded() {
     return beGuarded;
   }
-
+ /**
+   *getBeCloakedNum: get the number of be Cloaked
+   *@return: beCloakedNum integer
+   */
   @Override
   public int getBeCloakedNum() {
     return beCloakedNum;
   }
-
+ /**
+   *setBeGuarded: set the boolean beGuarded
+   *@param: beGuarded input as boolean
+   */
   @Override
   public void setBeGuarded(int beGuarded) {
     this.beGuarded = beGuarded;
   }
-
+ /**
+   *setBeCloakedNum: set the number of be Cloaked
+   *@param: beCloakedNum input as integer
+   */
   @Override
   public void setBeCloakedNum(int beCloakedNum) {
     this.beCloakedNum = beCloakedNum;

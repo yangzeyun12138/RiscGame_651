@@ -161,7 +161,11 @@ public class V2Action implements AbstractActionFactory {
     String result = NameCheck.checkAttack(attacker, src, dest, numUnit, players, level);
     return result;
   }
-
+  /**
+   *count boumb: accept a Unit List and out put the number of bombers as integer
+   *@param: Units: the unit list want to be count
+   *@return: the number of bombers
+   */
   public int countBomb(ArrayList<Unit> Units){
     int num = 0;
     for (int i = 0 ; i < Units.size();i++){
@@ -171,7 +175,11 @@ public class V2Action implements AbstractActionFactory {
     }
     return num;
   }
-  
+  /**
+   *BombAttack: Do the Bombers attack actions before all other units gets into the battle
+   *@param: attackUnits: the Unit list belongs to the attacker
+   *@param: defendTerritory: defender territory
+   */
   public void BombsAttack (ArrayList<Unit> attackUnits, Territory defendTerritory){
     int NumAtkBomb = countBomb(attackUnits);
     int NumDefBomb = defendTerritory.countLevelUnit(7);
