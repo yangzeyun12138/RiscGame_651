@@ -350,10 +350,10 @@ public class V2Action implements AbstractActionFactory {
     int min = 1;
     int max = 20;
     long time_seed = System.currentTimeMillis();
-    int seed1 = 100;
-    int seed2 = seed1+1;
-    Random rand1 = new Random(seed1);
-    Random rand2 = new Random(seed2);
+    //int seed1 = 100;
+    //int seed2 = seed1+1;
+    Random rand1 = new Random();
+    Random rand2 = new Random();
     
     
     int Dice1 = rand1.nextInt(max - min + 1) + min + atkUnit.getBonus();
